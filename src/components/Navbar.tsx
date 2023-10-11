@@ -4,23 +4,120 @@ import { HiMenuAlt1 } from 'react-icons/hi'
 import { MdKeyboardArrowRight } from 'react-icons/md'
 import { FiSearch } from 'react-icons/fi'
 import { montserrat } from '@/app/fonts'
+import UserImage from './UserImage'
+import Link from 'next/link'
 
 const Navbar = () => {
-  const [IsOpen, setIsOpen] = useState(false)
-  const session = false
+  const [IsOpen, setIsOpen] = useState(true)
+  const [options, setOptions] = useState(false)
+  const session = true
 
   return (
-    <nav className="relative flex items-center justify-between gap-x-2 border px-4 py-3">
-      <div className=" w-fit cursor-pointer rounded-lg bg-white py-2 transition-colors">
-        <span className={`${montserrat.className} font-bold`}>Hously.</span>
+    <nav
+      className={`relative flex items-center justify-between gap-x-2 border-b px-4 ${
+        session ? 'py-4' : 'py-3'
+      }`}
+    >
+      <div className="w-fit cursor-pointer rounded-lg bg-white py-2 transition-colors">
+        <span className={`${montserrat.className} font-bold lg:text-xl`}>
+          Hously.
+        </span>
       </div>
 
-      <div className="hover:border-lightGrey hover:bg-lightGrey ml-auto w-fit cursor-pointer rounded-lg bg-white p-2 transition-colors">
-        <FiSearch className="text-xl" />
-      </div>
+      <ul className="m-auto hidden gap-x-10 lg:flex">
+        <li>
+          <Link
+            href="/home"
+            className="block cursor-pointer text-neutral-600 transition-all hover:font-medium hover:text-black"
+          >
+            <span>Home</span>
+          </Link>
+        </li>
+        <li>
+          <Link
+            href="/listings"
+            className="block cursor-pointer text-neutral-600 transition-all hover:font-medium hover:text-black"
+          >
+            <span>Listings</span>
+          </Link>
+        </li>
+
+        <li>
+          <Link
+            href="about-us"
+            className="block cursor-pointer text-neutral-600 transition-all hover:font-medium hover:text-black"
+          >
+            <span>About us</span>
+          </Link>
+        </li>
+        <li>
+          <Link
+            href="contact"
+            className="block cursor-pointer text-neutral-600 transition-all hover:font-medium hover:text-black"
+          >
+            <span>Contact</span>
+          </Link>
+        </li>
+      </ul>
+
+      {session && (
+        <div className="group/search ml-auto w-fit cursor-pointer rounded-lg bg-white p-2 hover:border-lightGrey hover:bg-lightGrey lg:ml-0 lg:rounded-full lg:bg-lightGrey lg:px-6 lg:py-3">
+          <FiSearch className="transition-color text-xl text-neutral-500 group-hover/search:text-black lg:text-2xl" />
+        </div>
+      )}
+
+      {session ? (
+        <>
+          <span
+            className="flex-0 hidden cursor-pointer rounded-full lg:flex"
+            onClick={() => setOptions(!options)}
+          >
+            <UserImage name="JL" imageUrl="/images/person.jpg" />
+          </span>
+          {options && (
+            <ul className="absolute right-4 top-[74px] hidden rounded-3xl border border-grey bg-white p-2 lg:block">
+              <li className="mt-auto block cursor-pointer items-center justify-center rounded-2xl px-4 py-2 text-neutral-600 transition-all hover:bg-lightGrey  hover:text-black">
+                <span>Create listing</span>
+              </li>
+              <li className="block cursor-pointer items-center justify-center rounded-2xl px-4 py-2 text-neutral-600 transition-all hover:bg-lightGrey  hover:text-black">
+                <span>Sign out</span>
+              </li>
+              <span className="mx-auto my-2 block h-[1px] w-[90%] bg-grey"></span>
+              <li className="relative flex cursor-pointer items-center gap-x-4 rounded-3xl bg-lightGrey px-4 py-4 text-black transition-all">
+                <UserImage name="JL" imageUrl="/images/person.jpg" />
+                <div className="flex flex-col">
+                  <span className="block font-bold">Jana Lorene</span>
+                  <span className="block text-neutral-600">
+                    Jana@lorene.com
+                  </span>
+                </div>
+
+                <div className="ml-auto w-fit cursor-pointer rounded-lg p-2 transition-colors hover:bg-whiteHover">
+                  <MdKeyboardArrowRight className="text-xl" />
+                </div>
+              </li>
+            </ul>
+          )}
+        </>
+      ) : (
+        <div className="hidden gap-x-2 lg:flex">
+          <Link
+            href="/sign-in"
+            className="cursor-pointer rounded-full border border-grey px-6 py-3 font-medium text-black hover:border-black focus:outline-none focus-visible:ring-4 focus-visible:ring-neutral-600"
+          >
+            Sign in
+          </Link>
+          <Link
+            href="/register"
+            className="cursor-pointer rounded-full bg-black px-6 py-3 font-medium text-white hover:bg-neutral-800 focus:outline-none focus-visible:ring-4 focus-visible:ring-neutral-600"
+          >
+            Register
+          </Link>
+        </div>
+      )}
 
       <div
-        className="hover:border-lightGrey hover:bg-lightGrey w-fit cursor-pointer rounded-lg bg-white p-2 transition-colors"
+        className="w-fit cursor-pointer rounded-lg bg-white p-2 transition-colors hover:border-lightGrey hover:bg-lightGrey lg:hidden"
         onClick={() => setIsOpen(!IsOpen)}
       >
         <HiMenuAlt1 className="scale-x-[-1] text-xl" />
@@ -29,56 +126,79 @@ const Navbar = () => {
       <ul
         className={`${
           !IsOpen
-            ? 'hidden opacity-0'
-            : 'absolute right-0 top-[65px] flex h-[calc(100vh-67px)] w-full flex-col gap-1  border p-2 pb-3 opacity-100 transition-opacity'
+            ? 'hidden opacity-0 md:hidden'
+            : 'absolute right-0 top-[65px] flex h-[calc(100vh-67px)] w-full flex-col gap-1 p-2 pb-3 opacity-100 transition-opacity lg:hidden'
         }`}
       >
-        <li className="hover:bg-lightGrey block cursor-pointer items-center justify-center rounded-2xl px-4 py-2 text-slate-600 transition-all hover:font-medium hover:text-black">
-          <span>Home</span>
+        <li>
+          <Link
+            href="/home"
+            className="block cursor-pointer items-center justify-center rounded-2xl px-4 py-2 text-neutral-600 transition-all hover:bg-lightGrey hover:text-black"
+          >
+            <span>Home</span>
+          </Link>
         </li>
-        <li className="hover:bg-lightGrey block cursor-pointer items-center justify-center rounded-2xl px-4 py-2 text-slate-600 transition-all hover:font-medium hover:text-black">
-          <span>Listings</span>
+        <li>
+          <Link
+            href="/listings"
+            className="block cursor-pointer items-center justify-center rounded-2xl px-4 py-2 text-neutral-600 transition-all hover:bg-lightGrey hover:text-black"
+          >
+            <span>Listings</span>
+          </Link>
         </li>
 
-        <li className="hover:bg-lightGrey block cursor-pointer items-center justify-center rounded-2xl px-4 py-2 text-slate-600 transition-all hover:font-medium hover:text-black">
-          <span>About us</span>
+        <li>
+          <Link
+            href="/about-us"
+            className="block cursor-pointer items-center justify-center rounded-2xl px-4 py-2 text-neutral-600 transition-all hover:bg-lightGrey hover:text-black"
+          >
+            <span>About us</span>
+          </Link>
         </li>
-        <li className="hover:bg-lightGrey block cursor-pointer items-center justify-center rounded-2xl px-4 py-2 text-slate-600 transition-all hover:font-medium hover:text-black">
-          <span>Contact</span>
+        <li>
+          <Link
+            href="/contact"
+            className="block cursor-pointer items-center justify-center rounded-2xl px-4 py-2 text-neutral-600 transition-all hover:bg-lightGrey hover:text-black"
+          >
+            <span>Contact</span>
+          </Link>
         </li>
 
         {session ? (
-          <li className="mt-auto">
-            <li className="hover:bg-lightGrey block cursor-pointer items-center justify-center rounded-2xl px-4 py-2 text-slate-600 transition-all hover:font-medium hover:text-black">
-              <span>Profile</span>
+          <>
+            <li className="mt-auto block cursor-pointer items-center justify-center rounded-2xl px-4 py-2 text-neutral-600 transition-all hover:bg-lightGrey hover:text-black">
+              <span>Create listing</span>
             </li>
-            <li className="hover:bg-lightGrey block cursor-pointer items-center justify-center rounded-2xl px-4 py-2 text-slate-600 transition-all hover:font-medium hover:text-black">
+            <li className="block cursor-pointer items-center justify-center rounded-2xl px-4 py-2 text-neutral-600 transition-all hover:bg-lightGrey hover:text-black">
               <span>Sign out</span>
             </li>
-            <span className="bg-grey mx-auto my-4 block h-[1px] w-[90%]"></span>
-            <li className="bg-lightGrey relative flex cursor-pointer items-center gap-x-4 rounded-3xl px-4 py-4 text-black transition-all">
-              <span className="flex h-12 w-12 items-center justify-center rounded-full border border-slate-300 bg-white">
-                JL
-              </span>
-
+            <span className="mx-auto my-4 block h-[1px] w-[90%] bg-grey"></span>
+            <li className="relative flex cursor-pointer items-center gap-x-4 rounded-3xl bg-lightGrey px-4 py-4 text-black transition-all">
+              <UserImage name="JL" imageUrl="/images/person.jpg" />
               <div className="flex flex-col">
                 <span className="block font-bold">Jana Lorene</span>
                 <span className="block text-slate-600">Jana@lorene.com</span>
               </div>
 
-              <div className="hover:bg-whiteHover ml-auto w-fit cursor-pointer rounded-lg p-2 transition-colors">
+              <div className="ml-auto w-fit cursor-pointer rounded-lg p-2 transition-colors hover:bg-whiteHover">
                 <MdKeyboardArrowRight className="text-xl" />
               </div>
             </li>
-          </li>
+          </>
         ) : (
           <li className="mt-auto flex gap-x-2">
-            <li className="border-grey flex w-full cursor-pointer items-center justify-center rounded-full border px-8 py-3 font-medium text-black transition-colors hover:border-black">
+            <Link
+              href="/sign-in"
+              className="flex w-full cursor-pointer items-center justify-center rounded-full border border-grey px-8 py-3 font-medium text-black transition-colors hover:border-black focus:outline-none focus-visible:ring-4 focus-visible:ring-neutral-600"
+            >
               <span className="block">Sign in</span>
-            </li>
-            <li className="hover:bg-beige flex w-full cursor-pointer items-center justify-center rounded-full bg-black px-8 py-3 font-medium text-white transition-colors hover:text-black">
+            </Link>
+            <Link
+              href="register"
+              className="flex w-full cursor-pointer items-center justify-center rounded-full bg-black px-8 py-3 font-medium text-white transition-colors hover:bg-neutral-800 focus:outline-none focus-visible:ring-4 focus-visible:ring-neutral-600"
+            >
               <span className="block">Register</span>
-            </li>
+            </Link>
           </li>
         )}
       </ul>
