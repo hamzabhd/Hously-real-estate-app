@@ -5,6 +5,7 @@ import { FcGoogle } from 'react-icons/fc'
 import { HiOutlineEye, HiOutlineEyeOff } from 'react-icons/hi'
 import { usePathname } from 'next/navigation'
 import Link from 'next/link'
+import { signIn } from 'next-auth/react'
 
 const Form = () => {
   const [showPassword, setShowPassword] = useState(false)
@@ -29,7 +30,11 @@ const Form = () => {
         Choose your preferred {isSignIn ? 'sign in' : 'sign up'} method
       </p>
 
-      <button className="mb-6 flex w-full flex-wrap items-center justify-center gap-x-4 rounded-full border border-grey px-8 py-3 transition-colors hover:border-black focus:outline-none focus-visible:ring-4 focus-visible:ring-neutral-600">
+      <button
+        type="button"
+        className="mb-6 flex w-full flex-wrap items-center justify-center gap-x-4 rounded-full border border-grey px-8 py-3 transition-colors hover:border-black focus:outline-none focus-visible:ring-4 focus-visible:ring-neutral-600"
+        onClick={() => signIn('google')}
+      >
         <FcGoogle className="h-6 w-6 flex-shrink-0" />
         <span className="font-medium text-black">
           {isSignIn ? 'Sign in' : 'Sign up'} with Google

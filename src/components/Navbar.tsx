@@ -6,11 +6,13 @@ import { FiSearch } from 'react-icons/fi'
 import { montserrat } from '@/app/fonts'
 import UserImage from './UserImage'
 import Link from 'next/link'
+import { signOut } from 'next-auth/react'
+import { useSession } from 'next-auth/react'
 
 const Navbar = () => {
   const [IsOpen, setIsOpen] = useState(false)
   const [options, setOptions] = useState(false)
-  const session = false
+  const { data: session } = useSession()
 
   return (
     <nav
@@ -172,7 +174,10 @@ const Navbar = () => {
             <li className="mt-auto block cursor-pointer items-center justify-center rounded-2xl px-4 py-2 text-neutral-600 transition-all hover:bg-lightGrey hover:text-black">
               <span>Create listing</span>
             </li>
-            <li className="block cursor-pointer items-center justify-center rounded-2xl px-4 py-2 text-neutral-600 transition-all hover:bg-lightGrey hover:text-black">
+            <li
+              className="block cursor-pointer items-center justify-center rounded-2xl px-4 py-2 text-neutral-600 transition-all hover:bg-lightGrey hover:text-black"
+              onClick={() => signOut()}
+            >
               <span>Sign out</span>
             </li>
             <span className="mx-auto my-4 block h-[1px] w-[90%] bg-grey"></span>
