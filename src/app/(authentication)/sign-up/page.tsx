@@ -1,7 +1,7 @@
 import Form from '@/components/Form'
 
-const SignIn = () => {
+const Register = () => {
   return <Form />
 }
 
-export default SignIn
+export default Register
