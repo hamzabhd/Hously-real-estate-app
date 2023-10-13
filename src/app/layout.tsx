@@ -19,7 +19,7 @@ export default function RootLayout({
 }) {
   return (
     <html lang="en">
-      <body className={`${roboto.className} relative`}>
+      <body className={`${roboto.className} relative box-border`}>
         <AuthProvider>{children}</AuthProvider>
       </body>
     </html>

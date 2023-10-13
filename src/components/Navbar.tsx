@@ -7,16 +7,7 @@ import { montserrat } from '@/app/fonts'
 import UserImage from './UserImage'
 import Link from 'next/link'
 import { signOut } from 'next-auth/react'
-import { useSession } from 'next-auth/react'
-
-interface UserObj {
-  username: string
-  fullName: string
-  email: string
-  profilePicture: string
-  createdAt?: string
-  bio?: string
-}
+import { UserObj } from '@/types/types'
 
 type NavbarPropsType = {
   user: UserObj
@@ -29,13 +20,13 @@ const Navbar = ({ user, session }: NavbarPropsType) => {
 
   return (
     <nav
-      className={`relative flex items-center justify-between gap-x-2 border-b px-4 ${
+      className={`relative z-10 flex items-center justify-between gap-x-2 border-b bg-white/20 px-4 backdrop-blur-lg ${
         session ? 'py-4' : 'py-3'
       }`}
     >
       <Link
         href="/"
-        className="w-fit cursor-pointer select-none rounded-lg bg-white py-2 transition-colors"
+        className="w-fit cursor-pointer select-none rounded-lg py-2 transition-colors"
       >
         <span className={`${montserrat.className} font-bold lg:text-xl`}>
           Hously.
@@ -79,8 +70,8 @@ const Navbar = ({ user, session }: NavbarPropsType) => {
       </ul>
 
       {session && (
-        <div className="group/search ml-auto w-fit cursor-pointer rounded-lg bg-white p-2 hover:border-lightGrey hover:bg-lightGrey lg:ml-0 lg:rounded-full lg:bg-lightGrey lg:px-6 lg:py-3">
-          <FiSearch className="transition-color text-xl text-neutral-500 group-hover/search:text-black lg:text-2xl" />
+        <div className="group/search ml-auto w-fit cursor-pointer rounded-lg  p-2 hover:border-lightGrey hover:bg-lightGrey lg:ml-0 lg:rounded-full lg:bg-lightGrey lg:px-6 lg:py-3">
+          <FiSearch className="transition-color text-xl group-hover/search:text-black lg:text-2xl" />
         </div>
       )}
 
@@ -99,7 +90,7 @@ const Navbar = ({ user, session }: NavbarPropsType) => {
               </li>
               <li
                 className="block cursor-pointer items-center justify-center rounded-2xl px-4 py-2 text-neutral-600 transition-all hover:bg-lightGrey  hover:text-black"
-                onClick={() => signOut()}
+                onClick={() => signOut({ callbackUrl: '/sign-in' })}
               >
                 <span>Sign out</span>
               </li>
@@ -136,7 +127,7 @@ const Navbar = ({ user, session }: NavbarPropsType) => {
       )}
 
       <div
-        className="w-fit cursor-pointer rounded-lg bg-white p-2 transition-colors hover:border-lightGrey hover:bg-lightGrey lg:hidden"
+        className="w-fit cursor-pointer rounded-lg p-2 transition-colors hover:border-lightGrey hover:bg-lightGrey lg:hidden"
         onClick={() => setIsOpen(!IsOpen)}
       >
         <HiMenuAlt1 className="scale-x-[-1] text-xl" />

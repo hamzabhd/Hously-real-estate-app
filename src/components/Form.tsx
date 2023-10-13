@@ -33,7 +33,7 @@ const Form = () => {
       <button
         type="button"
         className="mb-6 flex w-full flex-wrap items-center justify-center gap-x-4 rounded-full border border-grey px-8 py-3 transition-colors hover:border-black focus:outline-none focus-visible:ring-4 focus-visible:ring-neutral-600"
-        onClick={() => signIn('google')}
+        onClick={() => signIn('google', { callbackUrl: '/' })}
       >
         <FcGoogle className="h-6 w-6 flex-shrink-0" />
         <span className="font-medium text-black">
