@@ -6,7 +6,7 @@ const UserImage = ({ imageUrl, name }: { imageUrl?: string; name: string }) => {
     <>
       {imageUrl ? (
         <Image
-          src="/images/person.jpg"
+          src={imageUrl}
           alt="user profile image"
           width={40}
           height={40}

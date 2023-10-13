@@ -19,7 +19,7 @@ export const authOptions: NextAuthOptions = {
 
       return session
     },
-    async signIn({ email, profile }) {
+    async signIn({ profile }) {
       console.log(profile)
 
       try {

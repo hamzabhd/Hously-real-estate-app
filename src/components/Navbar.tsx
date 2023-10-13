@@ -9,10 +9,23 @@ import Link from 'next/link'
 import { signOut } from 'next-auth/react'
 import { useSession } from 'next-auth/react'
 
-const Navbar = () => {
+interface UserObj {
+  username: string
+  fullName: string
+  email: string
+  profilePicture: string
+  createdAt?: string
+  bio?: string
+}
+
+type NavbarPropsType = {
+  user: UserObj
+  session: string | undefined
+}
+
+const Navbar = ({ user, session }: NavbarPropsType) => {
   const [IsOpen, setIsOpen] = useState(false)
   const [options, setOptions] = useState(false)
-  const { data: session } = useSession()
 
   return (
     <nav
@@ -77,24 +90,25 @@ const Navbar = () => {
             className="flex-0 hidden cursor-pointer rounded-full lg:flex"
             onClick={() => setOptions(!options)}
           >
-            <UserImage name="JL" imageUrl="/images/person.jpg" />
+            <UserImage name="JL" imageUrl={user.profilePicture} />
           </span>
           {options && (
             <ul className="absolute right-4 top-[74px] hidden rounded-3xl border border-grey bg-white p-2 lg:block">
               <li className="mt-auto block cursor-pointer items-center justify-center rounded-2xl px-4 py-2 text-neutral-600 transition-all hover:bg-lightGrey  hover:text-black">
                 <span>Create listing</span>
               </li>
-              <li className="block cursor-pointer items-center justify-center rounded-2xl px-4 py-2 text-neutral-600 transition-all hover:bg-lightGrey  hover:text-black">
+              <li
+                className="block cursor-pointer items-center justify-center rounded-2xl px-4 py-2 text-neutral-600 transition-all hover:bg-lightGrey  hover:text-black"
+                onClick={() => signOut()}
+              >
                 <span>Sign out</span>
               </li>
               <span className="mx-auto my-2 block h-[1px] w-[90%] bg-grey"></span>
               <li className="relative flex cursor-pointer items-center gap-x-4 rounded-3xl bg-lightGrey px-4 py-4 text-black transition-all">
-                <UserImage name="JL" imageUrl="/images/person.jpg" />
+                <UserImage name="JL" imageUrl={user.profilePicture} />
                 <div className="flex flex-col">
-                  <span className="block font-bold">Jana Lorene</span>
-                  <span className="block text-neutral-600">
-                    Jana@lorene.com
-                  </span>
+                  <span className="block font-bold">{user.fullName}</span>
+                  <span className="block text-neutral-600">{user.email}</span>
                 </div>
 
                 <div className="ml-auto w-fit cursor-pointer rounded-lg p-2 transition-colors hover:bg-whiteHover">
@@ -182,10 +196,10 @@ const Navbar = () => {
             </li>
             <span className="mx-auto my-4 block h-[1px] w-[90%] bg-grey"></span>
             <li className="relative flex cursor-pointer items-center gap-x-4 rounded-3xl bg-lightGrey px-4 py-4 text-black transition-all">
-              <UserImage name="JL" imageUrl="/images/person.jpg" />
+              <UserImage name="JL" imageUrl={user.profilePicture} />
               <div className="flex flex-col">
-                <span className="block font-bold">Jana Lorene</span>
-                <span className="block text-slate-600">Jana@lorene.com</span>
+                <span className="block font-bold">{user.fullName}</span>
+                <span className="block text-slate-600">{user.email}</span>
               </div>
 
               <div className="ml-auto w-fit cursor-pointer rounded-lg p-2 transition-colors hover:bg-whiteHover">
