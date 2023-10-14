@@ -24,7 +24,7 @@ const ProfileCard = ({ user }: { user: UserObj }) => {
           imageUrl={user.profilePicture}
           width={96}
           height={96}
-          name="JL"
+          name={user.fullName}
         />
       </div>
 

@@ -12,6 +12,10 @@ const UserImage = ({
   width?: number
   height?: number
 }) => {
+  name = 'Hamza ELBOHDIDI'
+  const username =
+    name.split(' ')[0].slice(0, 1) + name.split(' ')[1].slice(0, 1)
+
   return (
     <>
       {imageUrl ? (
@@ -26,13 +30,14 @@ const UserImage = ({
         />
       ) : (
         <span
-          className={`flex h-${height ? height / 4 : '10'} w-${
+          className={`flex h-${height ? height / 4 : '10'} 
+          w-${
             width ? width / 4 : '10'
           } items-center justify-center rounded-full border border-slate-300 bg-white text-${
             width ? '4xl' : 'base'
           }`}
         >
-          {name}
+          {username}
         </span>
       )}
     </>

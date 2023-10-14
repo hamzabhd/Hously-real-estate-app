@@ -37,7 +37,7 @@ const Navbar = ({ user, session }: NavbarPropsType) => {
         <li>
           <Link
             href="/home"
-            className="block cursor-pointer text-neutral-600 transition-all hover:font-medium hover:text-black"
+            className="block cursor-pointer text-black/60 transition-all hover:font-medium hover:text-black"
           >
             <span>Home</span>
           </Link>
@@ -45,7 +45,7 @@ const Navbar = ({ user, session }: NavbarPropsType) => {
         <li>
           <Link
             href="/listings"
-            className="block cursor-pointer text-neutral-600 transition-all hover:font-medium hover:text-black"
+            className="block cursor-pointer text-black/60 transition-all hover:font-medium hover:text-black"
           >
             <span>Listings</span>
           </Link>
@@ -54,7 +54,7 @@ const Navbar = ({ user, session }: NavbarPropsType) => {
         <li>
           <Link
             href="about-us"
-            className="block cursor-pointer text-neutral-600 transition-all hover:font-medium hover:text-black"
+            className="block cursor-pointer text-black/60 transition-all hover:font-medium hover:text-black"
           >
             <span>About us</span>
           </Link>
@@ -62,7 +62,7 @@ const Navbar = ({ user, session }: NavbarPropsType) => {
         <li>
           <Link
             href="contact"
-            className="block cursor-pointer text-neutral-600 transition-all hover:font-medium hover:text-black"
+            className="block cursor-pointer text-black/60 transition-all hover:font-medium hover:text-black"
           >
             <span>Contact</span>
           </Link>
@@ -81,30 +81,38 @@ const Navbar = ({ user, session }: NavbarPropsType) => {
             className="flex-0 hidden cursor-pointer rounded-full lg:flex"
             onClick={() => setOptions(!options)}
           >
-            <UserImage name="JL" imageUrl={user.profilePicture} />
+            <UserImage name={user.fullName} imageUrl={user.profilePicture} />
           </span>
           {options && (
             <ul className="absolute right-4 top-[74px] hidden rounded-3xl border border-grey bg-white p-2 lg:block">
-              <li className="mt-auto block cursor-pointer items-center justify-center rounded-2xl px-4 py-2 text-neutral-600 transition-all hover:bg-lightGrey  hover:text-black">
+              <li className="mt-auto block cursor-pointer items-center justify-center rounded-2xl px-4 py-2 text-black/60 transition-all hover:bg-lightGrey  hover:text-black">
                 <span>Create listing</span>
               </li>
               <li
-                className="block cursor-pointer items-center justify-center rounded-2xl px-4 py-2 text-neutral-600 transition-all hover:bg-lightGrey  hover:text-black"
+                className="block cursor-pointer items-center justify-center rounded-2xl px-4 py-2 text-black/60 transition-all hover:bg-lightGrey  hover:text-black"
                 onClick={() => signOut({ callbackUrl: '/sign-in' })}
               >
                 <span>Sign out</span>
               </li>
               <span className="mx-auto my-2 block h-[1px] w-[90%] bg-grey"></span>
-              <li className="relative flex cursor-pointer items-center gap-x-4 rounded-3xl bg-lightGrey px-4 py-4 text-black transition-all">
-                <UserImage name="JL" imageUrl={user.profilePicture} />
-                <div className="flex flex-col">
-                  <span className="block font-bold">{user.fullName}</span>
-                  <span className="block text-neutral-600">{user.email}</span>
-                </div>
+              <li className="">
+                <Link
+                  href="/profile"
+                  className="relative flex cursor-pointer items-center gap-x-4 rounded-3xl bg-lightGrey px-4 py-4 text-black transition-all"
+                >
+                  <UserImage
+                    name={user.fullName}
+                    imageUrl={user.profilePicture}
+                  />
+                  <div className="flex flex-col">
+                    <span className="block font-bold">{user.fullName}</span>
+                    <span className="block text-neutral-600">{user.email}</span>
+                  </div>
 
-                <div className="ml-auto w-fit cursor-pointer rounded-lg p-2 transition-colors hover:bg-whiteHover">
-                  <MdKeyboardArrowRight className="text-xl" />
-                </div>
+                  <div className="ml-auto w-fit cursor-pointer rounded-lg p-2 transition-colors hover:bg-whiteHover">
+                    <MdKeyboardArrowRight className="text-xl" />
+                  </div>
+                </Link>
               </li>
             </ul>
           )}
@@ -143,7 +151,7 @@ const Navbar = ({ user, session }: NavbarPropsType) => {
         <li>
           <Link
             href="/home"
-            className="block cursor-pointer items-center justify-center rounded-2xl px-4 py-2 text-neutral-600 transition-all hover:bg-lightGrey hover:text-black"
+            className="block cursor-pointer items-center justify-center rounded-2xl px-4 py-2 text-black/60 transition-all hover:bg-lightGrey hover:text-black"
           >
             <span>Home</span>
           </Link>
@@ -151,7 +159,7 @@ const Navbar = ({ user, session }: NavbarPropsType) => {
         <li>
           <Link
             href="/listings"
-            className="block cursor-pointer items-center justify-center rounded-2xl px-4 py-2 text-neutral-600 transition-all hover:bg-lightGrey hover:text-black"
+            className="block cursor-pointer items-center justify-center rounded-2xl px-4 py-2 text-black/60 transition-all hover:bg-lightGrey hover:text-black"
           >
             <span>Listings</span>
           </Link>
@@ -160,7 +168,7 @@ const Navbar = ({ user, session }: NavbarPropsType) => {
         <li>
           <Link
             href="/about-us"
-            className="block cursor-pointer items-center justify-center rounded-2xl px-4 py-2 text-neutral-600 transition-all hover:bg-lightGrey hover:text-black"
+            className="block cursor-pointer items-center justify-center rounded-2xl px-4 py-2 text-black/60 transition-all hover:bg-lightGrey hover:text-black"
           >
             <span>About us</span>
           </Link>
@@ -168,7 +176,7 @@ const Navbar = ({ user, session }: NavbarPropsType) => {
         <li>
           <Link
             href="/contact"
-            className="block cursor-pointer items-center justify-center rounded-2xl px-4 py-2 text-neutral-600 transition-all hover:bg-lightGrey hover:text-black"
+            className="block cursor-pointer items-center justify-center rounded-2xl px-4 py-2 text-black/60 transition-all hover:bg-lightGrey hover:text-black"
           >
             <span>Contact</span>
           </Link>
@@ -176,26 +184,34 @@ const Navbar = ({ user, session }: NavbarPropsType) => {
 
         {session ? (
           <>
-            <li className="mt-auto block cursor-pointer items-center justify-center rounded-2xl px-4 py-2 text-neutral-600 transition-all hover:bg-lightGrey hover:text-black">
+            <li className="mt-auto block cursor-pointer items-center justify-center rounded-2xl px-4 py-2 text-black/60 transition-all hover:bg-lightGrey hover:text-black">
               <span>Create listing</span>
             </li>
             <li
-              className="block cursor-pointer items-center justify-center rounded-2xl px-4 py-2 text-neutral-600 transition-all hover:bg-lightGrey hover:text-black"
+              className="block cursor-pointer items-center justify-center rounded-2xl px-4 py-2 text-black/60 transition-all hover:bg-lightGrey hover:text-black"
               onClick={() => signOut()}
             >
               <span>Sign out</span>
             </li>
             <span className="mx-auto my-4 block h-[1px] w-[90%] bg-grey"></span>
-            <li className="relative flex cursor-pointer items-center gap-x-4 rounded-3xl bg-lightGrey px-4 py-4 text-black transition-all">
-              <UserImage name="JL" imageUrl={user.profilePicture} />
-              <div className="flex flex-col">
-                <span className="block font-bold">{user.fullName}</span>
-                <span className="block text-slate-600">{user.email}</span>
-              </div>
+            <li>
+              <Link
+                href="/profile"
+                className="relative flex cursor-pointer items-center gap-x-4 rounded-3xl bg-lightGrey px-4 py-4 text-black transition-all"
+              >
+                <UserImage
+                  name={user.fullName}
+                  imageUrl={user.profilePicture}
+                />
+                <div className="flex flex-col">
+                  <span className="block font-bold">{user.fullName}</span>
+                  <span className="block text-slate-600">{user.email}</span>
+                </div>
 
-              <div className="ml-auto w-fit cursor-pointer rounded-lg p-2 transition-colors hover:bg-whiteHover">
-                <MdKeyboardArrowRight className="text-xl" />
-              </div>
+                <div className="ml-auto w-fit cursor-pointer rounded-lg p-2 transition-colors hover:bg-whiteHover">
+                  <MdKeyboardArrowRight className="text-xl" />
+                </div>
+              </Link>
             </li>
           </>
         ) : (
