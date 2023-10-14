@@ -8,7 +8,7 @@ const Profile = async () => {
   const user = await getUser()
 
   return (
-    <div className="mx-auto max-w-[1248px] p-4 md:px-8">
+    <div className="mx-auto max-w-[1248px] md:px-6">
       <ProfileCard user={user} />
       <ProfileDetails />
     </div>
@@ -18,7 +18,7 @@ const Profile = async () => {
 const ProfileCard = ({ user }: { user: UserObj }) => {
   const year = new Date(user.createdAt as string).getFullYear()
   return (
-    <div className="mt-20 xl:mt-44">
+    <div className="mt-20 px-4 xl:mt-44">
       <div className="mx-auto w-fit rounded-full border-2 border-white drop-shadow">
         <UserImage
           imageUrl={user.profilePicture}

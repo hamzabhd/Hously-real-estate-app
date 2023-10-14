@@ -1,11 +1,59 @@
 'use client'
-import { useState } from 'react'
+import { Fragment, ReactNode, useState } from 'react'
 import { FaXTwitter, FaFacebookF, FaLinkedinIn } from 'react-icons/fa6'
 import { MdOutlineLocalPhone, MdOutlineEmail } from 'react-icons/md'
+import { IoIosStar, IoIosStarOutline } from 'react-icons/io'
 import Image from 'next/image'
+import UserImage from '@/components/UserImage'
+
+const DATA = [
+  {
+    id: '1',
+    username: 'Jana Lorene',
+    userImage: '/images/person.jpg',
+    reviewDate: '1 year ago',
+    review: 'Lorem, ipsum dolor sit amet consectetur adipisicing elit.',
+    rating: '5',
+  },
+  {
+    id: '2',
+    username: 'Jana Lorene',
+    userImage: '/images/person.jpg',
+    reviewDate: '1 year ago',
+    review:
+      'Lorem, ipsum dolor sit amet consectetur adipisicing elit. Nobis ipsum labore sunt possimus.',
+    rating: '4',
+  },
+  {
+    id: '3',
+    username: 'Jana Lorene',
+    userImage: '/images/person.jpg',
+    reviewDate: '1 year ago',
+    review:
+      'Lorem, ipsum dolor sit amet consectetur adipisicing elit. Nobis ipsum labore sunt possimus commodi numquam blanditiis.',
+    rating: '3',
+  },
+  {
+    id: '4',
+    username: 'Jana Lorene',
+    userImage: '/images/person.jpg',
+    reviewDate: '1 year ago',
+    review:
+      'Lorem, ipsum dolor sit amet consectetur adipisicing elit. Nobis ipsum labore sunt possimus commodi numquam blanditiis ad fugit corporis nostrum ratione dolorum aperiam, pariatur veritatis quos culpa, accusantium illo! Unde.',
+    rating: '2',
+  },
+  {
+    id: '5',
+    username: 'Jana Lorene',
+    userImage: '/images/person.jpg',
+    reviewDate: '1 year ago',
+    review: 'Lorem, ipsum dolor sit amet consectetur adipisicing elit. ',
+    rating: '1',
+  },
+]
 
 const ProfileDetails = () => {
-  const [link, setLink] = useState('about')
+  const [link, setLink] = useState('reviews')
 
   const setActiveLink = (link: string) => {
     setLink(link)
@@ -13,7 +61,7 @@ const ProfileDetails = () => {
 
   return (
     <div className="mt-6">
-      <ul className="flex items-center justify-between border-b border-b-black/40 md:justify-normal md:gap-x-10">
+      <ul className="mx-4 flex items-center justify-between border-b border-b-black/40 md:mx-0 md:justify-normal md:gap-x-10">
         <li className="relative py-5">
           <span
             className={`cursor-pointer font-medium ${
@@ -76,7 +124,7 @@ const ProfileDetails = () => {
         </li>
       </ul>
       {link === 'about' && (
-        <div className="mt-6 lg:mt-8 lg:grid lg:grid-cols-3 lg:gap-x-6">
+        <div className="mt-6 px-4 md:px-0 lg:mt-8 lg:grid lg:grid-cols-3 lg:gap-x-6">
           <div className="lg:col-start-1 lg:col-end-3">
             <h3 className="mb-4 mt-6 text-xl font-medium text-black lg:mt-0 lg:text-2xl">
               Biography
@@ -204,6 +252,84 @@ const ProfileDetails = () => {
           </ul>
         </div>
       )}
+
+      {link === 'reviews' && (
+        <div className="mt-6 sm:grid sm:grid-cols-2 sm:gap-4 sm:px-4 md:px-0 lg:my-8 lg:grid-cols-3 lg:gap-6">
+          {DATA.map((item) => (
+            <Fragment key={item.id}>
+              <ReviewCard review={item} />
+            </Fragment>
+          ))}
+        </div>
+      )}
+    </div>
+  )
+}
+
+const ReviewCard = ({
+  review,
+}: {
+  review: {
+    id: string
+    username: string
+    userImage: string
+    reviewDate: string
+    review: string
+    rating: string
+  }
+}) => {
+  const reformReviewText = (text: string): string => {
+    const textArr = text.split(' ')
+
+    if (textArr.length > 15) {
+      return textArr.slice(0, 21).join(' ') + '...'
+    }
+    return text
+  }
+
+  const isMore = (text: string): boolean => {
+    const textArr = text.split(' ')
+
+    if (textArr.length > 15) {
+      return true
+    }
+    return false
+  }
+
+  const getRating = (rating: string) => {
+    let stars: ReactNode[] = []
+
+    for (let i = 0; i < 5; i++) {
+      if (i >= Number(rating)) {
+        stars.push(<IoIosStarOutline className="h-4 w-4 text-black/60" />)
+      } else {
+        stars.push(<IoIosStar className="h-4 w-4 text-black/60" />)
+      }
+    }
+    return stars
+  }
+
+  return (
+    <div className="sm:container-shadow group overflow-hidden px-4 pt-6 first:pt-0 last:mb-0 sm:rounded-3xl  sm:py-6 sm:first:pt-6">
+      <div className="flex items-center justify-between gap-x-2">
+        <UserImage name={review.username} imageUrl={review.userImage} />
+        <div className="mr-auto flex flex-col">
+          <span className="block font-bold">{review.username}</span>
+          <span className="block text-slate-600">{review.reviewDate}</span>
+        </div>
+        <div className="flex self-start">{getRating(review.rating)}</div>
+      </div>
+
+      <p className="mb-4 mt-6 font-normal leading-relaxed text-black/60">
+        {reformReviewText(review.review)}
+      </p>
+
+      {isMore(review.review) && (
+        <span className="cursor-pointer text-sm font-medium hover:underline">
+          Read more
+        </span>
+      )}
+      <span className="mt-6 block h-px bg-grey group-last:hidden sm:hidden"></span>
     </div>
   )
 }

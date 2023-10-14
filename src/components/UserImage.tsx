@@ -12,9 +12,12 @@ const UserImage = ({
   width?: number
   height?: number
 }) => {
-  name = 'Hamza ELBOHDIDI'
   const username =
     name.split(' ')[0].slice(0, 1) + name.split(' ')[1].slice(0, 1)
+
+  const imgHeight = height ? 'h-' + height / 4 : 'h-10'
+  const imgWidth = width ? 'w-' + width / 4 : 'w-10'
+  const textSize = width ? 'text-4xl' : 'text-base'
 
   return (
     <>
@@ -24,18 +27,11 @@ const UserImage = ({
           alt="user profile image"
           width={width || 40}
           height={height || 40}
-          className={`h-${height ? height / 4 : '10'} w-${
-            width ? width / 4 : '10'
-          } rounded-full bg-white object-cover`}
+          className={`${imgHeight} ${imgWidth} flex-shrink-0 rounded-full bg-white object-cover`}
         />
       ) : (
         <span
-          className={`flex h-${height ? height / 4 : '10'} 
-          w-${
-            width ? width / 4 : '10'
-          } items-center justify-center rounded-full border border-slate-300 bg-white text-${
-            width ? '4xl' : 'base'
-          }`}
+          className={`flex ${imgHeight} ${imgWidth} flex-shrink-0 items-center justify-center rounded-full border border-slate-300 bg-white text-${textSize}`}
         >
           {username}
         </span>
