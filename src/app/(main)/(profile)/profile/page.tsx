@@ -18,7 +18,7 @@ const Profile = async () => {
 const ProfileCard = ({ user }: { user: UserObj }) => {
   const year = new Date(user.createdAt as string).getFullYear()
   return (
-    <div className="mt-20 px-4 xl:mt-44">
+    <div className="mt-20 px-4 xl:mt-48">
       <div className="mx-auto w-fit rounded-full border-2 border-white drop-shadow">
         <UserImage
           imageUrl={user.profilePicture}

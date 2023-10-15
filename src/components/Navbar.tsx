@@ -15,12 +15,14 @@ type NavbarPropsType = {
 }
 
 const Navbar = ({ user, session }: NavbarPropsType) => {
-  const [IsOpen, setIsOpen] = useState(false)
+  const [isOpen, setIsOpen] = useState(false)
   const [options, setOptions] = useState(false)
 
   return (
     <nav
-      className={`relative z-10 flex items-center justify-between gap-x-2 border-b bg-white/20 px-4 backdrop-blur-lg ${
+      className={`${
+        isOpen ? 'fixed bg-white' : 'relative bg-white/20'
+      } top-0 z-10 flex w-full items-center justify-between gap-x-2 border-b  px-4 backdrop-blur-lg lg:relative ${
         session ? 'py-4' : 'py-3'
       }`}
     >
@@ -136,16 +138,16 @@ const Navbar = ({ user, session }: NavbarPropsType) => {
 
       <div
         className="w-fit cursor-pointer rounded-lg p-2 transition-colors hover:border-lightGrey hover:bg-lightGrey lg:hidden"
-        onClick={() => setIsOpen(!IsOpen)}
+        onClick={() => setIsOpen(!isOpen)}
       >
         <HiMenuAlt1 className="scale-x-[-1] text-xl" />
       </div>
 
       <ul
         className={`${
-          !IsOpen
+          !isOpen
             ? 'hidden opacity-0 md:hidden'
-            : 'absolute right-0 top-[65px] flex h-[calc(100vh-67px)] w-full flex-col gap-1 bg-white p-2 pb-3 opacity-100 transition-opacity lg:hidden'
+            : 'absolute right-0 top-[73px] flex h-[calc(100vh-73px)] w-full flex-col gap-1 bg-white p-2 pb-3 opacity-100 transition-opacity lg:hidden'
         }`}
       >
         <li>

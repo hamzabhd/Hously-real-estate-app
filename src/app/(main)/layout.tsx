@@ -7,7 +7,7 @@ const MainLayout = async ({ children }: { children: ReactNode }) => {
   const currentUser = await getUser()
 
   return (
-    <main>
+    <main className="relative min-h-screen">
       <Navbar user={currentUser} session={session?.user.id} />
       {children}
       <Footer />
