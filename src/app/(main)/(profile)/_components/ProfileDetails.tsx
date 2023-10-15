@@ -269,10 +269,10 @@ const ProfileDetails = () => {
           {reviewFound && (
             <div className="fixed left-0 top-0 grid min-h-full w-full place-content-center bg-black/20 px-4 backdrop-blur-[2px]">
               <div className="container-shadow animate-popup h-full w-full max-w-[500px] overflow-hidden rounded-3xl bg-white duration-1000">
-                <div className="flex items-center justify-between p-4 lg:p-5">
+                <div className="m-4 flex items-center justify-between rounded-2xl bg-lightGrey p-4">
                   <span className="text-xl font-bold">User review</span>
                   <div
-                    className="group w-fit cursor-pointer rounded-lg border p-1 transition-colors hover:border-lightGrey hover:bg-lightGrey"
+                    className="group w-fit cursor-pointer rounded-lg border p-1 transition-colors hover:bg-whiteHover"
                     onClick={() => setReviewToShow('')}
                   >
                     <IoClose className="transition-color text-xl text-black/60 transition-colors group-hover:text-black" />
@@ -343,8 +343,8 @@ const ReviewCard = ({
 
   return (
     <div
-      className={`sm:container-shadow group relative overflow-hidden px-4 pt-6 last:mb-0 sm:rounded-3xl sm:py-6 sm:first:pt-6 lg:px-5 ${
-        showReview ? 'container-shadow rounded-3xl py-6 ' : 'first:pt-0'
+      className={`group relative overflow-hidden px-4 pt-6 last:mb-0 sm:rounded-3xl sm:py-6 sm:first:pt-6 lg:px-5 ${
+        showReview ? 'pb-6 pt-2 sm:pt-2' : 'sm:container-shadow first:pt-0 '
       }`}
     >
       {!showReview && (
