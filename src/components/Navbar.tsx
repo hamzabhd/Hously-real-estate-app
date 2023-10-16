@@ -22,7 +22,7 @@ const Navbar = ({ user, session }: NavbarPropsType) => {
     <nav
       className={`${
         isOpen ? 'fixed bg-white' : 'relative bg-white/20'
-      } top-0 z-10 flex w-full items-center justify-between gap-x-2 border-b  px-4 backdrop-blur-lg lg:relative ${
+      } top-0 z-10 flex w-full items-center justify-between gap-x-2 border border-grey px-4 backdrop-blur-lg lg:relative lg:bg-white/20 ${
         session ? 'py-4' : 'py-3'
       }`}
     >

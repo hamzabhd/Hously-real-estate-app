@@ -31,7 +31,7 @@ const UserImage = ({
         />
       ) : (
         <span
-          className={`flex ${imgHeight} ${imgWidth} flex-shrink-0 items-center justify-center rounded-full border border-slate-300 bg-white text-${textSize}`}
+          className={`flex ${imgHeight} ${imgWidth} flex-shrink-0 items-center justify-center rounded-full border border-slate-300 bg-white ${textSize}`}
         >
           {username}
         </span>
