@@ -1,23 +1,121 @@
-import { AiOutlinePlus } from 'react-icons/ai'
+'use client'
+import { AiOutlinePlus, AiOutlineMinus } from 'react-icons/ai'
+import { IoClose } from 'react-icons/io5'
+import { HiOutlinePlusSm } from 'react-icons/hi'
 import UserImage from '@/components/UserImage'
-import React from 'react'
 import Line from '@/components/Line'
+import { ReactNode, useReducer } from 'react'
 
-const EditProfile = () => {
-  return (
-    <div className="mx-auto max-w-[1248px] px-4">
-      <EditProfileForm />
-    </div>
-  )
+enum ActionTypes {
+  ADD_FACT = 'ADD_FACT',
+  REMOVE_FACT = 'REMOVE_FACT',
+  ADD_DESTINATION = 'ADD_DESTINATION',
+  REMOVE_DESTINATION = 'REMOVE_DESTINATION',
+  ADD_LINK = 'ADD_LINK',
+  REMOVE_LINK = 'REMOVE_LINK',
+}
+
+interface AddAction {
+  type: ActionTypes
+  payload?: ReactNode
+}
+
+interface InitialState {
+  fact: ReactNode[]
+  destination: ReactNode[]
+  link: ReactNode[]
+}
+
+const reducer = (state: InitialState, action: AddAction) => {
+  const { type, payload } = action
+
+  switch (type) {
+    case ActionTypes.ADD_FACT:
+      if (state.fact.length === 2) return state
+      return { ...state, fact: [...state.fact, payload] }
+
+    case ActionTypes.REMOVE_FACT:
+      if (state.fact.length === 0) return state
+      return { ...state, fact: state.fact.slice(0, -1) }
+
+    case ActionTypes.ADD_DESTINATION:
+      if (state.destination.length === 2) return state
+      return { ...state, destination: [...state.destination, payload] }
+
+    case ActionTypes.REMOVE_DESTINATION:
+      if (state.destination.length === 0) return state
+      return { ...state, destination: state.destination.slice(0, -1) }
+
+    case ActionTypes.ADD_LINK:
+      if (state.link.length === 2) return state
+      return { ...state, link: [...state.link, payload] }
+
+    case ActionTypes.REMOVE_LINK:
+      if (state.link.length === 0) return state
+      return { ...state, link: state.link.slice(0, -1) }
+
+    default:
+      return state
+  }
+}
+
+const initialState: InitialState = {
+  fact: [],
+  destination: [],
+  link: [],
 }
 
 const EditProfileForm = () => {
+  const [inputs, dispatch] = useReducer(reducer, initialState)
+
+  const factInput = (input: number) => {
+    return (
+      <div className="relative mb-4 md:mb-5">
+        <input
+          type="text"
+          name={`fact-${input}`}
+          id={`fact-${input}`}
+          placeholder="Tell us something funny "
+          className="block w-full rounded-full border border-grey bg-transparent p-4 text-black placeholder:font-medium placeholder:text-gray-400 focus:border-black/60 focus:outline-none focus:ring-0"
+        />
+      </div>
+    )
+  }
+
+  const destinationInput = (input: number) => {
+    return (
+      <div className="relative mb-4 md:mb-5">
+        <input
+          type="text"
+          name={`destination-${input}`}
+          id={`destination-${input}`}
+          placeholder="Santorini, Greece"
+          className="block w-full rounded-full border border-grey bg-transparent p-4 text-black placeholder:font-medium placeholder:text-gray-400 focus:border-black/60 focus:outline-none focus:ring-0"
+        />
+      </div>
+    )
+  }
+
+  const linkInput = (input: number) => {
+    return (
+      <div className="relative mb-4 md:mb-5">
+        <input
+          type="text"
+          name={`link-${input}`}
+          id={`link-${input}`}
+          placeholder="Add a social link"
+          className="peer block w-full appearance-none rounded-full border border-grey bg-transparent p-4 text-black placeholder:font-medium placeholder:text-gray-400 focus:border-black/60 focus:outline-none focus:ring-0"
+        />
+      </div>
+    )
+  }
+
   return (
-    <div className="mt-4">
+    <div className="mt-4 lg:mt-8">
       <form className="">
         <div className="md:grid md:grid-cols-3">
           <h2 className="mb-4 mt-2 text-lg font-bold uppercase md:my-0 md:mb-5 lg:text-xl ">
-            Personal information
+            <span className="block text-black/60">01.</span>Personal information
           </h2>
           <div className="sm:grid sm:grid-cols-2 sm:gap-x-4 md:col-start-2 md:col-end-4">
             <div className="mb-4 flex gap-x-4 sm:col-start-1 sm:col-end-3 md:mb-5">
@@ -135,7 +233,8 @@ const EditProfileForm = () => {
 
         <div className="md:grid md:grid-cols-3">
           <h2 className="mb-4 mt-2 text-lg font-bold uppercase md:my-0 md:mb-5 lg:text-xl ">
-            Additional information
+            <span className="block text-black/60">02.</span>Additional
+            information
           </h2>
           <div className="md:col-start-2 md:col-end-4">
             <div className="relative mb-4 md:mb-5">
@@ -166,25 +265,108 @@ const EditProfileForm = () => {
                 Professional background
               </label>
             </div>
-            <div>
+            <div className="mb-4 md:mb-5">
               <span className="mb-2 block font-medium text-black/60">
                 Fun facts
               </span>
               <div className="relative mb-4 md:mb-5">
                 <input
                   type="text"
-                  name="professionalBackground"
-                  id="professionalBack"
-                  placeholder="Something fun no one knows"
+                  name="fact"
+                  id="fact"
+                  placeholder="Tell us something funny "
                   className="block w-full rounded-full border border-grey bg-transparent p-4 text-black placeholder:font-medium placeholder:text-gray-400 focus:border-black/60 focus:outline-none focus:ring-0"
                 />
               </div>
-              <button className="group flex items-center gap-x-2 font-normal">
-                <AiOutlinePlus className="text-blue-900" />
-                <span className="text-sm font-medium text-blue-900 group-hover:underline">
-                  Add a fact
-                </span>
-              </button>
+              {inputs.fact}
+              <div className="flex gap-x-4">
+                {inputs.fact.length < 2 && (
+                  <button
+                    type="button"
+                    className="group flex items-center gap-x-2 font-normal"
+                    onClick={() =>
+                      dispatch({
+                        type: ActionTypes.ADD_FACT,
+                        payload: factInput(inputs.fact.length + 1),
+                      })
+                    }
+                  >
+                    <HiOutlinePlusSm className="h-4 w-4 text-blue-900" />
+                    <span className="text-sm font-medium text-blue-900 group-hover:underline">
+                      Add fact
+                    </span>
+                  </button>
+                )}
+                {inputs.fact.length > 0 && (
+                  <button
+                    type="button"
+                    className="group flex items-center gap-x-2 font-normal"
+                    onClick={() =>
+                      dispatch({
+                        type: ActionTypes.REMOVE_FACT,
+                      })
+                    }
+                  >
+                    <IoClose className="h-4 w-4 text-red-500" />
+                    <span className="text-sm font-medium text-red-500 group-hover:underline">
+                      Remove fact
+                    </span>
+                  </button>
+                )}
+              </div>
+            </div>
+            <div>
+              <span className="mb-2 block font-medium text-black/60">
+                Favorite destinations
+              </span>
+              <div className="relative mb-4 md:mb-5">
+                <input
+                  type="text"
+                  name="destination"
+                  id="destination"
+                  placeholder="Santorini, Greece"
+                  className="block w-full rounded-full border border-grey bg-transparent p-4 text-black placeholder:font-medium placeholder:text-gray-400 focus:border-black/60 focus:outline-none focus:ring-0"
+                />
+              </div>
+              {inputs.destination}
+
+              <div className="flex gap-x-4">
+                {inputs.destination.length < 2 && (
+                  <button
+                    type="button"
+                    className="group flex items-center gap-x-2 font-normal"
+                    onClick={() =>
+                      dispatch({
+                        type: ActionTypes.ADD_DESTINATION,
+                        payload: destinationInput(
+                          inputs.destination.length + 1,
+                        ),
+                      })
+                    }
+                  >
+                    <HiOutlinePlusSm className="h-4 w-4 text-blue-900" />
+                    <span className="text-sm font-medium text-blue-900 group-hover:underline">
+                      Add destination
+                    </span>
+                  </button>
+                )}
+                {inputs.destination.length > 0 && (
+                  <button
+                    type="button"
+                    className="group flex items-center gap-x-2 font-normal"
+                    onClick={() =>
+                      dispatch({
+                        type: ActionTypes.REMOVE_DESTINATION,
+                      })
+                    }
+                  >
+                    <IoClose className="h-4 w-4 text-red-500" />
+                    <span className="text-sm font-medium text-red-500 group-hover:underline">
+                      Remove destination
+                    </span>
+                  </button>
+                )}
+              </div>
             </div>
           </div>
 
@@ -193,7 +375,8 @@ const EditProfileForm = () => {
 
         <div className="md:grid md:grid-cols-3">
           <h2 className="mb-4 mt-2 text-xl  font-bold uppercase md:my-0 md:mb-5 ">
-            Additional contact info
+            <span className="block text-black/60">03.</span>Additional contact
+            info
           </h2>
           <div className="md:col-start-2 md:col-end-4">
             <span className="mb-2 block font-medium text-black/60">
@@ -208,12 +391,43 @@ const EditProfileForm = () => {
                 className="peer block w-full appearance-none rounded-full border border-grey bg-transparent p-4 text-black placeholder:font-medium placeholder:text-gray-400 focus:border-black/60 focus:outline-none focus:ring-0"
               />
             </div>
-            <button className="group flex items-center gap-x-2 font-normal">
-              <AiOutlinePlus className="text-blue-900" />
-              <span className="text-sm font-medium text-blue-900 group-hover:underline">
-                Add a link
-              </span>
-            </button>
+            {inputs.link}
+            <div className="flex gap-x-4">
+              {inputs.link.length < 2 && (
+                <button
+                  type="button"
+                  className="group flex items-center gap-x-2 font-normal"
+                  onClick={() =>
+                    dispatch({
+                      type: ActionTypes.ADD_LINK,
+                      payload: linkInput(inputs.link.length + 1),
+                    })
+                  }
+                >
+                  <HiOutlinePlusSm className="h-4 w-4 text-blue-900" />
+                  <span className="text-sm font-medium text-blue-900 group-hover:underline">
+                    Add link
+                  </span>
+                </button>
+              )}
+
+              {inputs.link.length > 0 && (
+                <button
+                  type="button"
+                  className="group flex items-center gap-x-2 font-normal"
+                  onClick={() =>
+                    dispatch({
+                      type: ActionTypes.REMOVE_LINK,
+                    })
+                  }
+                >
+                  <IoClose className="h-4 w-4 text-red-500" />
+                  <span className="text-sm font-medium text-red-500 group-hover:underline">
+                    Remove link
+                  </span>
+                </button>
+              )}
+            </div>
           </div>
 
           <Line className="md:col-start-1 md:col-end-4 lg:mb-5" />
@@ -232,4 +446,4 @@ const EditProfileForm = () => {
   )
 }
 
-export default EditProfile
+export default EditProfileForm

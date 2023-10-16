@@ -22,7 +22,7 @@ const Navbar = ({ user, session }: NavbarPropsType) => {
     <nav
       className={`${
         isOpen ? 'fixed bg-white' : 'relative bg-white/20'
-      } top-0 z-10 flex w-full items-center justify-between gap-x-2 border border-grey px-4 backdrop-blur-lg lg:relative lg:bg-white/20 ${
+      } top-0 z-20 flex w-full items-center justify-between gap-x-2 px-4 backdrop-blur-lg lg:relative lg:bg-white/20 ${
         session ? 'py-4' : 'py-3'
       }`}
     >
@@ -146,8 +146,8 @@ const Navbar = ({ user, session }: NavbarPropsType) => {
       <ul
         className={`${
           !isOpen
-            ? 'hidden opacity-0 md:hidden'
-            : 'absolute right-0 top-[73px] flex h-[calc(100vh-73px)] w-full flex-col gap-1 bg-white p-2 pb-3 opacity-100 transition-opacity lg:hidden'
+            ? 'hidden md:hidden'
+            : 'absolute right-0 top-[73px] flex h-[calc(100vh-73px)] w-full flex-col gap-1 bg-white p-2 pb-3 lg:hidden'
         }`}
       >
         <li>
