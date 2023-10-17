@@ -6,65 +6,6 @@ import UserImage from '@/components/UserImage'
 import Line from '@/components/Line'
 import { ChangeEvent, ReactNode, useReducer, useState } from 'react'
 
-enum ActionTypes {
-  ADD_FACT = 'ADD_FACT',
-  REMOVE_FACT = 'REMOVE_FACT',
-  ADD_DESTINATION = 'ADD_DESTINATION',
-  REMOVE_DESTINATION = 'REMOVE_DESTINATION',
-  ADD_LINK = 'ADD_LINK',
-  REMOVE_LINK = 'REMOVE_LINK',
-}
-
-interface AddAction {
-  type: ActionTypes
-  payload?: ReactNode
-}
-
-interface InitialState {
-  fact: ReactNode[]
-  destination: ReactNode[]
-  link: ReactNode[]
-}
-
-const reducer = (state: InitialState, action: AddAction) => {
-  const { type, payload } = action
-
-  switch (type) {
-    case ActionTypes.ADD_FACT:
-      if (state.fact.length === 2) return state
-      return { ...state, fact: [...state.fact, payload] }
-
-    case ActionTypes.REMOVE_FACT:
-      if (state.fact.length === 0) return state
-      return { ...state, fact: state.fact.slice(0, -1) }
-
-    case ActionTypes.ADD_DESTINATION:
-      if (state.destination.length === 2) return state
-      return { ...state, destination: [...state.destination, payload] }
-
-    case ActionTypes.REMOVE_DESTINATION:
-      if (state.destination.length === 0) return state
-      return { ...state, destination: state.destination.slice(0, -1) }
-
-    case ActionTypes.ADD_LINK:
-      if (state.link.length === 2) return state
-      return { ...state, link: [...state.link, payload] }
-
-    case ActionTypes.REMOVE_LINK:
-      if (state.link.length === 0) return state
-      return { ...state, link: state.link.slice(0, -1) }
-
-    default:
-      return state
-  }
-}
-
-const initialState: InitialState = {
-  fact: [],
-  destination: [],
-  link: [],
-}
-
 interface UserDetails {
   username: string
   fullName: string
@@ -74,13 +15,18 @@ interface UserDetails {
   email: string
   bio: string
   background: string
-  facts: string[]
-  destinations: string[]
-  links: string[]
+  facts: {
+    [key: string]: string
+  }
+  destinations: {
+    [key: string]: string
+  }
+  links: {
+    [key: string]: string
+  }
 }
 
 const EditProfileForm = () => {
-  const [inputs, dispatch] = useReducer(reducer, initialState)
   const [imageToPreview, setImageToPreview] = useState('')
   const [imageData, setImageData] = useState('')
   const [userDetails, setUserDetails] = useState<UserDetails>({
@@ -92,12 +38,24 @@ const EditProfileForm = () => {
     email: '',
     bio: '',
     background: '',
-    facts: [],
-    destinations: [],
-    links: [],
+    facts: {
+      fact1: '',
+      fact2: '',
+      fact3: '',
+    },
+    destinations: {
+      destination1: '',
+      destination2: '',
+      destination3: '',
+    },
+    links: {
+      link1: '',
+      link2: '',
+      link3: '',
+    },
   })
 
-  const reformUserName = (name: string) => {
+  const reformName = (name: string) => {
     const nameArr = name.split(' ')
 
     const firstLetterToUpperCase =
@@ -105,7 +63,6 @@ const EditProfileForm = () => {
       nameArr[0].slice(1).toLocaleLowerCase()
     const newName =
       firstLetterToUpperCase + nameArr.slice(1).join('').toLocaleLowerCase()
-    if (newName.length >= 10) return newName.slice(0, 10)
     return newName
   }
 
@@ -132,13 +89,15 @@ const EditProfileForm = () => {
     }
   }
 
-  const onChange = (e: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
+  const handleChange = (
+    e: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>,
+  ) => {
     const { value, name } = e.target
 
-    if (name === 'username') {
+    if (/(username|country|city)/.test(name)) {
       return setUserDetails((prevState) => ({
         ...prevState,
-        username: reformUserName(value),
+        [name]: reformName(value),
       }))
     }
     if (name === 'fullName') {
@@ -149,77 +108,37 @@ const EditProfileForm = () => {
     }
 
     if (/(fact)\d?/g.test(name)) {
-      console.log(name, value)
       return setUserDetails((prevState) => ({
         ...prevState,
-        facts: [...prevState.facts, value],
+        facts: {
+          ...prevState.facts,
+          [name]: value,
+        },
       }))
     }
     if (/(destination)\d?/g.test(name)) {
       return setUserDetails((prevState) => ({
         ...prevState,
-        destinations: [...prevState.destinations, value],
-      }))
-    }
-    if (/(link)\d?/g.test(name)) {
-      return setUserDetails((prevState) => ({
-        ...prevState,
-        links: [...prevState.links, value],
+        destinations: {
+          ...prevState.destinations,
+          [name]: value,
+        },
       }))
     }
 
+    if (/(link)\d?/g.test(name)) {
+      return setUserDetails((prevState) => ({
+        ...prevState,
+        links: {
+          ...prevState.links,
+          [name]: value,
+        },
+      }))
+    }
     return setUserDetails((prevState) => ({
       ...prevState,
       [name]: value,
     }))
-  }
-
-  const factInput = (input: number) => {
-    return (
-      <div className="relative mb-4 md:mb-5">
-        <input
-          type="text"
-          name={`fact-${input}`}
-          id={`fact-${input}`}
-          onChange={onChange}
-          value={userDetails.facts[input]}
-          placeholder="Tell us something funny "
-          className="block w-full rounded-full border border-grey bg-transparent p-4 text-black placeholder:font-medium placeholder:text-gray-400 focus:border-black/60 focus:outline-none focus:ring-0"
-        />
-      </div>
-    )
-  }
-
-  const destinationInput = (input: number) => {
-    return (
-      <div className="relative mb-4 md:mb-5">
-        <input
-          type="text"
-          name={`destination-${input}`}
-          id={`destination-${input}`}
-          onChange={onChange}
-          value={userDetails.destinations[input]}
-          placeholder="Santorini, Greece"
-          className="block w-full rounded-full border border-grey bg-transparent p-4 text-black placeholder:font-medium placeholder:text-gray-400 focus:border-black/60 focus:outline-none focus:ring-0"
-        />
-      </div>
-    )
-  }
-
-  const linkInput = (input: number) => {
-    return (
-      <div className="relative mb-4 md:mb-5">
-        <input
-          type="text"
-          name={`link-${input}`}
-          id={`link-${input}`}
-          onChange={onChange}
-          value={userDetails.links[input]}
-          placeholder="Add a social link"
-          className="peer block w-full appearance-none rounded-full border border-grey bg-transparent p-4 text-black placeholder:font-medium placeholder:text-gray-400 focus:border-black/60 focus:outline-none focus:ring-0"
-        />
-      </div>
-    )
   }
 
   const uploadImage = (e: ChangeEvent<HTMLInputElement>) => {
@@ -298,7 +217,9 @@ const EditProfileForm = () => {
                 type="text"
                 name="username"
                 id="username"
-                onChange={onChange}
+                minLength={5}
+                maxLength={8}
+                onChange={handleChange}
                 value={userDetails.username}
                 placeholder=" "
                 className="peer block w-full appearance-none rounded-full border border-grey bg-transparent px-4 pb-3 pt-4 text-black focus:border-black/60 focus:outline-none focus:ring-0 invalid:[&:not(:focus)]:border-red-500 invalid:[&:not(:placeholder-shown):not(:focus)]:text-red-500"
@@ -322,8 +243,8 @@ const EditProfileForm = () => {
               <InputValidator
                 message={
                   userDetails.fullName
-                  ? 'Please enter only letters'
-                  : 'This field is required'
+                    ? 'Please enter only letters'
+                    : 'This field is required'
                 }
               />
             </div>
@@ -332,10 +253,11 @@ const EditProfileForm = () => {
                 type="text"
                 name="fullName"
                 id="fullName"
-                onChange={onChange}
+                onChange={handleChange}
                 value={userDetails.fullName}
                 placeholder=" "
                 className="peer block w-full appearance-none rounded-full border border-grey bg-transparent px-4 pb-3 pt-4 text-black focus:border-black/60 focus:outline-none focus:ring-0 invalid:[&:not(:focus)]:border-red-500 invalid:[&:not(:placeholder-shown):not(:focus)]:text-red-500"
+                minLength={5}
                 pattern="^[a-zA-Z\s]+$"
                 required
               />
@@ -348,7 +270,9 @@ const EditProfileForm = () => {
               <InputValidator
                 message={
                   userDetails.fullName
-                    ? 'Please enter only letters'
+                    ? userDetails.fullName.length < 5
+                      ? 'The name should be at least 5 characters'
+                      : 'Please enter only letters'
                     : 'This field is required'
                 }
               />
@@ -358,6 +282,8 @@ const EditProfileForm = () => {
                 type="text"
                 name="country"
                 id="country"
+                onChange={handleChange}
+                value={userDetails.country}
                 placeholder=" "
                 className="peer block w-full appearance-none rounded-full border border-grey bg-transparent px-4 pb-3 pt-4 text-black focus:border-black/60 focus:outline-none focus:ring-0"
               />
@@ -373,6 +299,8 @@ const EditProfileForm = () => {
                 type="text"
                 name="city"
                 id="city"
+                onChange={handleChange}
+                value={userDetails.city}
                 placeholder=" "
                 className="peer block w-full appearance-none rounded-full border border-grey bg-transparent px-4 pb-3 pt-4 text-black focus:border-black/60 focus:outline-none focus:ring-0"
               />
@@ -388,7 +316,7 @@ const EditProfileForm = () => {
                 type="tel"
                 name="phoneNumber"
                 id="phoneNumber"
-                onChange={onChange}
+                onChange={handleChange}
                 value={userDetails.phoneNumber}
                 placeholder=" "
                 className="peer block w-full appearance-none rounded-full border border-grey bg-transparent px-4 pb-3 pt-4 text-black focus:border-black/60 focus:outline-none focus:ring-0 invalid:[&:not(:placeholder-shown):not(:focus)]:border-red-500 invalid:[&:not(:placeholder-shown):not(:focus)]:text-red-500"
@@ -407,6 +335,8 @@ const EditProfileForm = () => {
                 type="email"
                 name="email"
                 id="email"
+                value={userDetails.email}
+                onChange={handleChange}
                 placeholder=" "
                 className="peer block w-full appearance-none rounded-full border border-grey bg-transparent px-4 pb-3 pt-4 text-black focus:border-black/60 focus:outline-none focus:ring-0 invalid:[&:not(:placeholder-shown):not(:focus)]:border-red-500 invalid:[&:not(:placeholder-shown):not(:focus)]:text-red-500"
               />
@@ -432,6 +362,8 @@ const EditProfileForm = () => {
               <textarea
                 name="bio"
                 id="bio"
+                value={userDetails.bio}
+                onChange={handleChange}
                 placeholder=" "
                 className="peer block h-36 w-full resize-none appearance-none rounded-3xl border border-grey bg-transparent p-4 text-black focus:border-black/60 focus:outline-none focus:ring-0"
               />
@@ -444,13 +376,15 @@ const EditProfileForm = () => {
             </div>
             <div className="relative mb-4 md:mb-5">
               <textarea
-                name="professionalBackground"
-                id="professionalBack"
+                name="background"
+                id="background"
+                value={userDetails.background}
+                onChange={handleChange}
                 placeholder=" "
                 className="peer block h-36 w-full resize-none appearance-none rounded-3xl border border-grey bg-transparent p-4 text-black focus:border-black/60 focus:outline-none focus:ring-0"
               />
               <label
-                htmlFor="professionalBack"
+                htmlFor="background"
                 className="absolute left-4 top-1 z-10 origin-[0] -translate-y-4 scale-75 transform cursor-text select-none bg-white px-1 font-medium text-gray-400 duration-300 peer-placeholder-shown:top-4 peer-placeholder-shown:-translate-y-0 peer-placeholder-shown:scale-100 peer-focus:top-1 peer-focus:-translate-y-4 peer-focus:scale-75 peer-focus:cursor-default peer-focus:border-black/60 peer-focus:px-2 peer-focus:text-gray-600"
               >
                 Professional background
@@ -463,49 +397,32 @@ const EditProfileForm = () => {
               <div className="relative mb-4 md:mb-5">
                 <input
                   type="text"
-                  name="fact"
-                  id="fact"
-                  onChange={onChange}
-                  value={userDetails.facts[0]}
+                  name="fact1"
+                  value={userDetails.facts.fact1}
+                  onChange={handleChange}
                   placeholder="Tell us something funny "
                   className="block w-full rounded-full border border-grey bg-transparent p-4 text-black placeholder:font-medium placeholder:text-gray-400 focus:border-black/60 focus:outline-none focus:ring-0"
                 />
               </div>
-              {inputs.fact}
-              <div className="flex gap-x-4">
-                {inputs.fact.length < 2 && (
-                  <button
-                    type="button"
-                    className="group flex items-center gap-x-2 font-normal"
-                    onClick={() =>
-                      dispatch({
-                        type: ActionTypes.ADD_FACT,
-                        payload: factInput(inputs.fact.length + 1),
-                      })
-                    }
-                  >
-                    <HiOutlinePlusSm className="h-4 w-4 text-blue-900" />
-                    <span className="text-sm font-medium text-blue-900 group-hover:underline">
-                      Add fact
-                    </span>
-                  </button>
-                )}
-                {inputs.fact.length > 0 && (
-                  <button
-                    type="button"
-                    className="group flex items-center gap-x-2 font-normal"
-                    onClick={() =>
-                      dispatch({
-                        type: ActionTypes.REMOVE_FACT,
-                      })
-                    }
-                  >
-                    <IoClose className="h-4 w-4 text-red-500" />
-                    <span className="text-sm font-medium text-red-500 group-hover:underline">
-                      Remove fact
-                    </span>
-                  </button>
-                )}
+              <div className="relative mb-4 md:mb-5">
+                <input
+                  type="text"
+                  name="fact2"
+                  value={userDetails.facts.fact2}
+                  onChange={handleChange}
+                  placeholder="Tell us something funny "
+                  className="block w-full rounded-full border border-grey bg-transparent p-4 text-black placeholder:font-medium placeholder:text-gray-400 focus:border-black/60 focus:outline-none focus:ring-0"
+                />
+              </div>
+              <div className="relative mb-4 md:mb-5">
+                <input
+                  type="text"
+                  name="fact3"
+                  value={userDetails.facts.fact3}
+                  onChange={handleChange}
+                  placeholder="Tell us something funny "
+                  className="block w-full rounded-full border border-grey bg-transparent p-4 text-black placeholder:font-medium placeholder:text-gray-400 focus:border-black/60 focus:outline-none focus:ring-0"
+                />
               </div>
             </div>
             <div>
@@ -515,50 +432,32 @@ const EditProfileForm = () => {
               <div className="relative mb-4 md:mb-5">
                 <input
                   type="text"
-                  name="destination"
-                  id="destination"
+                  name="destination1"
+                  value={userDetails.facts.destination1}
+                  onChange={handleChange}
                   placeholder="Santorini, Greece"
                   className="block w-full rounded-full border border-grey bg-transparent p-4 text-black placeholder:font-medium placeholder:text-gray-400 focus:border-black/60 focus:outline-none focus:ring-0"
                 />
               </div>
-              {inputs.destination}
-
-              <div className="flex gap-x-4">
-                {inputs.destination.length < 2 && (
-                  <button
-                    type="button"
-                    className="group flex items-center gap-x-2 font-normal"
-                    onClick={() =>
-                      dispatch({
-                        type: ActionTypes.ADD_DESTINATION,
-                        payload: destinationInput(
-                          inputs.destination.length + 1,
-                        ),
-                      })
-                    }
-                  >
-                    <HiOutlinePlusSm className="h-4 w-4 text-blue-900" />
-                    <span className="text-sm font-medium text-blue-900 group-hover:underline">
-                      Add destination
-                    </span>
-                  </button>
-                )}
-                {inputs.destination.length > 0 && (
-                  <button
-                    type="button"
-                    className="group flex items-center gap-x-2 font-normal"
-                    onClick={() =>
-                      dispatch({
-                        type: ActionTypes.REMOVE_DESTINATION,
-                      })
-                    }
-                  >
-                    <IoClose className="h-4 w-4 text-red-500" />
-                    <span className="text-sm font-medium text-red-500 group-hover:underline">
-                      Remove destination
-                    </span>
-                  </button>
-                )}
+              <div className="relative mb-4 md:mb-5">
+                <input
+                  type="text"
+                  name="destination2"
+                  value={userDetails.facts.destination2}
+                  onChange={handleChange}
+                  placeholder="Santorini, Greece"
+                  className="block w-full rounded-full border border-grey bg-transparent p-4 text-black placeholder:font-medium placeholder:text-gray-400 focus:border-black/60 focus:outline-none focus:ring-0"
+                />
+              </div>
+              <div className="relative mb-4 md:mb-5">
+                <input
+                  type="text"
+                  name="destination3"
+                  value={userDetails.facts.destination3}
+                  onChange={handleChange}
+                  placeholder="Santorini, Greece"
+                  className="block w-full rounded-full border border-grey bg-transparent p-4 text-black placeholder:font-medium placeholder:text-gray-400 focus:border-black/60 focus:outline-none focus:ring-0"
+                />
               </div>
             </div>
           </div>
@@ -578,48 +477,38 @@ const EditProfileForm = () => {
             <div className="relative mb-4 md:mb-5">
               <input
                 type="text"
-                name="professionalBackground"
-                id="professionalBack"
+                name="link1"
+                value={userDetails.facts.link1}
+                onChange={handleChange}
                 placeholder="Add a social link"
-                className="peer block w-full appearance-none rounded-full border border-grey bg-transparent p-4 text-black placeholder:font-medium placeholder:text-gray-400 focus:border-black/60 focus:outline-none focus:ring-0"
+                className="peer block w-full appearance-none rounded-full border border-grey bg-transparent p-4 text-black placeholder:font-medium placeholder:text-gray-400 focus:border-black/60 focus:outline-none focus:ring-0 invalid:[&:not(:focus)]:border-red-500 invalid:[&:not(:placeholder-shown):not(:focus)]:text-red-500"
+                pattern="https://.+"
               />
+              <InputValidator message="Please enter a valid link" />
             </div>
-            {inputs.link}
-            <div className="flex gap-x-4">
-              {inputs.link.length < 2 && (
-                <button
-                  type="button"
-                  className="group flex items-center gap-x-2 font-normal"
-                  onClick={() =>
-                    dispatch({
-                      type: ActionTypes.ADD_LINK,
-                      payload: linkInput(inputs.link.length + 1),
-                    })
-                  }
-                >
-                  <HiOutlinePlusSm className="h-4 w-4 text-blue-900" />
-                  <span className="text-sm font-medium text-blue-900 group-hover:underline">
-                    Add link
-                  </span>
-                </button>
-              )}
-
-              {inputs.link.length > 0 && (
-                <button
-                  type="button"
-                  className="group flex items-center gap-x-2 font-normal"
-                  onClick={() =>
-                    dispatch({
-                      type: ActionTypes.REMOVE_LINK,
-                    })
-                  }
-                >
-                  <IoClose className="h-4 w-4 text-red-500" />
-                  <span className="text-sm font-medium text-red-500 group-hover:underline">
-                    Remove link
-                  </span>
-                </button>
-              )}
+            <div className="relative mb-4 md:mb-5">
+              <input
+                type="text"
+                name="link2"
+                value={userDetails.facts.link2}
+                onChange={handleChange}
+                placeholder="Add a social link"
+                className="peer block w-full appearance-none rounded-full border border-grey bg-transparent p-4 text-black placeholder:font-medium placeholder:text-gray-400 focus:border-black/60 focus:outline-none focus:ring-0 invalid:[&:not(:focus)]:border-red-500 invalid:[&:not(:placeholder-shown):not(:focus)]:text-red-500"
+                pattern="https://.+"
+              />
+              <InputValidator message="Please enter a valid link" />
+            </div>
+            <div className="relative mb-4 md:mb-5">
+              <input
+                type="text"
+                name="link3"
+                value={userDetails.facts.link3}
+                onChange={handleChange}
+                placeholder="Add a social link"
+                className="peer block w-full appearance-none rounded-full border border-grey bg-transparent p-4 text-black placeholder:font-medium placeholder:text-gray-400 focus:border-black/60 focus:outline-none focus:ring-0 invalid:[&:not(:focus)]:border-red-500 invalid:[&:not(:placeholder-shown):not(:focus)]:text-red-500"
+                pattern="https://.+"
+              />
+              <InputValidator message="Please enter a valid link" />
             </div>
           </div>
 
