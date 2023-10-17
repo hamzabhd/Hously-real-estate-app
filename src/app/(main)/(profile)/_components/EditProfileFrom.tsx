@@ -1,10 +1,10 @@
 'use client'
-import { AiOutlinePlus, AiOutlineMinus } from 'react-icons/ai'
+import { MdOutlineInfo } from 'react-icons/md'
 import { IoClose } from 'react-icons/io5'
 import { HiOutlinePlusSm } from 'react-icons/hi'
 import UserImage from '@/components/UserImage'
 import Line from '@/components/Line'
-import { ReactNode, useReducer } from 'react'
+import { ChangeEvent, ReactNode, useReducer, useState } from 'react'
 
 enum ActionTypes {
   ADD_FACT = 'ADD_FACT',
@@ -65,8 +65,114 @@ const initialState: InitialState = {
   link: [],
 }
 
+interface UserDetails {
+  username: string
+  fullName: string
+  country: string
+  city: string
+  phoneNumber: string
+  email: string
+  bio: string
+  background: string
+  facts: string[]
+  destinations: string[]
+  links: string[]
+}
+
 const EditProfileForm = () => {
   const [inputs, dispatch] = useReducer(reducer, initialState)
+  const [imageToPreview, setImageToPreview] = useState('')
+  const [imageData, setImageData] = useState('')
+  const [userDetails, setUserDetails] = useState<UserDetails>({
+    username: '',
+    fullName: '',
+    country: '',
+    city: '',
+    phoneNumber: '',
+    email: '',
+    bio: '',
+    background: '',
+    facts: [],
+    destinations: [],
+    links: [],
+  })
+
+  const reformUserName = (name: string) => {
+    const nameArr = name.split(' ')
+
+    const firstLetterToUpperCase =
+      nameArr[0].slice(0, 1).toLocaleUpperCase() +
+      nameArr[0].slice(1).toLocaleLowerCase()
+    const newName =
+      firstLetterToUpperCase + nameArr.slice(1).join('').toLocaleLowerCase()
+    if (newName.length >= 10) return newName.slice(0, 10)
+    return newName
+  }
+
+  const reformFullName = (name: string) => {
+    const nameArr = name.split(' ')
+
+    const firstLetterToUpperCase = (name: string) =>
+      name.slice(0, 1).toLocaleUpperCase() + name.slice(1).toLocaleLowerCase()
+
+    let newArr = []
+    for (let i = 0; i < nameArr.length; i++) {
+      newArr.push(firstLetterToUpperCase(nameArr[i]))
+    }
+
+    const newName = newArr.slice(0, 3).join(' ').replace(/\s+/g, ' ')
+    return newName
+  }
+
+  function validateInput(input: string) {
+    if (/^[a-zA-Z]+$/.test(input)) {
+      return true
+    } else {
+      return false
+    }
+  }
+
+  const onChange = (e: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
+    const { value, name } = e.target
+
+    if (name === 'username') {
+      return setUserDetails((prevState) => ({
+        ...prevState,
+        username: reformUserName(value),
+      }))
+    }
+    if (name === 'fullName') {
+      return setUserDetails((prevState) => ({
+        ...prevState,
+        fullName: reformFullName(value),
+      }))
+    }
+
+    if (/(fact)\d?/g.test(name)) {
+      console.log(name, value)
+      return setUserDetails((prevState) => ({
+        ...prevState,
+        facts: [...prevState.facts, value],
+      }))
+    }
+    if (/(destination)\d?/g.test(name)) {
+      return setUserDetails((prevState) => ({
+        ...prevState,
+        destinations: [...prevState.destinations, value],
+      }))
+    }
+    if (/(link)\d?/g.test(name)) {
+      return setUserDetails((prevState) => ({
+        ...prevState,
+        links: [...prevState.links, value],
+      }))
+    }
+
+    return setUserDetails((prevState) => ({
+      ...prevState,
+      [name]: value,
+    }))
+  }
 
   const factInput = (input: number) => {
     return (
@@ -75,6 +181,8 @@ const EditProfileForm = () => {
           type="text"
           name={`fact-${input}`}
           id={`fact-${input}`}
+          onChange={onChange}
+          value={userDetails.facts[input]}
           placeholder="Tell us something funny "
           className="block w-full rounded-full border border-grey bg-transparent p-4 text-black placeholder:font-medium placeholder:text-gray-400 focus:border-black/60 focus:outline-none focus:ring-0"
         />
@@ -89,6 +197,8 @@ const EditProfileForm = () => {
           type="text"
           name={`destination-${input}`}
           id={`destination-${input}`}
+          onChange={onChange}
+          value={userDetails.destinations[input]}
           placeholder="Santorini, Greece"
           className="block w-full rounded-full border border-grey bg-transparent p-4 text-black placeholder:font-medium placeholder:text-gray-400 focus:border-black/60 focus:outline-none focus:ring-0"
         />
@@ -103,11 +213,26 @@ const EditProfileForm = () => {
           type="text"
           name={`link-${input}`}
           id={`link-${input}`}
+          onChange={onChange}
+          value={userDetails.links[input]}
           placeholder="Add a social link"
           className="peer block w-full appearance-none rounded-full border border-grey bg-transparent p-4 text-black placeholder:font-medium placeholder:text-gray-400 focus:border-black/60 focus:outline-none focus:ring-0"
         />
       </div>
     )
+  }
+
+  const uploadImage = (e: ChangeEvent<HTMLInputElement>) => {
+    if (/\.(jpe?g|png)/.test(e.target.files?.[0].name as string)) {
+      const fileReader = new FileReader()
+      fileReader.onload = (e) => {
+        setImageToPreview(e.target?.result as string)
+        setImageData(fileReader.result as string)
+      }
+      fileReader.readAsDataURL(e.target.files?.[0] as File)
+      return
+    }
+    alert('This is not a valid image file')
   }
 
   return (
@@ -121,20 +246,51 @@ const EditProfileForm = () => {
             <div className="mb-4 flex gap-x-4 sm:col-start-1 sm:col-end-3 md:mb-5">
               <UserImage
                 name="Jana Lorene"
-                imageUrl="/images/person.jpg"
+                imageUrl={imageToPreview}
                 width={96}
                 height={96}
               />
               <div className="flex w-full flex-col justify-center gap-y-1 rounded-2xl border border-grey p-4 text-sm">
-                <span className="block text-black/60">
-                  <span className="cursor-pointer font-medium text-blue-900 hover:underline">
-                    Click to upload
-                  </span>{' '}
-                  your image.
-                </span>
-                <span className="block text-black/60">
-                  PNG, JPG (max. 800x400px)
-                </span>
+                {!imageData ? (
+                  <>
+                    <div className="text-black/60">
+                      <label>
+                        <span className="cursor-pointer font-medium text-blue-900 hover:underline">
+                          Click to upload
+                        </span>
+                        <input
+                          type="file"
+                          name="image"
+                          className="hidden"
+                          onChange={uploadImage}
+                        />
+                      </label>{' '}
+                      your image.
+                    </div>
+                    <span className="block text-black/60">
+                      PNG, JPG (max. 800x400px)
+                    </span>
+                  </>
+                ) : (
+                  <div className="text-black/60">
+                    <span className="block">
+                      Your image was successfully uploaded
+                    </span>
+                    <button
+                      type="button"
+                      className="group mt-1 flex items-center gap-x-2 font-normal"
+                      onClick={() => {
+                        setImageData('')
+                        setImageToPreview('/images/person.jpg')
+                      }}
+                    >
+                      <IoClose className="h-4 w-4 text-red-500" />
+                      <span className="text-sm font-medium text-red-500 group-hover:underline">
+                        Reset image
+                      </span>
+                    </button>
+                  </div>
+                )}
               </div>
             </div>
             <div className="relative mb-4 md:mb-5">
@@ -142,62 +298,62 @@ const EditProfileForm = () => {
                 type="text"
                 name="username"
                 id="username"
+                onChange={onChange}
+                value={userDetails.username}
                 placeholder=" "
-                className=" peer block w-full appearance-none rounded-full border border-grey bg-transparent px-4 pb-3 pt-4 text-black focus:border-black/60 focus:outline-none focus:ring-0"
+                className="peer block w-full appearance-none rounded-full border border-grey bg-transparent px-4 pb-3 pt-4 text-black focus:border-black/60 focus:outline-none focus:ring-0 invalid:[&:not(:focus)]:border-red-500 invalid:[&:not(:placeholder-shown):not(:focus)]:text-red-500"
+                pattern="^[a-zA-Z]+$"
+                required
               />
               <label
                 htmlFor="username"
-                className="absolute left-3 top-2 z-10 origin-[0] -translate-y-4 scale-75 transform bg-white px-1 font-medium text-gray-400 duration-300 peer-placeholder-shown:top-1/2 peer-placeholder-shown:-translate-y-1/2 peer-placeholder-shown:scale-100 peer-focus:top-2 peer-focus:-translate-y-4 peer-focus:scale-75 peer-focus:border-black/60 peer-focus:px-2 peer-focus:text-gray-600"
+                className="absolute left-3 top-1 z-10 origin-[0] -translate-y-4 scale-75 transform cursor-text select-none bg-white px-1 font-medium text-gray-400 duration-300 peer-placeholder-shown:top-1/2 peer-placeholder-shown:-translate-y-1/2 peer-placeholder-shown:scale-100 peer-invalid:text-red-500 peer-focus:top-1 peer-focus:-translate-y-4 peer-focus:scale-75 peer-focus:cursor-default peer-focus:border-black/60 peer-focus:px-2 peer-focus:text-gray-600"
               >
-                Username
+                Username*
               </label>
+              <div className="group absolute right-4 top-5 hidden peer-invalid:block">
+                <MdOutlineInfo className="h-4 w-4 cursor-pointer text-red-500" />
+                <span className="absolute right-0 z-30 mt-1 hidden w-fit whitespace-nowrap rounded-full border border-red-400 bg-white px-4 py-3 text-sm font-medium text-red-500 group-hover:block">
+                  {userDetails.username
+                    ? 'Please enter only letters'
+                    : 'This field is required'}
+                </span>
+              </div>
+              <InputValidator
+                message={
+                  userDetails.fullName
+                  ? 'Please enter only letters'
+                  : 'This field is required'
+                }
+              />
             </div>
             <div className="relative mb-4 md:mb-5">
               <input
                 type="text"
                 name="fullName"
                 id="fullName"
+                onChange={onChange}
+                value={userDetails.fullName}
                 placeholder=" "
-                className=" peer block w-full appearance-none rounded-full border border-grey bg-transparent px-4 pb-3 pt-4 text-black focus:border-black/60 focus:outline-none focus:ring-0"
+                className="peer block w-full appearance-none rounded-full border border-grey bg-transparent px-4 pb-3 pt-4 text-black focus:border-black/60 focus:outline-none focus:ring-0 invalid:[&:not(:focus)]:border-red-500 invalid:[&:not(:placeholder-shown):not(:focus)]:text-red-500"
+                pattern="^[a-zA-Z\s]+$"
+                required
               />
               <label
                 htmlFor="fullName"
-                className="absolute left-3 top-2 z-10 origin-[0] -translate-y-4 scale-75 transform bg-white px-1 font-medium text-gray-400 duration-300 peer-placeholder-shown:top-1/2 peer-placeholder-shown:-translate-y-1/2 peer-placeholder-shown:scale-100 peer-focus:top-2 peer-focus:-translate-y-4 peer-focus:scale-75 peer-focus:border-black/60 peer-focus:px-2 peer-focus:text-gray-600"
+                className="absolute left-3 top-1 z-10 origin-[0] -translate-y-4 scale-75 transform cursor-text select-none bg-white px-1 font-medium text-gray-400 duration-300 peer-placeholder-shown:top-1/2 peer-placeholder-shown:-translate-y-1/2 peer-placeholder-shown:scale-100 peer-invalid:text-red-500 peer-focus:top-1 peer-focus:-translate-y-4 peer-focus:scale-75 peer-focus:cursor-default peer-focus:border-black/60 peer-focus:px-2 peer-focus:text-gray-600"
               >
-                Full name
+                Full name*
               </label>
+              <InputValidator
+                message={
+                  userDetails.fullName
+                    ? 'Please enter only letters'
+                    : 'This field is required'
+                }
+              />
             </div>
             <div className="relative mb-4 md:mb-5">
-              <input
-                type="email"
-                name="email"
-                id="email"
-                placeholder=" "
-                className=" peer block w-full appearance-none rounded-full border border-grey bg-transparent px-4 pb-3 pt-4 text-black focus:border-black/60 focus:outline-none focus:ring-0"
-              />
-              <label
-                htmlFor="email"
-                className="absolute left-3 top-2 z-10 origin-[0] -translate-y-4 scale-75 transform bg-white px-1 font-medium text-gray-400 duration-300 peer-placeholder-shown:top-1/2 peer-placeholder-shown:-translate-y-1/2 peer-placeholder-shown:scale-100 peer-focus:top-2 peer-focus:-translate-y-4 peer-focus:scale-75 peer-focus:border-black/60 peer-focus:px-2 peer-focus:text-gray-600"
-              >
-                Email address
-              </label>
-            </div>
-            <div className="relative mb-4 md:mb-5">
-              <input
-                type="text"
-                name="phoneNumber"
-                id="phoneNumber"
-                placeholder=" "
-                className=" peer block w-full appearance-none rounded-full border border-grey bg-transparent px-4 pb-3 pt-4 text-black focus:border-black/60 focus:outline-none focus:ring-0"
-              />
-              <label
-                htmlFor="phoneNumber"
-                className="absolute left-3 top-2 z-10 origin-[0] -translate-y-4 scale-75 transform bg-white px-1 font-medium text-gray-400 duration-300 peer-placeholder-shown:top-1/2 peer-placeholder-shown:-translate-y-1/2 peer-placeholder-shown:scale-100 peer-focus:top-2 peer-focus:-translate-y-4 peer-focus:scale-75 peer-focus:border-black/60 peer-focus:px-2 peer-focus:text-gray-600"
-              >
-                Phone number
-              </label>
-            </div>
-            <div className="relative mb-4 sm:mb-0">
               <input
                 type="text"
                 name="country"
@@ -207,12 +363,12 @@ const EditProfileForm = () => {
               />
               <label
                 htmlFor="country"
-                className="absolute left-3 top-2 z-10 origin-[0] -translate-y-4 scale-75 transform bg-white px-1 font-medium text-gray-400 duration-300 peer-placeholder-shown:top-1/2 peer-placeholder-shown:-translate-y-1/2 peer-placeholder-shown:scale-100 peer-focus:top-2 peer-focus:-translate-y-4 peer-focus:scale-75 peer-focus:border-black/60 peer-focus:px-2 peer-focus:text-gray-600"
+                className="absolute left-3 top-1 z-10 origin-[0] -translate-y-4 scale-75 transform cursor-text select-none bg-white px-1 font-medium text-gray-400 duration-300 peer-placeholder-shown:top-1/2 peer-placeholder-shown:-translate-y-1/2 peer-placeholder-shown:scale-100 peer-focus:top-1 peer-focus:-translate-y-4 peer-focus:scale-75 peer-focus:cursor-default peer-focus:border-black/60 peer-focus:px-2 peer-focus:text-gray-600"
               >
                 Country
               </label>
             </div>
-            <div className="relative mb-0">
+            <div className="relative mb-4 md:mb-5">
               <input
                 type="text"
                 name="city"
@@ -222,10 +378,45 @@ const EditProfileForm = () => {
               />
               <label
                 htmlFor="city"
-                className="absolute left-3 top-2 z-10 origin-[0] -translate-y-4 scale-75 transform bg-white px-1 font-medium text-gray-400 duration-300 peer-placeholder-shown:top-1/2 peer-placeholder-shown:-translate-y-1/2 peer-placeholder-shown:scale-100 peer-focus:top-2 peer-focus:-translate-y-4 peer-focus:scale-75 peer-focus:border-black/60 peer-focus:px-2 peer-focus:text-gray-600"
+                className="absolute left-3 top-1 z-10 origin-[0] -translate-y-4 scale-75 transform cursor-text select-none bg-white px-1 font-medium text-gray-400 duration-300 peer-placeholder-shown:top-1/2 peer-placeholder-shown:-translate-y-1/2 peer-placeholder-shown:scale-100 peer-focus:top-1 peer-focus:-translate-y-4 peer-focus:scale-75 peer-focus:cursor-default peer-focus:border-black/60 peer-focus:px-2 peer-focus:text-gray-600"
               >
                 City
               </label>
+            </div>
+            <div className="relative mb-4 sm:mb-0">
+              <input
+                type="tel"
+                name="phoneNumber"
+                id="phoneNumber"
+                onChange={onChange}
+                value={userDetails.phoneNumber}
+                placeholder=" "
+                className="peer block w-full appearance-none rounded-full border border-grey bg-transparent px-4 pb-3 pt-4 text-black focus:border-black/60 focus:outline-none focus:ring-0 invalid:[&:not(:placeholder-shown):not(:focus)]:border-red-500 invalid:[&:not(:placeholder-shown):not(:focus)]:text-red-500"
+                pattern="^\+\([1-9]{1,3}\)\s[0-9]{3}\s[0-9]{3}\s[0-9]{3}$"
+              />
+              <label
+                htmlFor="phoneNumber"
+                className="absolute left-3 top-1 z-10 origin-[0] -translate-y-4 scale-75 transform cursor-text select-none bg-white px-1 font-medium text-gray-400 duration-300 peer-placeholder-shown:top-1/2 peer-placeholder-shown:-translate-y-1/2 peer-placeholder-shown:scale-100 peer-invalid:text-red-500 peer-focus:top-1 peer-focus:-translate-y-4 peer-focus:scale-75 peer-focus:cursor-default peer-focus:border-black/60 peer-focus:px-2 peer-focus:text-gray-600"
+              >
+                Phone number
+              </label>
+              <InputValidator message="Phone number format: +(123) xxx xxx xx" />
+            </div>
+            <div className="relative mb-0">
+              <input
+                type="email"
+                name="email"
+                id="email"
+                placeholder=" "
+                className="peer block w-full appearance-none rounded-full border border-grey bg-transparent px-4 pb-3 pt-4 text-black focus:border-black/60 focus:outline-none focus:ring-0 invalid:[&:not(:placeholder-shown):not(:focus)]:border-red-500 invalid:[&:not(:placeholder-shown):not(:focus)]:text-red-500"
+              />
+              <label
+                htmlFor="email"
+                className="absolute left-3 top-1 z-10 origin-[0] -translate-y-4 scale-75 transform cursor-text select-none bg-white px-1 font-medium text-gray-400 duration-300 peer-placeholder-shown:top-1/2 peer-placeholder-shown:-translate-y-1/2 peer-placeholder-shown:scale-100 peer-invalid:text-red-500 peer-focus:top-1 peer-focus:-translate-y-4 peer-focus:scale-75 peer-focus:cursor-default peer-focus:border-black/60 peer-focus:px-2 peer-focus:text-gray-600"
+              >
+                Email address
+              </label>
+              <InputValidator message="Please enter a valid email" />
             </div>
           </div>
           <Line className="md:col-start-1 md:col-end-4" />
@@ -246,7 +437,7 @@ const EditProfileForm = () => {
               />
               <label
                 htmlFor="bio"
-                className="absolute left-4 top-2 z-10 origin-[0] -translate-y-4 scale-75 transform bg-white px-1 font-medium text-gray-400 duration-300 peer-placeholder-shown:top-4 peer-placeholder-shown:-translate-y-0 peer-placeholder-shown:scale-100 peer-focus:top-2 peer-focus:-translate-y-4 peer-focus:scale-75 peer-focus:border-black/60 peer-focus:px-2 peer-focus:text-gray-600"
+                className="absolute left-4 top-1 z-10 origin-[0] -translate-y-4 scale-75 transform cursor-text select-none bg-white px-1 font-medium text-gray-400 duration-300 peer-placeholder-shown:top-4 peer-placeholder-shown:-translate-y-0 peer-placeholder-shown:scale-100 peer-focus:top-1 peer-focus:-translate-y-4 peer-focus:scale-75 peer-focus:cursor-default peer-focus:border-black/60 peer-focus:px-2 peer-focus:text-gray-600"
               >
                 Biography
               </label>
@@ -260,7 +451,7 @@ const EditProfileForm = () => {
               />
               <label
                 htmlFor="professionalBack"
-                className="absolute left-4 top-2 z-10 origin-[0] -translate-y-4 scale-75 transform bg-white px-1 font-medium text-gray-400 duration-300 peer-placeholder-shown:top-4 peer-placeholder-shown:-translate-y-0 peer-placeholder-shown:scale-100 peer-focus:top-2 peer-focus:-translate-y-4 peer-focus:scale-75 peer-focus:border-black/60 peer-focus:px-2 peer-focus:text-gray-600"
+                className="absolute left-4 top-1 z-10 origin-[0] -translate-y-4 scale-75 transform cursor-text select-none bg-white px-1 font-medium text-gray-400 duration-300 peer-placeholder-shown:top-4 peer-placeholder-shown:-translate-y-0 peer-placeholder-shown:scale-100 peer-focus:top-1 peer-focus:-translate-y-4 peer-focus:scale-75 peer-focus:cursor-default peer-focus:border-black/60 peer-focus:px-2 peer-focus:text-gray-600"
               >
                 Professional background
               </label>
@@ -274,6 +465,8 @@ const EditProfileForm = () => {
                   type="text"
                   name="fact"
                   id="fact"
+                  onChange={onChange}
+                  value={userDetails.facts[0]}
                   placeholder="Tell us something funny "
                   className="block w-full rounded-full border border-grey bg-transparent p-4 text-black placeholder:font-medium placeholder:text-gray-400 focus:border-black/60 focus:outline-none focus:ring-0"
                 />
@@ -442,6 +635,17 @@ const EditProfileForm = () => {
           </button>
         </div>
       </form>
+    </div>
+  )
+}
+
+const InputValidator = ({ message }: { message: string }) => {
+  return (
+    <div className="group absolute right-4 top-5 hidden peer-invalid:block">
+      <MdOutlineInfo className="h-4 w-4 cursor-pointer text-red-500" />
+      <span className="absolute right-0 z-30 mt-1 hidden w-fit whitespace-nowrap rounded-full border border-red-400 bg-white px-4 py-3 text-sm font-medium text-red-500 group-hover:block">
+        {message}
+      </span>
     </div>
   )
 }
