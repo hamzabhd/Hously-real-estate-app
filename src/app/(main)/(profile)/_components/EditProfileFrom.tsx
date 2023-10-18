@@ -1,13 +1,12 @@
 'use client'
 import { MdOutlineInfo } from 'react-icons/md'
 import { IoClose } from 'react-icons/io5'
-import { HiOutlinePlusSm } from 'react-icons/hi'
 import UserImage from '@/components/UserImage'
 import Line from '@/components/Line'
-import { ChangeEvent, ReactNode, useReducer, useState } from 'react'
+import { ChangeEvent, FormEvent, useState } from 'react'
+import { z } from 'zod'
 
 interface UserDetails {
-  username: string
   fullName: string
   country: string
   city: string
@@ -26,25 +25,14 @@ interface UserDetails {
   link3: string
 }
 
-//^\+\([1-9]{1,3}\)\s[0-9]{3}\s[0-9]{3}\s[0-9]{3}$
-//pattern="https://.+"
-
-const reformName = (name: string) => {
-  const nameArr = name.split(' ')
-
-  const firstLetterToUpperCase =
-    nameArr[0].slice(0, 1).toLocaleUpperCase() +
-    nameArr[0].slice(1).toLocaleLowerCase()
-  const newName =
-    firstLetterToUpperCase + nameArr.slice(1).join('').toLocaleLowerCase()
-  return newName
+interface InputErrors {
+  [key: string]: string
 }
 
 const EditProfileForm = () => {
   const [imageToPreview, setImageToPreview] = useState('')
   const [imageData, setImageData] = useState('')
   const [userDetails, setUserDetails] = useState<UserDetails>({
-    username: '',
     fullName: '',
     country: '',
     city: '',
@@ -63,7 +51,6 @@ const EditProfileForm = () => {
     link3: '',
   })
   const [errorInputs, setErrorInputs] = useState<UserDetails>({
-    username: '',
     fullName: '',
     country: '',
     city: '',
@@ -112,6 +99,17 @@ const EditProfileForm = () => {
     return newName
   }
 
+  const validateNumber = (name: string) => {
+    const numbersArr = name.split('')
+    let newArr = []
+    for (let i = 0; i < numbersArr.length; i++) {
+      if (Number(numbersArr[i])) {
+        newArr.push(numbersArr[i])
+      }
+    }
+    return newArr.join('')
+  }
+
   const handleChange = (
     e: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>,
   ) => {
@@ -121,10 +119,18 @@ const EditProfileForm = () => {
       ...prevState,
       [name]: '',
     }))
+
     if (/(country|city)/.test(name)) {
       return setUserDetails((prevState) => ({
         ...prevState,
         [name]: reformName(value, ' '),
+      }))
+    }
+
+    if (name === 'phoneNumber') {
+      return setUserDetails((prevState) => ({
+        ...prevState,
+        phoneNumber: validateNumber(value),
       }))
     }
 
@@ -153,9 +159,48 @@ const EditProfileForm = () => {
     alert('This is not a valid image file')
   }
 
+  const validateNonEmptyString = (value: string) => {
+    if (value === '') {
+      return false
+    }
+    return true
+  }
+
+  const userSchema = z.object({
+    fullName: z.string().refine(validateNonEmptyString, {
+      message: 'Username must not be empty',
+    }),
+    email: z.string().email('Email address is required'),
+  })
+
+  const handleSubmit = (e: FormEvent<HTMLFormElement>) => {
+    e.preventDefault()
+    try {
+      const result = userSchema.safeParse(userDetails)
+
+      if (!result.success) {
+        const issues = result.error.issues
+        let errors: InputErrors = {}
+
+        for (let i = 0; i < issues.length; i++) {
+          errors[issues[i].path[0]] = issues[i].message
+        }
+
+        setErrorInputs((prevState) => {
+          return {
+            ...prevState,
+            ...errors,
+          }
+        })
+      }
+    } catch (err) {
+      console.log(err)
+    }
+  }
+
   return (
     <div className="mt-4 lg:mt-8">
-      <form className="">
+      <form className="" onSubmit={handleSubmit}>
         <div className="md:grid md:grid-cols-3">
           <h2 className="mb-4 mt-2 text-lg font-bold uppercase md:my-0 md:mb-5 lg:text-xl ">
             <span className="block text-black/60">01.</span>Personal information
@@ -253,7 +298,7 @@ const EditProfileForm = () => {
               name="email"
               value={userDetails.email}
               handleChange={handleChange}
-              type="email"
+              type="text"
               label="Email address"
               className="relative mb-0 sm:col-start-1 sm:col-end-3 "
             />
