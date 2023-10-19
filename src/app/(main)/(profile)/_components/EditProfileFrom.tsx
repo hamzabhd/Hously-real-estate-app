@@ -26,7 +26,7 @@ interface UserDetails {
 }
 
 interface InputErrors {
-  [key: string]: string
+  [key: string]: string | { [key: string]: string }
 }
 
 const EditProfileForm = () => {
@@ -103,7 +103,7 @@ const EditProfileForm = () => {
     const numbersArr = name.split('')
     let newArr = []
     for (let i = 0; i < numbersArr.length; i++) {
-      if (Number(numbersArr[i])) {
+      if (Number(numbersArr[i]) || numbersArr[i] === '0') {
         newArr.push(numbersArr[i])
       }
     }
@@ -140,6 +140,7 @@ const EditProfileForm = () => {
         fullName: reformFullName(value),
       }))
     }
+
     return setUserDetails((prevState) => ({
       ...prevState,
       [name]: value,
@@ -159,18 +160,30 @@ const EditProfileForm = () => {
     alert('This is not a valid image file')
   }
 
-  const validateNonEmptyString = (value: string) => {
-    if (value === '') {
-      return false
-    }
-    return true
-  }
-
   const userSchema = z.object({
-    fullName: z.string().refine(validateNonEmptyString, {
+    fullName: z.string().refine((val) => (val === '' ? false : true), {
       message: 'Username must not be empty',
     }),
-    email: z.string().email('Email address is required'),
+    phoneNumber: z
+      .union([
+        z.string().refine((val) => (Number(val) ? true : false), {
+          message: 'Phone number must contain only numbers',
+        }),
+        z.string().length(0),
+      ])
+      .optional(),
+    email: z
+      .union([z.string().email('Invalid email address'), z.string().length(0)])
+      .optional(),
+    link1: z
+      .union([z.string().url('Invalid social link'), z.string().length(0)])
+      .optional(),
+    link2: z
+      .union([z.string().url('Invalid social link'), z.string().length(0)])
+      .optional(),
+    link3: z
+      .union([z.string().url('Invalid social link'), z.string().length(0)])
+      .optional(),
   })
 
   const handleSubmit = (e: FormEvent<HTMLFormElement>) => {
@@ -186,17 +199,28 @@ const EditProfileForm = () => {
           errors[issues[i].path[0]] = issues[i].message
         }
 
-        setErrorInputs((prevState) => {
-          return {
-            ...prevState,
-            ...errors,
-          }
-        })
+        return setErrorInputs((prevState) => ({
+          ...prevState,
+          ...errors,
+        }))
       }
+
+      const formData = new FormData()
+
+      if (imageData) {
+        formData.append('profilePicture', imageData)
+      }
+      for (const key in userDetails) {
+        formData.append(key, userDetails[key as keyof UserDetails])
+      }
+
+      console.log(formData)
     } catch (err) {
       console.log(err)
     }
   }
+
+  console.log(errorInputs)
 
   return (
     <div className="mt-4 lg:mt-8">
@@ -264,7 +288,8 @@ const EditProfileForm = () => {
               label="Full name*"
               max={25}
               className="relative mb-4 md:mb-5"
-              message="Please enter your full name using only letters."
+              message="Feel free to enter your full name using letters and spaces."
+              error={errorInputs.fullName}
             />
 
             <CustomInput
@@ -275,6 +300,7 @@ const EditProfileForm = () => {
               label="Phone Number"
               className="relative mb-4 md:mb-5"
               message="Please include your country code (e.g. +1)"
+              error={errorInputs.phoneNumber}
             />
 
             <CustomInput
@@ -301,6 +327,7 @@ const EditProfileForm = () => {
               type="text"
               label="Email address"
               className="relative mb-0 sm:col-start-1 sm:col-end-3 "
+              error={errorInputs.email}
             />
           </div>
           <Line className="md:col-start-1 md:col-end-4" />
@@ -407,7 +434,6 @@ const EditProfileForm = () => {
               handleChange={handleChange}
               placeholder="https://www.facebook.com/johndoe"
               type="text"
-              message="Please enter a valid social media link"
               error={errorInputs.link1}
               className="relative mb-4 md:mb-5"
             />
@@ -417,7 +443,6 @@ const EditProfileForm = () => {
               handleChange={handleChange}
               placeholder="https://www.facebook.com/johndoe"
               type="text"
-              message="Please enter a valid social media link"
               error={errorInputs.link2}
               className="relative mb-4 md:mb-5"
             />
@@ -427,7 +452,6 @@ const EditProfileForm = () => {
               handleChange={handleChange}
               placeholder="https://www.facebook.com/johndoe"
               type="text"
-              message="Please enter a valid social media link"
               error={errorInputs.link3}
               className="relative mb-4 md:mb-5"
             />
@@ -504,7 +528,9 @@ const CustomInput = ({
                 +
               </span>
             )}
-            {message && <InputValidator message={message} error={error} />}
+            {(message || error) && (
+              <InputValidator message={message} error={error} />
+            )}
           </div>
         ) : (
           <div className={className}>
@@ -519,7 +545,9 @@ const CustomInput = ({
                 message && 'focus:pr-10'
               } ${error && 'border-red-500 pr-10 text-red-500'}`}
             />
-            {message && <InputValidator message={message} error={error} />}
+            {(message || error) && (
+              <InputValidator message={message} error={error} />
+            )}
           </div>
         )
       ) : (
@@ -548,7 +576,7 @@ const InputValidator = ({
   message,
   error,
 }: {
-  message: string
+  message?: string
   error?: string
 }) => {
   return (
