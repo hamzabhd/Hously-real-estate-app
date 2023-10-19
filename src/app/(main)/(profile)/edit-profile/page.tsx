@@ -1,6 +1,39 @@
 import EditProfileForm from '../_components/EditProfileFrom'
+import { userSchema } from 'utils/validations/validations'
+import { serverSession } from 'utils/getUser'
+import User from 'models/user'
+import { connectToDb } from 'utils/connectToDb'
+import { reformObj } from 'utils/reformObj'
 
 const EditProfile = () => {
+  async function updateProfile(formData: FormData) {
+    'use server'
+    const parsedData = Object.fromEntries(formData.entries())
+    try {
+      const result = userSchema.safeParse(parsedData)
+      if (!result.success) {
+        return Promise.resolve('Something went wrong, please try again!')
+      }
+      const objToAdd = reformObj(parsedData)
+      console.log(objToAdd)
+
+      const session = await serverSession()
+      await connectToDb()
+      await User.findByIdAndUpdate(
+        session?.user.id as string,
+        {
+          $set: { objToAdd },
+        },
+        { new: true },
+      )
+
+      return Promise.resolve('Soo Good!')
+    } catch (e) {
+      console.log('something went wrong', e)
+      return Promise.resolve('Something went wrong')
+    }
+  }
+
   return (
     <div className="mx-auto max-w-[1248px] px-4 md:px-6">
       <div className="flex h-[182px] flex-col justify-center xl:h-[238px]">
@@ -12,7 +45,7 @@ const EditProfile = () => {
           transactions. Please get in touch if you need any help.
         </p>
       </div>
-      <EditProfileForm />
+      <EditProfileForm updateProfile={updateProfile} />
     </div>
   )
 }

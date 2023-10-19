@@ -4,32 +4,14 @@ import { IoClose } from 'react-icons/io5'
 import UserImage from '@/components/UserImage'
 import Line from '@/components/Line'
 import { ChangeEvent, FormEvent, useState } from 'react'
-import { z } from 'zod'
+import { userSchema } from 'utils/validations/validations'
+import { UserDetails, InputErrors } from '@/types/types'
 
-interface UserDetails {
-  fullName: string
-  country: string
-  city: string
-  phoneNumber: string
-  email: string
-  bio: string
-  background: string
-  fact1: string
-  fact2: string
-  fact3: string
-  destination1: string
-  destination2: string
-  destination3: string
-  link1: string
-  link2: string
-  link3: string
-}
-
-interface InputErrors {
-  [key: string]: string | { [key: string]: string }
-}
-
-const EditProfileForm = () => {
+const EditProfileForm = ({
+  updateProfile,
+}: {
+  updateProfile: (fromData: FormData) => Promise<string>
+}) => {
   const [imageToPreview, setImageToPreview] = useState('')
   const [imageData, setImageData] = useState('')
   const [userDetails, setUserDetails] = useState<UserDetails>({
@@ -160,34 +142,7 @@ const EditProfileForm = () => {
     alert('This is not a valid image file')
   }
 
-  const userSchema = z.object({
-    fullName: z.string().refine((val) => (val === '' ? false : true), {
-      message: 'Username must not be empty',
-    }),
-    phoneNumber: z
-      .union([
-        z.string().refine((val) => (Number(val) ? true : false), {
-          message: 'Phone number must contain only numbers',
-        }),
-        z.string().length(0),
-      ])
-      .optional(),
-    email: z
-      .union([z.string().email('Invalid email address'), z.string().length(0)])
-      .optional(),
-    link1: z
-      .union([z.string().url('Invalid social link'), z.string().length(0)])
-      .optional(),
-    link2: z
-      .union([z.string().url('Invalid social link'), z.string().length(0)])
-      .optional(),
-    link3: z
-      .union([z.string().url('Invalid social link'), z.string().length(0)])
-      .optional(),
-  })
-
-  const handleSubmit = (e: FormEvent<HTMLFormElement>) => {
-    e.preventDefault()
+  const validateFrom = () => {
     try {
       const result = userSchema.safeParse(userDetails)
 
@@ -204,27 +159,26 @@ const EditProfileForm = () => {
           ...errors,
         }))
       }
-
-      const formData = new FormData()
-
-      if (imageData) {
-        formData.append('profilePicture', imageData)
-      }
-      for (const key in userDetails) {
-        formData.append(key, userDetails[key as keyof UserDetails])
-      }
-
-      console.log(formData)
     } catch (err) {
       console.log(err)
     }
   }
 
-  console.log(errorInputs)
-
   return (
     <div className="mt-4 lg:mt-8">
-      <form className="" onSubmit={handleSubmit}>
+      <form
+        action={async (formData) => {
+          validateFrom()
+
+          for (const key in userDetails) {
+            formData.set(key, userDetails[key as keyof UserDetails])
+          }
+          formData.set('profilePicture', imageData)
+
+          const response = await updateProfile(formData)
+          return alert(response)
+        }}
+      >
         <div className="md:grid md:grid-cols-3">
           <h2 className="mb-4 mt-2 text-lg font-bold uppercase md:my-0 md:mb-5 lg:text-xl ">
             <span className="block text-black/60">01.</span>Personal information
@@ -247,7 +201,7 @@ const EditProfileForm = () => {
                         </span>
                         <input
                           type="file"
-                          name="image"
+                          name="profilePicture"
                           className="hidden"
                           onChange={uploadImage}
                         />
@@ -297,7 +251,7 @@ const EditProfileForm = () => {
               value={userDetails.phoneNumber}
               handleChange={handleChange}
               type="tel"
-              label="Phone Number"
+              label="Phone number"
               className="relative mb-4 md:mb-5"
               message="Please include your country code (e.g. +1)"
               error={errorInputs.phoneNumber}
