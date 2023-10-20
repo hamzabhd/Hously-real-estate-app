@@ -246,7 +246,7 @@ const EditProfileForm = ({
                       className="group mt-1 flex items-center gap-x-2 font-normal"
                       onClick={() => {
                         setImageData('')
-                        setImageToPreview('/images/person.jpg')
+                        setImageToPreview(user.profilePicture)
                       }}
                     >
                       <IoClose className="h-4 w-4 text-red-500" />
@@ -287,7 +287,7 @@ const EditProfileForm = ({
               handleChange={handleChange}
               type="text"
               label="Country"
-              className="relative mb-0"
+              className="relative mb-4 md:mb-0"
             />
 
             <CustomInput

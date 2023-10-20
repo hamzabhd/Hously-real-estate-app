@@ -3,6 +3,12 @@ import { userSchema } from 'utils/validations/validations'
 import { getUser, serverSession } from 'utils/getUser'
 import User from 'models/user'
 import { connectToDb } from 'utils/connectToDb'
+import {
+  uploadProfileImage,
+  destroyOldProfileImage,
+  getPublicId,
+} from 'utils/cloudinary'
+import { revalidatePath } from 'next/cache'
 
 const EditProfile = async () => {
   const user = await getUser()
@@ -10,23 +16,50 @@ const EditProfile = async () => {
   async function updateProfile(formData: FormData) {
     'use server'
     const parsedData = Object.fromEntries(formData.entries())
+    const userId = await serverSession().then((res) => res?.user.id)
+    const result = userSchema.safeParse(parsedData)
+    if (!result.success) {
+      return Promise.resolve('Something went wrong, please try again!')
+    }
+
+    if (parsedData.profilePicture) {
+      if (/res.cloudinary.com/g.test(user.profilePicture)) {
+        // Destroying old profile picture logic goes here
+        const publicId = getPublicId(user.profilePicture)
+
+        try {
+          if (publicId) {
+            console.log('Destroying old profile picture')
+            await destroyOldProfileImage(publicId)
+          }
+        } catch (e) {
+          console.error(e)
+        }
+        console.log('Old profile picture destroyed successfully')
+      }
+
+      try {
+        console.log('uploading profile picture')
+        const secure_url = await uploadProfileImage(
+          parsedData.profilePicture as string,
+        )
+
+        await connectToDb()
+        await User.findByIdAndUpdate(
+          userId,
+          { $set: { profilePicture: secure_url } },
+          { new: true },
+        )
+      } catch (e) {
+        console.error(e)
+      }
+      console.log('profile picture updated successfully')
+    }
+
     try {
-      const result = userSchema.safeParse(parsedData)
-      if (!result.success) {
-        return Promise.resolve('Something went wrong, please try again!')
-      }
-
-      const session = await serverSession()
       await connectToDb()
-
-      if (parsedData.profilePicture) {
-        // updating user profile picture logic goes here
-
-        console.log('Profile picture found')
-      }
-
       await User.findByIdAndUpdate(
-        session?.user.id as string,
+        userId,
         {
           $set: {
             fullName: parsedData.fullName,
@@ -51,6 +84,8 @@ const EditProfile = async () => {
     } catch (e) {
       console.log('something went wrong', e)
       return Promise.resolve('Something went wrong')
+    } finally {
+      revalidatePath('/')
     }
   }
 

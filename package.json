@@ -10,6 +10,7 @@
   },
   "dependencies": {
     "axios": "^1.5.1",
+    "cloudinary": "^1.41.0",
     "lucide-react": "^0.284.0",
     "mongodb": "^6.1.0",
     "mongoose": "^7.6.1",
