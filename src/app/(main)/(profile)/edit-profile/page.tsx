@@ -9,13 +9,14 @@ import {
   getPublicId,
 } from 'utils/cloudinary'
 import { revalidatePath } from 'next/cache'
+import { redirect } from 'next/navigation'
 
 const EditProfile = async () => {
   const user = await getUser()
 
-  async function updateProfile(formData: FormData) {
+  async function updateProfile(form: FormData) {
     'use server'
-    const parsedData = Object.fromEntries(formData.entries())
+    const parsedData = Object.fromEntries(form.entries())
     const userId = await serverSession().then((res) => res?.user.id)
     const result = userSchema.safeParse(parsedData)
     if (!result.success) {
@@ -29,13 +30,11 @@ const EditProfile = async () => {
 
         try {
           if (publicId) {
-            console.log('Destroying old profile picture')
             await destroyOldProfileImage(publicId)
           }
         } catch (e) {
           console.error(e)
         }
-        console.log('Old profile picture destroyed successfully')
       }
 
       try {
@@ -53,7 +52,6 @@ const EditProfile = async () => {
       } catch (e) {
         console.error(e)
       }
-      console.log('profile picture updated successfully')
     }
 
     try {
@@ -86,6 +84,7 @@ const EditProfile = async () => {
       return Promise.resolve('Something went wrong')
     } finally {
       revalidatePath('/')
+      redirect('/profile')
     }
   }
 

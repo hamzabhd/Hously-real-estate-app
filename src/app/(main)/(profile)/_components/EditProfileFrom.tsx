@@ -1,5 +1,6 @@
 'use client'
-import { ChangeEvent, FormEvent, useEffect, useState } from 'react'
+import { useFormStatus } from 'react-dom'
+import { ChangeEvent, useEffect, useRef, useState } from 'react'
 import { UserDetails, InputErrors, UserObj } from '@/types/types'
 import { userSchema } from 'utils/validations/validations'
 import { MdOutlineInfo } from 'react-icons/md'
@@ -200,7 +201,7 @@ const EditProfileForm = ({
           formData.set('profilePicture', imageData)
 
           const response = await updateProfile(formData)
-          return alert(response)
+          console.log(response)
         }}
       >
         <div className="md:grid md:grid-cols-3">
@@ -439,6 +440,21 @@ const EditProfileForm = ({
         </div>
       </form>
     </div>
+  )
+}
+
+const SubmitButton = () => {
+  const { pending } = useFormStatus()
+
+  return (
+    <button
+      disabled={pending}
+      className={`flex w-full cursor-pointer items-center justify-center rounded-full bg-black px-8 py-3 font-medium text-white transition-colors hover:bg-neutral-800 focus:outline-none focus-visible:ring-4 focus-visible:ring-neutral-600 ${
+        pending ? 'opacity-80' : ''
+      }`}
+    >
+      <span className="block">{pending ? 'Saving' : 'Save'}</span>
+    </button>
   )
 }
 
