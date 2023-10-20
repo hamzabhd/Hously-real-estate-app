@@ -3,6 +3,7 @@ import { montserrat } from '@/app/fonts'
 import { UserObj } from '@/types/types'
 import ProfileDetails from '../_components/ProfileDetails'
 import { getUser } from 'utils/getUser'
+import Link from 'next/link'
 
 const Profile = async () => {
   const user = await getUser()
@@ -10,7 +11,7 @@ const Profile = async () => {
   return (
     <div className="mx-auto max-w-[1248px] md:px-6">
       <ProfileCard user={user} />
-      <ProfileDetails />
+      <ProfileDetails user={user} />
     </div>
   )
 }
@@ -57,12 +58,12 @@ const ProfileCard = ({ user }: { user: UserObj }) => {
       </div>
 
       <div className="mt-auto flex gap-x-2 md:mx-auto md:w-fit">
-        <button
-          type="button"
-          className="flex w-full cursor-pointer items-center justify-center rounded-full border border-grey px-8 py-3 font-medium text-black transition-colors hover:border-black focus:outline-none focus-visible:ring-4 focus-visible:ring-neutral-600 md:w-auto"
+        <Link
+          href="/edit-profile"
+          className="flex w-full cursor-pointer items-center justify-center rounded-full border border-grey px-8 py-3 font-medium text-black transition-colors hover:border-black/60 focus:outline-none focus-visible:ring-4 focus-visible:ring-neutral-600 md:w-auto"
         >
           <span className="block">Edit profile</span>
-        </button>
+        </Link>
         <button
           type="button"
           className="flex w-full cursor-pointer items-center justify-center rounded-full bg-black px-8 py-3 font-medium text-white transition-colors hover:bg-neutral-800 focus:outline-none focus-visible:ring-4 focus-visible:ring-neutral-600 md:w-auto"

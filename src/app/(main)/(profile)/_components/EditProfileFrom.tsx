@@ -1,15 +1,17 @@
 'use client'
+import { ChangeEvent, FormEvent, useEffect, useState } from 'react'
+import { UserDetails, InputErrors, UserObj } from '@/types/types'
+import { userSchema } from 'utils/validations/validations'
 import { MdOutlineInfo } from 'react-icons/md'
 import { IoClose } from 'react-icons/io5'
 import UserImage from '@/components/UserImage'
 import Line from '@/components/Line'
-import { ChangeEvent, FormEvent, useState } from 'react'
-import { userSchema } from 'utils/validations/validations'
-import { UserDetails, InputErrors } from '@/types/types'
 
 const EditProfileForm = ({
+  user,
   updateProfile,
 }: {
+  user: UserObj
   updateProfile: (fromData: FormData) => Promise<string>
 }) => {
   const [imageToPreview, setImageToPreview] = useState('')
@@ -19,7 +21,6 @@ const EditProfileForm = ({
     country: '',
     city: '',
     phoneNumber: '',
-    email: '',
     bio: '',
     background: '',
     fact1: '',
@@ -37,7 +38,6 @@ const EditProfileForm = ({
     country: '',
     city: '',
     phoneNumber: '',
-    email: '',
     bio: '',
     background: '',
     fact1: '',
@@ -50,6 +50,30 @@ const EditProfileForm = ({
     link2: '',
     link3: '',
   })
+
+  useEffect(() => {
+    const facts = user.facts?.filter((item) => item)
+    const destinations = user.destinations?.filter((item) => item)
+    const links = user.links?.filter((item) => item)
+    setImageToPreview(user.profilePicture)
+    setUserDetails({
+      fullName: user.fullName,
+      country: user.country || '',
+      city: user.city || '',
+      phoneNumber: user.phoneNumber || '',
+      bio: user.bio || '',
+      background: user.background || '',
+      fact1: facts?.[0] || '',
+      fact2: facts?.[1] || '',
+      fact3: facts?.[2] || '',
+      destination1: destinations?.[0] || '',
+      destination2: destinations?.[1] || '',
+      destination3: destinations?.[2] || '',
+      link1: links?.[0] || '',
+      link2: links?.[1] || '',
+      link3: links?.[2] || '',
+    })
+  }, [])
 
   const reformName = (name: string, replacer: string) => {
     const nameArr = name.split(' ')
@@ -242,7 +266,7 @@ const EditProfileForm = ({
               label="Full name*"
               max={25}
               className="relative mb-4 md:mb-5"
-              message="Feel free to enter your full name using letters and spaces."
+              message="Feel free to enter your name using letters."
               error={errorInputs.fullName}
             />
 
@@ -263,7 +287,7 @@ const EditProfileForm = ({
               handleChange={handleChange}
               type="text"
               label="Country"
-              className="relative mb-4 md:mb-5"
+              className="relative mb-0"
             />
 
             <CustomInput
@@ -272,16 +296,7 @@ const EditProfileForm = ({
               handleChange={handleChange}
               type="text"
               label="City"
-              className="relative mb-4 md:mb-5"
-            />
-            <CustomInput
-              name="email"
-              value={userDetails.email}
-              handleChange={handleChange}
-              type="text"
-              label="Email address"
-              className="relative mb-0 sm:col-start-1 sm:col-end-3 "
-              error={errorInputs.email}
+              className="relative mb-0"
             />
           </div>
           <Line className="md:col-start-1 md:col-end-4" />

@@ -12,9 +12,6 @@ export const userSchema = z.object({
       z.string().length(0),
     ])
     .optional(),
-  email: z
-    .union([z.string().email('Invalid email address'), z.string().length(0)])
-    .optional(),
   link1: z
     .union([z.string().url('Invalid social link'), z.string().length(0)])
     .optional(),

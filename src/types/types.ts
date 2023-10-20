@@ -1,10 +1,17 @@
-export interface UserObj {
+export type UserObj = {
   username: string
   fullName: string
   email: string
   profilePicture: string
-  createdAt?: string
+  createdAt: string
+  phoneNumber?: string
+  country?: string
+  city?: string
   bio?: string
+  background?: string
+  facts?: string[]
+  destinations?: string[]
+  links?: string[]
 }
 
 export interface UserDetails {
@@ -12,7 +19,6 @@ export interface UserDetails {
   country: string
   city: string
   phoneNumber: string
-  email: string
   bio: string
   background: string
   fact1: string

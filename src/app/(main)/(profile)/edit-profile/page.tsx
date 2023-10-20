@@ -1,11 +1,12 @@
 import EditProfileForm from '../_components/EditProfileFrom'
 import { userSchema } from 'utils/validations/validations'
-import { serverSession } from 'utils/getUser'
+import { getUser, serverSession } from 'utils/getUser'
 import User from 'models/user'
 import { connectToDb } from 'utils/connectToDb'
-import { reformObj } from 'utils/reformObj'
 
-const EditProfile = () => {
+const EditProfile = async () => {
+  const user = await getUser()
+
   async function updateProfile(formData: FormData) {
     'use server'
     const parsedData = Object.fromEntries(formData.entries())
@@ -14,15 +15,34 @@ const EditProfile = () => {
       if (!result.success) {
         return Promise.resolve('Something went wrong, please try again!')
       }
-      const objToAdd = reformObj(parsedData)
-      console.log(objToAdd)
 
       const session = await serverSession()
       await connectToDb()
+
+      if (parsedData.profilePicture) {
+        // updating user profile picture logic goes here
+
+        console.log('Profile picture found')
+      }
+
       await User.findByIdAndUpdate(
         session?.user.id as string,
         {
-          $set: { objToAdd },
+          $set: {
+            fullName: parsedData.fullName,
+            phoneNumber: parsedData.phoneNumber,
+            city: parsedData.city,
+            country: parsedData.country,
+            bio: parsedData.bio,
+            background: parsedData.background,
+            facts: [parsedData.fact1, parsedData.fact2, parsedData.fact3],
+            destinations: [
+              parsedData.destination1,
+              parsedData.destination2,
+              parsedData.destination3,
+            ],
+            links: [parsedData.link1, parsedData.link2, parsedData.link3],
+          },
         },
         { new: true },
       )
@@ -45,7 +65,7 @@ const EditProfile = () => {
           transactions. Please get in touch if you need any help.
         </p>
       </div>
-      <EditProfileForm updateProfile={updateProfile} />
+      <EditProfileForm updateProfile={updateProfile} user={user} />
     </div>
   )
 }

@@ -4,8 +4,11 @@ import { FaXTwitter, FaFacebookF, FaLinkedinIn } from 'react-icons/fa6'
 import { MdOutlineLocalPhone, MdOutlineEmail } from 'react-icons/md'
 import { IoIosStar, IoIosStarOutline } from 'react-icons/io'
 import { IoClose } from 'react-icons/io5'
+import { BsQuestionLg } from 'react-icons/bs'
 import Image from 'next/image'
 import UserImage from '@/components/UserImage'
+import { UserObj } from '@/types/types'
+import Link from 'next/link'
 
 const DATA = [
   {
@@ -53,7 +56,7 @@ const DATA = [
   },
 ]
 
-const ProfileDetails = () => {
+const ProfileDetails = ({ user }: { user: UserObj }) => {
   const [link, setLink] = useState('reviews')
   const [reviewToShow, setReviewToShow] = useState<string>('')
 
@@ -135,43 +138,29 @@ const ProfileDetails = () => {
               Biography
             </h3>
             <p className="font-normal leading-relaxed text-black/60">
-              I'm a passionate traveler and nature enthusiast. When I'm not
-              exploring new places, I enjoy hiking, photography, and trying out
-              local cuisines. I've been fortunate to visit some amazing
-              destinations around the world and I'm always on the lookout for my
-              next adventure.
+              {user.bio}
             </p>
 
             <h3 className="mb-4 mt-6 text-xl font-medium text-black lg:mt-8 lg:text-2xl">
               Professional background
             </h3>
             <p className="font-normal leading-relaxed text-black/60">
-              With a background in environmental science, I'm particularly
-              interested in sustainable travel and eco-friendly accommodations.
-              I believe in leaving a positive impact on the places I visit and
-              strive to promote responsible tourism.
+              {user.background}
             </p>
 
             <h3 className="mb-4 mt-6 text-xl font-medium text-black lg:mt-8 lg:text-2xl">
               Fun facts
             </h3>
             <ul className="list-disc">
-              <li className="mb-4 ml-6 last:mb-0">
-                <span className="block pl-4  font-normal leading-relaxed text-black/60">
-                  I once hiked to the summit of Mount Kilimanjaro.
-                </span>
-              </li>
-              <li className="mb-4 ml-6 last:mb-0">
-                <span className="block pl-4 font-normal leading-relaxed text-black/60">
-                  I'm a certified scuba diver and have explored coral reefs in
-                  various oceans.
-                </span>
-              </li>
-              <li className="mb-4 ml-6 last:mb-0">
-                <span className="block pl-4 font-normal leading-relaxed text-black/60">
-                  My goal is to visit every national park in the United States.
-                </span>
-              </li>
+              {user.facts
+                ?.filter((item) => item)
+                .map((fact, i) => (
+                  <li className="mb-4 ml-6 last:mb-0" key={i}>
+                    <span className="block pl-4  font-normal leading-relaxed text-black/60">
+                      {fact}
+                    </span>
+                  </li>
+                ))}
             </ul>
 
             <h3 className="mb-4 mt-6 text-xl font-medium text-black lg:mt-8 lg:text-2xl">
@@ -179,36 +168,33 @@ const ProfileDetails = () => {
             </h3>
 
             <ul className=" list-disc">
-              <li className="mb-4 ml-6 last:mb-0">
-                <span className="block pl-4 font-normal leading-relaxed text-black/60">
-                  Bali, Indonesia
-                </span>
-              </li>
-              <li className="mb-4 ml-6 last:mb-0">
-                <span className="block pl-4 font-normal leading-relaxed text-black/60">
-                  Banff National Park, Canada
-                </span>
-              </li>
-              <li className="mb-4 ml-6 last:mb-0">
-                <span className="block pl-4 font-normal leading-relaxed text-black/60">
-                  Santorini, Greece
-                </span>
-              </li>
+              {user.destinations
+                ?.filter((item) => item)
+                .map((destination, i) => (
+                  <li className="mb-4 ml-6 last:mb-0" key={i}>
+                    <span className="block pl-4 font-normal leading-relaxed text-black/60">
+                      {destination}
+                    </span>
+                  </li>
+                ))}
             </ul>
 
             <h3 className="mb-4 mt-6 text-xl font-medium text-black lg:mt-8 lg:text-2xl">
               Connect with me
             </h3>
             <ul className="mb-6 flex gap-x-8">
-              <li className="group inline-block cursor-pointer rounded-full border border-black/60 border-grey p-2 transition-colors hover:border-black">
-                <FaFacebookF className="h-4 w-4 text-base text-black/60 transition-colors group-hover:text-black" />
-              </li>
-              <li className="group inline-block cursor-pointer rounded-full border border-black/60 border-grey p-2 transition-colors hover:border-black">
-                <FaXTwitter className="h-4 w-4 text-base text-black/60 transition-colors group-hover:text-black" />
-              </li>
-              <li className="group inline-block cursor-pointer rounded-full border border-black/60 border-grey p-2 transition-colors hover:border-black">
-                <FaLinkedinIn className="h-4 w-4 text-base text-black/60 transition-colors group-hover:text-black" />
-              </li>
+              {user.links
+                ?.filter((item) => item)
+                .map((link, i) => (
+                  <li key={i}>
+                    <Link
+                      href={link}
+                      className="group inline-block cursor-pointer rounded-full border border-grey p-2 transition-colors hover:border-black/60"
+                    >
+                      <LinkIcon link={link} />
+                    </Link>
+                  </li>
+                ))}
             </ul>
           </div>
 
@@ -227,7 +213,9 @@ const ProfileDetails = () => {
                     className="absolute left-0 top-0 object-cover "
                   />
                 </span>
-                <span className="font-medium text-black">Barcelona, Spain</span>
+                <span className="font-medium text-black">
+                  {user.country}, {user.city}
+                </span>
               </div>
             </li>
             <li>
@@ -235,10 +223,12 @@ const ProfileDetails = () => {
                 Phone number
               </span>
               <div className="flex items-center gap-x-4">
-                <span className="group inline-block cursor-pointer rounded-full border border-black/60 border-grey p-2 transition-colors hover:border-black">
+                <span className="group inline-block cursor-pointer rounded-full border hover:border-black/60 border-grey p-2 transition-colors">
                   <MdOutlineLocalPhone className="h-4 w-4 text-base text-black/60 transition-colors group-hover:text-black" />
                 </span>
-                <span className="font-medium text-black">+1 (xxx)-xxx-xxx</span>
+                <span className="font-medium text-black">
+                  +{user.phoneNumber}
+                </span>
               </div>
             </li>
             <li>
@@ -246,7 +236,7 @@ const ProfileDetails = () => {
                 Email address
               </span>
               <div className="flex items-center gap-x-4">
-                <span className="group inline-block cursor-pointer rounded-full border border-black/60 border-grey p-2 transition-colors hover:border-black">
+                <span className="group inline-block cursor-pointer rounded-full border border-grey p-2 transition-colors hover:border-black/60">
                   <MdOutlineEmail className="h-4 w-4 text-base text-black/60 transition-colors group-hover:text-black" />
                 </span>
                 <span className="font-medium text-black">
@@ -268,7 +258,7 @@ const ProfileDetails = () => {
 
           {reviewFound && (
             <div className="fixed left-0 top-0 grid min-h-full w-full place-content-center bg-black/20 px-4 backdrop-blur-[2px]">
-              <div className="container-shadow animate-popup h-full w-full max-w-[500px] overflow-hidden rounded-3xl bg-white duration-1000">
+              <div className="container-shadow h-full w-full max-w-[500px] animate-popup overflow-hidden rounded-3xl bg-white duration-1000">
                 <div className="m-4 flex items-center justify-between rounded-2xl bg-lightGrey p-4">
                   <span className="text-xl font-bold">User review</span>
                   <div
@@ -376,6 +366,32 @@ const ReviewCard = ({
         </span>
       )}
     </div>
+  )
+}
+
+const LinkIcon = ({ link }: { link: string }) => {
+  const facebook = /facebook/g.test(link)
+  const twitter = /twitter/g.test(link)
+  const linkedIn = /linkedIn/g.test(link)
+
+  if (facebook) {
+    return (
+      <FaFacebookF className="h-4 w-4 text-base text-black/60 transition-colors group-hover:text-black" />
+    )
+  }
+  if (twitter) {
+    return (
+      <FaXTwitter className="h-4 w-4 text-base text-black/60 transition-colors group-hover:text-black" />
+    )
+  }
+  if (linkedIn) {
+    return (
+      <FaLinkedinIn className="h-4 w-4 text-base text-black/60 transition-colors group-hover:text-black" />
+    )
+  }
+
+  return (
+    <BsQuestionLg className="h-4 w-4 text-base text-black/60 transition-colors group-hover:text-black" />
   )
 }
 
