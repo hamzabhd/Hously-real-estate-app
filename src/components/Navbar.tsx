@@ -87,8 +87,13 @@ const Navbar = ({ user, session }: NavbarPropsType) => {
           </span>
           {options && (
             <ul className="absolute right-4 top-[74px] hidden rounded-3xl border border-grey bg-white p-2 lg:block">
-              <li className="mt-auto block cursor-pointer items-center justify-center rounded-2xl px-4 py-2 text-black/60 transition-all hover:bg-lightGrey  hover:text-black">
-                <span>Create listing</span>
+              <li>
+                <Link
+                  href="/create-listing"
+                  className="mt-auto block cursor-pointer items-center justify-center rounded-2xl px-4 py-2 text-black/60 transition-all hover:bg-lightGrey  hover:text-black"
+                >
+                  <span>Create listing</span>
+                </Link>
               </li>
               <li
                 className="block cursor-pointer items-center justify-center rounded-2xl px-4 py-2 text-black/60 transition-all hover:bg-lightGrey  hover:text-black"
@@ -97,7 +102,7 @@ const Navbar = ({ user, session }: NavbarPropsType) => {
                 <span>Sign out</span>
               </li>
               <span className="mx-auto my-2 block h-[1px] w-[90%] bg-grey"></span>
-              <li className="">
+              <li>
                 <Link
                   href="/profile"
                   className="relative flex cursor-pointer items-center gap-x-4 rounded-3xl bg-lightGrey px-4 py-4 text-black transition-all"
@@ -186,8 +191,13 @@ const Navbar = ({ user, session }: NavbarPropsType) => {
 
         {session ? (
           <>
-            <li className="mt-auto block cursor-pointer items-center justify-center rounded-2xl px-4 py-2 text-black/60 transition-all hover:bg-lightGrey hover:text-black">
-              <span>Create listing</span>
+            <li className="mt-auto">
+              <Link
+                href="/create-listing"
+                className=" block cursor-pointer items-center justify-center rounded-2xl px-4 py-2 text-black/60 transition-all hover:bg-lightGrey hover:text-black"
+              >
+                <span>Create listing</span>
+              </Link>
             </li>
             <li
               className="block cursor-pointer items-center justify-center rounded-2xl px-4 py-2 text-black/60 transition-all hover:bg-lightGrey hover:text-black"

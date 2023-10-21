@@ -13,6 +13,18 @@ const config: Config = {
         grey: '#CCCCCC',
         lightGrey: '#ECECEC',
         whiteHover: '#F6F6F6',
+        light: {
+          900: '#F0F0F0',
+          800: '#F1F1F1',
+          700: '#F2F2F2',
+          600: '#F3F3F3',
+          500: '#F4F4F4',
+          400: '#F5F5F5',
+          300: '#F6F6F6',
+          200: '#F7F7F7',
+          100: '#F8F8F8',
+          50: '#F9F9F9',
+        },
       },
       backgroundImage: {
         'gradient-radial': 'radial-gradient(var(--tw-gradient-stops))',

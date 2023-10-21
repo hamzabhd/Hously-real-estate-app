@@ -1,11 +1,7 @@
 import './globals.css'
 import type { Metadata } from 'next'
-import { Roboto } from 'next/font/google'
 import AuthProvider from 'context/AuthProvider'
-const roboto = Roboto({
-  weight: ['100', '300', '400', '500', '700', '900'],
-  subsets: ['latin'],
-})
+import { roboto } from './fonts'
 
 export const metadata: Metadata = {
   title: 'Hously-Project',

@@ -1,7 +1,7 @@
 import UserImage from '@/components/UserImage'
 import { montserrat } from '@/app/fonts'
 import { UserObj } from '@/types/types'
-import ProfileDetails from '../_components/ProfileDetails'
+import ProfileDetails from '../../../../components/ProfileDetails'
 import { getUser } from 'utils/getUser'
 import Link from 'next/link'
 

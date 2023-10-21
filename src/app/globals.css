@@ -17,4 +17,15 @@
       rgba(17, 17, 26, 0.1) 0px 4px 16px,
       rgba(17, 17, 26, 0.1) 0px 8px 32px;
   }
+
+  input[type='radio'] {
+    @apply relative h-5 w-5 cursor-pointer appearance-none rounded-full border border-grey bg-white;
+  }
+
+  input[type='radio']::before {
+    @apply absolute left-1/2 top-1/2 h-[calc(1.25rem-6px)] w-[calc(1.25rem-6px)] -translate-x-1/2 -translate-y-1/2 content-normal rounded-full bg-black opacity-0 transition duration-300 ease-out content-[''];
+  }
+  input[type='radio']:checked::before {
+    @apply opacity-100;
+  }
 }
