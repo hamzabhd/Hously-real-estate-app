@@ -11,26 +11,11 @@ import {
   MdAccessTime,
   MdSingleBed,
 } from 'react-icons/md'
+import { BiMinus } from 'react-icons/bi'
 import { LuImagePlus } from 'react-icons/lu'
 import Image from 'next/image'
 
 const ListingFrom = () => {
-  const [bedrooms, setBedrooms] = useState([{ bedroom: 1, bedroomType: '' }])
-  const [selectedBedroom, setSelectedBedroom] = useState(1)
-
-  const addBedrooms = () => {
-    const bedroomToAdd = bedrooms.length + 1
-    setBedrooms((prevState) => [
-      ...prevState,
-      { bedroom: bedroomToAdd, bedroomType: '' },
-    ])
-    setSelectedBedroom(bedroomToAdd)
-  }
-
-  const removeBedrooms = () => {
-    setBedrooms((prevState) => prevState.slice(0, -1))
-  }
-
   return (
     <div className="my-4 lg:mt-8">
       <MainContainer order="01" title="main information">
@@ -104,7 +89,7 @@ const ListingFrom = () => {
 
           <div className="group relative aspect-square h-full w-full cursor-pointer overflow-hidden rounded-3xl">
             <Image
-              src="/images/person.jpg"
+              src="/images/house.jpg"
               alt="some image"
               fill
               className="object-cover"
@@ -179,80 +164,7 @@ const ListingFrom = () => {
         </Container>
       </MainContainer>
 
-      <MainContainer order="03" title="property details">
-        <Container title="bedrooms" type="grid">
-          <div className="group flex aspect-square h-full w-full cursor-pointer flex-col items-center justify-center gap-y-4 rounded-3xl border-2 border-dashed border-grey p-4 transition-colors hover:border-black/60">
-            <MdSingleBed className="h-12 w-12" />
-            <span className="text-center font-medium text-black/60 transition group-hover:text-black">
-              Click to add a bedroom
-            </span>
-          </div>
-          {bedrooms.map((bedroom, i) => (
-            <div
-              key={i}
-              className={`${
-                selectedBedroom === bedroom.bedroom
-                  ? 'border-black/60'
-                  : 'border-grey'
-              } group flex aspect-square h-full w-full cursor-pointer flex-col items-center justify-center gap-y-4 rounded-3xl border-2 p-4 transition-colors hover:border-black/60`}
-              onClick={() => setSelectedBedroom(bedroom.bedroom)}
-            >
-              <MdSingleBed className="h-12 w-12" />
-              <span
-                className={`text-center font-medium transition group-hover:text-black ${
-                  selectedBedroom === bedroom.bedroom
-                    ? 'text-black'
-                    : 'text-black/60'
-                }`}
-              >
-                Bedroom {bedroom.bedroom}
-              </span>
-            </div>
-          ))}
-        </Container>
-        <Container type="normal">
-          <div className="flex flex-col gap-4 sm:grid sm:grid-cols-2 ">
-            <CustomRadioButton
-              value="master bedroom"
-              name="bedroom1"
-              id="master"
-            >
-              <span className="block font-medium">Master Bedroom</span>
-              <span className="block text-sm text-black/60">
-                The largest and most luxurious bedroom in a home, often with an
-                attached bathroom.
-              </span>
-            </CustomRadioButton>
-
-            <CustomRadioButton value="guest bedroom" name="bedroom1" id="guest">
-              <span className="block font-medium">Guest Bedroom</span>
-              <span className="block text-sm text-black/60">
-                A bedroom designated for visitors and guests staying overnight
-              </span>
-            </CustomRadioButton>
-
-            <CustomRadioButton
-              value="children's bedroom"
-              name="bedroom1"
-              id="children"
-            >
-              <span className="block font-medium">Children's Bedroom</span>
-              <span className="block text-sm text-black/60">
-                A bedroom designed for children, often with playful decor and
-                furnishings
-              </span>
-            </CustomRadioButton>
-
-            <CustomRadioButton value="bedroom combo" name="bedroom1" id="combo">
-              <span className="block font-medium">Bedroom Combo</span>
-              <span className="block text-sm text-black/60">
-                A multi-purpose room that serves as both a bedroom and a
-                functional workspace.
-              </span>
-            </CustomRadioButton>
-          </div>
-        </Container>
-      </MainContainer>
+      <BedroomsSelection />
 
       {/* 
       <div>
@@ -319,11 +231,15 @@ const CustomRadioButton = ({
   value,
   id,
   children,
+  selected,
+  handleChange,
 }: {
   name: string
   value: string
   id: string
   children: ReactNode
+  selected?: boolean
+  handleChange?: (e: ChangeEvent<HTMLInputElement>) => void
 }) => {
   return (
     <div className="relative">
@@ -332,7 +248,9 @@ const CustomRadioButton = ({
         className="peer absolute right-4 top-4"
         name={name}
         value={value}
+        onChange={handleChange}
         id={id}
+        checked={selected}
       />
       <label
         htmlFor={id}
@@ -341,6 +259,163 @@ const CustomRadioButton = ({
         {children}
       </label>
     </div>
+  )
+}
+
+const BedroomsSelection = () => {
+  const [bedrooms, setBedrooms] = useState([{ bedroom: 1, bedroomType: '' }])
+  const [selectedBedroom, setSelectedBedroom] = useState(1)
+
+  const addBedroom = () => {
+    if (!bedrooms[bedrooms.length - 1].bedroomType) return
+    const bedroomToAdd = bedrooms.length + 1
+    setBedrooms((prevState) => [
+      ...prevState,
+      { bedroom: bedroomToAdd, bedroomType: '' },
+    ])
+    setSelectedBedroom(bedroomToAdd)
+  }
+
+  const removeBedroom = () => {
+    if (selectedBedroom <= 1) return
+    setSelectedBedroom(selectedBedroom - 1)
+    setBedrooms((prevState) => prevState.slice(0, -1))
+  }
+
+  const handleChange = (e: ChangeEvent<HTMLInputElement>) => {
+    const { value } = e.target
+    const obj = { bedroom: selectedBedroom, bedroomType: value }
+
+    setBedrooms((prevState) =>
+      [
+        ...prevState.filter((item) => item.bedroom !== selectedBedroom),
+        obj,
+      ].sort((a, b) => a.bedroom - b.bedroom),
+    )
+  }
+
+  return (
+    <MainContainer order="03" title="property details">
+      <Container title="Bedrooms" type="grid">
+        <div
+          onClick={addBedroom}
+          className="group flex aspect-square h-full w-full cursor-pointer flex-col items-center justify-center gap-y-4 rounded-3xl border-2 border-dashed border-grey p-4 transition-colors hover:border-black/60"
+        >
+          <MdSingleBed className="h-12 w-12" />
+          <span className="text-center font-medium text-black/60 transition group-hover:text-black">
+            Click to add a bedroom
+          </span>
+        </div>
+        {bedrooms.map((bedroom, i) => (
+          <div className="group relative" key={i}>
+            <span
+              className={`group/remove absolute right-4 top-4 z-10 hidden cursor-pointer rounded-full border border-grey p-1 text-black/60 transition-colors hover:border-black/60 ${
+                selectedBedroom <= 1 ? 'hidden' : 'group-last:block'
+              }`}
+              onClick={removeBedroom}
+            >
+              <BiMinus className="h-4 w-4 text-grey transition-colors group-hover/remove:text-black" />
+            </span>
+            <div
+              className={`${
+                selectedBedroom === bedroom.bedroom
+                  ? 'border-black/60'
+                  : 'border-grey'
+              } group relative flex aspect-square h-full w-full cursor-pointer flex-col items-center justify-center gap-y-4 rounded-3xl border-2 p-4 transition-colors hover:border-black/60`}
+              onClick={() => setSelectedBedroom(bedroom.bedroom)}
+            >
+              <MdSingleBed className="h-12 w-12" />
+              <span
+                className={`text-center font-medium transition group-hover:text-black ${
+                  selectedBedroom === bedroom.bedroom
+                    ? 'text-black'
+                    : 'text-black/60'
+                }`}
+              >
+                Bedroom {bedroom.bedroom}
+                <span className=" block text-sm text-black/40">
+                  {bedroom.bedroomType}
+                </span>
+              </span>
+            </div>
+          </div>
+        ))}
+      </Container>
+      <Container type="normal">
+        {bedrooms
+          .filter((b) => b.bedroom === selectedBedroom)
+          .map((item) => (
+            <div
+              key={item.bedroom}
+              className="flex flex-col gap-4 sm:grid sm:grid-cols-2 "
+            >
+              <CustomRadioButton
+                value="Master bedroom"
+                name={`bedroom${selectedBedroom}`}
+                id="master"
+                handleChange={handleChange}
+                selected={
+                  bedrooms[selectedBedroom - 1].bedroomType === 'Master bedroom'
+                }
+              >
+                <span className="block font-medium">Master Bedroom</span>
+                <span className="block text-sm text-black/60">
+                  The largest and most luxurious bedroom in a home, often with
+                  an attached bathroom.
+                </span>
+              </CustomRadioButton>
+
+              <CustomRadioButton
+                value="Guest bedroom"
+                name={`bedroom${selectedBedroom}`}
+                id="guest"
+                handleChange={handleChange}
+                selected={
+                  bedrooms[selectedBedroom - 1].bedroomType === 'Guest bedroom'
+                }
+              >
+                <span className="block font-medium">Guest Bedroom</span>
+                <span className="block text-sm text-black/60">
+                  A bedroom designated for visitors and guests staying overnight
+                </span>
+              </CustomRadioButton>
+
+              <CustomRadioButton
+                value="Children's bedroom"
+                name={`bedroom${selectedBedroom}`}
+                id="children"
+                handleChange={handleChange}
+                selected={
+                  bedrooms[selectedBedroom - 1].bedroomType ===
+                  "Children's bedroom"
+                }
+              >
+                <span className="block font-medium">Children's Bedroom</span>
+                <span className="block text-sm text-black/60">
+                  A bedroom designed for children, often with playful decor and
+                  furnishings
+                </span>
+              </CustomRadioButton>
+
+              <CustomRadioButton
+                value="Bedroom combo"
+                name={`bedroom${selectedBedroom}`}
+                id="combo"
+                handleChange={handleChange}
+                selected={
+                  bedrooms[selectedBedroom - 1].bedroomType === 'Bedroom combo'
+                }
+              >
+                <span className="block font-medium">Bedroom Combo</span>
+                <span className="block text-sm text-black/60">
+                  A multi-purpose room that serves as both a bedroom and a
+                  functional workspace.
+                </span>
+              </CustomRadioButton>
+            </div>
+          ))}
+      </Container>
+    </MainContainer>
   )
 }
 
