@@ -19,7 +19,7 @@
   }
 
   input[type='radio'] {
-    @apply relative h-5 w-5 cursor-pointer appearance-none rounded-full border border-grey bg-white;
+    @apply h-5 w-5 cursor-pointer appearance-none rounded-full border border-grey bg-white;
   }
 
   input[type='radio']::before {

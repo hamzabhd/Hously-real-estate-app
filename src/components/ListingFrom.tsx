@@ -1,116 +1,76 @@
 'use client'
-import { ChangeEvent } from 'react'
+import { ChangeEvent, ReactNode, useState } from 'react'
 import CustomInput from './CustomInput'
-import { HiOutlinePlus } from 'react-icons/hi'
 import { MdOutlineClose } from 'react-icons/md'
+import { HiOutlineHome } from 'react-icons/hi'
+import {
+  MdOutlineVilla,
+  MdOutlineCabin,
+  MdOutlineApartment,
+  MdOutlineSell,
+  MdAccessTime,
+  MdSingleBed,
+} from 'react-icons/md'
+import { LuImagePlus } from 'react-icons/lu'
 import Image from 'next/image'
 
 const ListingFrom = () => {
+  const [bedrooms, setBedrooms] = useState([{ bedroom: 1, bedroomType: '' }])
+  const [selectedBedroom, setSelectedBedroom] = useState(1)
+
+  const addBedrooms = () => {
+    const bedroomToAdd = bedrooms.length + 1
+    setBedrooms((prevState) => [
+      ...prevState,
+      { bedroom: bedroomToAdd, bedroomType: '' },
+    ])
+    setSelectedBedroom(bedroomToAdd)
+  }
+
+  const removeBedrooms = () => {
+    setBedrooms((prevState) => prevState.slice(0, -1))
+  }
+
   return (
     <div className="my-4 lg:mt-8">
-      <div>
-        <h2 className="mb-4 mt-2 text-lg font-bold uppercase md:my-0 md:mb-5 lg:text-xl">
-          <span className="block text-black/60">01.</span>Main information
-        </h2>
-
+      <MainContainer order="01" title="main information">
         {/* Property type */}
-        <div>
-          <span className="mb-4 block font-medium">Property type</span>
-          <fieldset>
-            <div className="mb-4 flex items-center px-2">
-              <input
-                type="radio"
-                className="peer"
-                name="property-type"
-                value="apartment"
-                id="apartment"
-              />
-              <label
-                htmlFor="apartment"
-                className="ml-4 inline-block cursor-pointer text-black/60 transition-colors hover:text-black peer-checked:font-medium peer-checked:text-black"
-              >
-                Apartment
-              </label>
-            </div>
-
-            <div className="mb-4 flex items-center px-2">
-              <input
-                type="radio"
-                className="peer"
-                name="property-type"
-                value="house"
-                id="house"
-              />
-              <label
-                htmlFor="house"
-                className="ml-4 inline-block cursor-pointer text-black/60 transition-colors hover:text-black peer-checked:font-medium peer-checked:text-black"
-              >
-                House
-              </label>
-            </div>
-
-            <div className="mb-4 flex items-center px-2">
-              <input
-                type="radio"
-                className="peer"
-                name="property-type"
-                value="vila"
-                id="vila"
-              />
-              <label
-                htmlFor="vila"
-                className="ml-4 inline-block cursor-pointer text-black/60 transition-colors hover:text-black peer-checked:font-medium peer-checked:text-black"
-              >
-                Vila
-              </label>
-            </div>
-          </fieldset>
-        </div>
-
+        <Container title="Property type" type="grid">
+          <CustomRadioButton
+            value="apartment"
+            name="property-type"
+            id="apartment"
+          >
+            <MdOutlineApartment className="h-6 w-6" />
+            <span className="font-medium">Apartment</span>
+          </CustomRadioButton>
+          <CustomRadioButton value="house" name="property-type" id="house">
+            <HiOutlineHome className="h-6 w-6" />
+            <span className="font-medium">House</span>
+          </CustomRadioButton>
+          <CustomRadioButton value="villa" name="property-type" id="villa">
+            <MdOutlineVilla className="h-6 w-6" />
+            <span className="font-medium">Villa</span>
+          </CustomRadioButton>
+          <CustomRadioButton value="cabin" name="property-type" id="cabin">
+            <MdOutlineCabin className="h-6 w-6" />
+            <span className="font-medium">Cabin</span>
+          </CustomRadioButton>
+        </Container>
         {/* Listing Type */}
-        <div>
-          <span className="mb-4 mt-2 block font-medium">Listing type</span>
-          <fieldset>
-            <div className="mb-4 flex items-center px-2">
-              <input
-                type="radio"
-                name="listing-type"
-                value="rent"
-                id="rent"
-                className="peer"
-              />
-              <label
-                htmlFor="rent"
-                className="ml-4 inline-block cursor-pointer text-black/60 transition-colors hover:text-black peer-checked:font-medium peer-checked:font-medium peer-checked:text-black peer-checked:text-black"
-              >
-                Rent
-              </label>
-            </div>
+        <Container title="Listing type" type="grid">
+          <CustomRadioButton value="sell" name="listing-type" id="sell">
+            <MdOutlineSell className="h-6 w-6" />
+            <span className="font-medium">Sell</span>
+          </CustomRadioButton>
 
-            <div className="mb-4 flex items-center px-2">
-              <input
-                type="radio"
-                className="peer"
-                name="listing-type"
-                value="sell"
-                id="sell"
-              />
-              <label
-                htmlFor="sell"
-                className="ml-4 inline-block cursor-pointer text-black/60 transition-colors hover:text-black peer-checked:font-medium peer-checked:text-black"
-              >
-                Sell
-              </label>
-            </div>
-          </fieldset>
-        </div>
-
+          <CustomRadioButton value="rent" name="listing-type" id="rent">
+            <MdAccessTime className="h-6 w-6" />
+            <span className="font-medium">Rent</span>
+          </CustomRadioButton>
+        </Container>
         {/* #General information */}
-        <div>
-          <span className="mb-4 mt-2 block font-medium">
-            General information
-          </span>
-
+        <Container title="General information" type="normal">
           <CustomInput
             name="propertyType"
             value={''}
@@ -122,7 +82,6 @@ const ListingFrom = () => {
             max={25}
             className="relative mb-4 md:mb-5"
           />
-
           <CustomInput
             name="description"
             value={''}
@@ -132,52 +91,170 @@ const ListingFrom = () => {
             label="Description"
             className="relative mb-4 md:mb-5"
           />
-        </div>
-
+        </Container>
         {/* Images */}
+        <Container type="grid" title="Images">
+          <label className="group flex aspect-square h-full w-full cursor-pointer flex-col items-center justify-center gap-y-4 rounded-3xl border-2 border-dashed border-grey p-4 transition-colors hover:border-black/60">
+            <LuImagePlus className="h-8 w-8" />
+            <span className="text-center font-medium text-black/60 transition group-hover:text-black">
+              Click here to upload a new image
+            </span>
+            <input type="file" className="hidden" />
+          </label>
 
-        <div>
-          <span className="mb-4 mt-6 block font-medium">Images</span>
-          <div className=" grid grid-cols-2 gap-4">
-            <label className="group flex h-48 w-full cursor-pointer flex-col items-center justify-center gap-y-4 rounded-3xl border-2 border-grey transition-colors hover:border-black/60">
-              <span className="rounded-full border-2 border-grey p-4 transition-colors  group-hover:border-black/40">
-                <HiOutlinePlus className="h-12 w-12 text-black/40 transition-colors group-hover:text-black/60 " />
-              </span>
-              <span className="block text-xl font-medium text-black/60">
-                Add new image
-              </span>
-              <input type="file" className="hidden" />
-            </label>
-
-            <div className="group relative h-48 cursor-pointer overflow-hidden rounded-3xl">
-              <Image
-                src="/images/person.jpg"
-                alt="some image"
-                fill
-                className="object-cover"
-              />
-              <button
-                type="button"
-                className="group/close absolute right-2 top-2 hidden rounded-full border border-white bg-white/60 p-1 transition-colors hover:bg-white group-hover:block"
-              >
-                <MdOutlineClose className="h-4 w-4 text-black/40 transition-colors group-hover/close:text-black" />
-              </button>
-            </div>
+          <div className="group relative aspect-square h-full w-full cursor-pointer overflow-hidden rounded-3xl">
+            <Image
+              src="/images/person.jpg"
+              alt="some image"
+              fill
+              className="object-cover"
+            />
+            <button
+              type="button"
+              className="group/close absolute right-2 top-2 hidden rounded-full border border-white bg-white/60 p-1 transition-colors hover:bg-white group-hover:block"
+            >
+              <MdOutlineClose className="h-4 w-4 text-black/40 transition-colors group-hover/close:text-black" />
+            </button>
           </div>
-        </div>
-      </div>
+        </Container>
+      </MainContainer>
 
-      {/* <div>
-        <h2 className="mb-4 mt-2 text-lg font-bold uppercase md:my-0 md:mb-5 lg:text-xl ">
-          <span className="block text-black/60">02.</span>Location details
-        </h2>
-      </div>
-      <div>
-        <h2 className="mb-4 mt-2 text-lg font-bold uppercase md:my-0 md:mb-5 lg:text-xl ">
-          <span className="block text-black/60">03.</span>Property details
-        </h2>
-      </div>
+      <MainContainer order="02" title="location details">
+        <Container title="Property address" type="normal">
+          <div className="sm:grid sm:grid-cols-2 sm:gap-x-4">
+            <CustomInput
+              name="address"
+              value={''}
+              handleChange={(
+                e: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>,
+              ) => undefined}
+              type="text"
+              label="Address"
+              className="relative mb-4 sm:col-span-2 md:mb-5"
+            />
+            <CustomInput
+              name="country"
+              value={''}
+              handleChange={(
+                e: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>,
+              ) => undefined}
+              type="text"
+              label="Country"
+              className="relative mb-4 md:mb-5"
+            />
 
+            <CustomInput
+              name="city"
+              value={''}
+              handleChange={(
+                e: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>,
+              ) => undefined}
+              type="text"
+              label="City"
+              className="relative mb-4 md:mb-5"
+            />
+
+            <CustomInput
+              name="state"
+              value={''}
+              handleChange={(
+                e: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>,
+              ) => undefined}
+              type="text"
+              label="State"
+              className="relative mb-4 md:mb-5"
+            />
+
+            <CustomInput
+              name="postalCode"
+              value={''}
+              handleChange={(
+                e: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>,
+              ) => undefined}
+              type="text"
+              label="ZIP/Postal code"
+              className="relative mb-4 md:mb-5"
+            />
+          </div>
+        </Container>
+      </MainContainer>
+
+      <MainContainer order="03" title="property details">
+        <Container title="bedrooms" type="grid">
+          <div className="group flex aspect-square h-full w-full cursor-pointer flex-col items-center justify-center gap-y-4 rounded-3xl border-2 border-dashed border-grey p-4 transition-colors hover:border-black/60">
+            <MdSingleBed className="h-12 w-12" />
+            <span className="text-center font-medium text-black/60 transition group-hover:text-black">
+              Click to add a bedroom
+            </span>
+          </div>
+          {bedrooms.map((bedroom, i) => (
+            <div
+              key={i}
+              className={`${
+                selectedBedroom === bedroom.bedroom
+                  ? 'border-black/60'
+                  : 'border-grey'
+              } group flex aspect-square h-full w-full cursor-pointer flex-col items-center justify-center gap-y-4 rounded-3xl border-2 p-4 transition-colors hover:border-black/60`}
+              onClick={() => setSelectedBedroom(bedroom.bedroom)}
+            >
+              <MdSingleBed className="h-12 w-12" />
+              <span
+                className={`text-center font-medium transition group-hover:text-black ${
+                  selectedBedroom === bedroom.bedroom
+                    ? 'text-black'
+                    : 'text-black/60'
+                }`}
+              >
+                Bedroom {bedroom.bedroom}
+              </span>
+            </div>
+          ))}
+        </Container>
+        <Container type="normal">
+          <div className="flex flex-col gap-4 sm:grid sm:grid-cols-2 ">
+            <CustomRadioButton
+              value="master bedroom"
+              name="bedroom1"
+              id="master"
+            >
+              <span className="block font-medium">Master Bedroom</span>
+              <span className="block text-sm text-black/60">
+                The largest and most luxurious bedroom in a home, often with an
+                attached bathroom.
+              </span>
+            </CustomRadioButton>
+
+            <CustomRadioButton value="guest bedroom" name="bedroom1" id="guest">
+              <span className="block font-medium">Guest Bedroom</span>
+              <span className="block text-sm text-black/60">
+                A bedroom designated for visitors and guests staying overnight
+              </span>
+            </CustomRadioButton>
+
+            <CustomRadioButton
+              value="children's bedroom"
+              name="bedroom1"
+              id="children"
+            >
+              <span className="block font-medium">Children's Bedroom</span>
+              <span className="block text-sm text-black/60">
+                A bedroom designed for children, often with playful decor and
+                furnishings
+              </span>
+            </CustomRadioButton>
+
+            <CustomRadioButton value="bedroom combo" name="bedroom1" id="combo">
+              <span className="block font-medium">Bedroom Combo</span>
+              <span className="block text-sm text-black/60">
+                A multi-purpose room that serves as both a bedroom and a
+                functional workspace.
+              </span>
+            </CustomRadioButton>
+          </div>
+        </Container>
+      </MainContainer>
+
+      {/* 
       <div>
         <h2 className="mb-4 mt-2 text-lg font-bold uppercase md:my-0 md:mb-5 lg:text-xl ">
           <span className="block text-black/60">04.</span>Property rules
@@ -189,6 +266,80 @@ const ListingFrom = () => {
           <span className="block text-black/60">05.</span>Pricing
         </h2>
       </div> */}
+    </div>
+  )
+}
+
+const MainContainer = ({
+  children,
+  order,
+  title,
+}: {
+  children: ReactNode
+  order: string
+  title: string
+}) => {
+  return (
+    <div className="lg:grid lg:grid-cols-3">
+      <h2 className="mb-4 mt-2 text-lg font-bold uppercase lg:my-0 lg:mb-5 lg:text-xl">
+        <span className="block text-black/60">{order}.</span>
+        {title}
+      </h2>
+      <div className="lg:col-start-2 lg:col-end-4">{children}</div>
+    </div>
+  )
+}
+
+const Container = ({
+  children,
+  type,
+  title,
+}: {
+  children: ReactNode
+  type: 'grid' | 'normal'
+  title?: string
+}) => {
+  const isGrid = type === 'grid'
+  return (
+    <div className="mb-6">
+      {title && <span className="mb-4 block font-medium">{title}</span>}
+      <div
+        className={`${
+          isGrid ? 'grid grid-cols-2 gap-4 sm:grid-cols-3 lg:grid-cols-4' : ''
+        }`}
+      >
+        {children}
+      </div>
+    </div>
+  )
+}
+
+const CustomRadioButton = ({
+  name,
+  value,
+  id,
+  children,
+}: {
+  name: string
+  value: string
+  id: string
+  children: ReactNode
+}) => {
+  return (
+    <div className="relative">
+      <input
+        type="radio"
+        className="peer absolute right-4 top-4"
+        name={name}
+        value={value}
+        id={id}
+      />
+      <label
+        htmlFor={id}
+        className="transitions-colors group flex h-24 w-full cursor-pointer flex-col justify-center  gap-y-2 rounded-2xl border-2 border-grey p-4 peer-checked:border-black/60"
+      >
+        {children}
+      </label>
     </div>
   )
 }
