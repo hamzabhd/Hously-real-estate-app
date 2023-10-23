@@ -1,4 +1,4 @@
-import ListingFrom from '@/components/ListingFrom'
+import ListingFrom from '@/components/listing/ListingFrom'
 
 const CreateListing = () => {
   return (
