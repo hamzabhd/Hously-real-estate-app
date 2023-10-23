@@ -1,5 +1,5 @@
 import { MdOutlineInfo } from 'react-icons/md'
-import { ChangeEvent } from 'react'
+import { ChangeEvent, ReactNode } from 'react'
 
 const CustomInput = ({
   name,
@@ -12,6 +12,7 @@ const CustomInput = ({
   type,
   message,
   error,
+  children,
 }: {
   name: string
   value: string
@@ -23,6 +24,7 @@ const CustomInput = ({
   type?: string
   message?: string
   error?: string
+  children?: ReactNode
 }) => {
   return (
     <>
@@ -45,7 +47,7 @@ const CustomInput = ({
             />
             <label
               htmlFor={name}
-              className={`absolute left-3 top-1 z-10 origin-[0] -translate-y-4 scale-75 transform cursor-text select-none bg-white px-1 font-medium text-gray-400 duration-300 peer-placeholder-shown:top-1/2 peer-placeholder-shown:-translate-y-1/2 peer-placeholder-shown:scale-100 peer-focus:top-1 peer-focus:-translate-y-4 peer-focus:scale-75 peer-focus:cursor-default peer-focus:px-2 peer-focus:text-gray-600 ${
+              className={`absolute left-3 top-1 z-10 origin-[0] -translate-y-4 scale-75 transform cursor-text select-none bg-white px-1 font-medium text-black/40 duration-300 peer-placeholder-shown:top-1/2 peer-placeholder-shown:-translate-y-1/2 peer-placeholder-shown:scale-100 peer-focus:top-1 peer-focus:-translate-y-4 peer-focus:scale-75 peer-focus:cursor-default peer-focus:px-2 peer-focus:text-gray-600 ${
                 error && 'text-red-500'
               }`}
             >
@@ -59,6 +61,7 @@ const CustomInput = ({
             {(message || error) && (
               <InputValidator message={message} error={error} />
             )}
+            {children}
           </div>
         ) : (
           <div className={className}>
