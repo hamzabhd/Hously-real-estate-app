@@ -50,7 +50,7 @@ export type DetailsState = {
   quietHours: string
   checkIn: string
   checkOut: string
-  pricePerNight: string
+  price: string
   cleaningFee: string
   securityFee: string
 }

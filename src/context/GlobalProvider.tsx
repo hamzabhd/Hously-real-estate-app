@@ -60,7 +60,7 @@ const Context = createContext<ContextType>({
     quietHours: '',
     checkIn: '',
     checkOut: '',
-    pricePerNight: '',
+    price: '',
     cleaningFee: '',
     securityFee: '',
   },
@@ -113,7 +113,7 @@ const GlobalProvider = ({ children }: { children: ReactNode }) => {
     quietHours: '',
     checkIn: '',
     checkOut: '',
-    pricePerNight: '',
+    price: '',
     cleaningFee: '',
     securityFee: '',
   })

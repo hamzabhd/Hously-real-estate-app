@@ -42,15 +42,27 @@ const ListingFrom = () => {
 
   return (
     <div className="my-4 lg:mt-8">
-      <MainContainer order="01" title="main information">
+      <MainContainer
+        order="01"
+        title="main information"
+        message="Please note that all fields in the section are required."
+      >
         <MainInformation />
       </MainContainer>
 
-      <MainContainer order="02" title="location details">
+      <MainContainer
+        order="02"
+        title="location details"
+        message="Please ensure you input accurate location details, including the state if applicable."
+      >
         <Location />
       </MainContainer>
 
-      <MainContainer order="03" title="property details">
+      <MainContainer
+        order="03"
+        title="property details"
+        message="Please make sure to select at least one option for each item."
+      >
         <DetailsSelection
           title="Bedroom"
           listItems={details.bedrooms}
@@ -99,11 +111,19 @@ const ListingFrom = () => {
         </Container>
       </MainContainer>
 
-      <MainContainer order="04" title="property rules">
+      <MainContainer
+        order="04"
+        title="property rules"
+        message="Kindly select the property rules that best align with your requirements, and feel free to provide specific rules if necessary."
+      >
         <Rules />
       </MainContainer>
 
-      <MainContainer order="05" title="property pricing">
+      <MainContainer
+        order="05"
+        title="property pricing"
+        message="Please note that only the price field is mandatory. The other fees are optional."
+      >
         <Pricing />
       </MainContainer>
 

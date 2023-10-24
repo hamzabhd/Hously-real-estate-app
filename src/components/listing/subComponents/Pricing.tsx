@@ -10,9 +10,9 @@ const Pricing = () => {
       <div className="sm:grid sm:grid-cols-2 sm:gap-4 lg:gap-6">
         <CustomInput
           className="relative mb-4 sm:col-span-2 sm:my-0"
-          label="Price per night"
-          value={details.pricePerNight}
-          name="pricePerNight"
+          label="Price"
+          value={details.price}
+          name="price"
           type="text"
           handleChange={handleChange}
         >
