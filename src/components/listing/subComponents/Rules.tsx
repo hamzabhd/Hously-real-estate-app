@@ -1,23 +1,18 @@
 import Container from '@/components/Container'
 import SelectionList from './SelectionList'
 import CustomInput from '@/components/CustomInput'
+import { useGlobalContext } from 'context/GlobalProvider'
+import { rules } from 'utils/itemManagement/data/data'
 
-const Rules = ({
-  arrOfItems,
-  arr,
-  handleClick,
-}: {
-  arrOfItems: string[]
-  arr: string[]
-  handleClick: (item: string) => void
-}) => {
+const Rules = () => {
+  const { handleRules, details, handleChange } = useGlobalContext()
   return (
     <>
       <Container title="General rules" type="normal">
         <SelectionList
-          arr={arr}
-          arrOfItems={arrOfItems}
-          handleClick={handleClick}
+          arr={details.rules}
+          arrOfItems={rules}
+          handleClick={handleRules}
         />
       </Container>
 
@@ -26,37 +21,37 @@ const Rules = ({
           <CustomInput
             className="relative mb-4 sm:my-0"
             label="Guests limit"
-            value=""
+            value={details.guestsLimit}
             name="guestsLimit"
             type="text"
-            handleChange={(e) => undefined}
+            handleChange={handleChange}
           />
 
           <CustomInput
             className="relative mb-4 sm:my-0"
             label="Quiet hours"
-            value=""
+            value={details.quietHours}
             name="quietHours"
             type="text"
-            handleChange={(e) => undefined}
+            handleChange={handleChange}
           />
 
           <CustomInput
             className="relative mb-4 sm:my-0"
             label="Check-in"
-            value=""
+            value={details.checkIn}
             name="checkIn"
             type="text"
-            handleChange={(e) => undefined}
+            handleChange={handleChange}
           />
 
           <CustomInput
             className="relative mb-4 sm:my-0"
             label="Check-out"
-            value=""
+            value={details.checkOut}
             name="checkOut"
             type="text"
-            handleChange={(e) => undefined}
+            handleChange={handleChange}
           />
         </div>
       </Container>

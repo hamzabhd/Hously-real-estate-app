@@ -1,268 +1,44 @@
 'use client'
-import { ChangeEvent, Dispatch, SetStateAction, useState } from 'react'
-import { isAdded } from 'utils/isAdded'
 import Line from '../Line'
-
+import { MdSingleBed } from 'react-icons/md'
+import { BiBath } from 'react-icons/bi'
+import { LuBed } from 'react-icons/lu'
 import MainInformation from './subComponents/MainInformation'
 import Location from './subComponents/Location'
-import BedroomsSelection from './subComponents/BedroomsSelections'
-import BathroomsSelection from './subComponents/BathroomsSelection'
-import BedsSelection from './subComponents/BedsSelections'
 import Container from '../Container'
 import MainContainer from '../MainContainer'
 import Rules from './subComponents/Rules'
 import Pricing from './subComponents/Pricing'
 import SelectionList from './subComponents/SelectionList'
-
-const RULES = [
-  'No Smoking',
-  'No Pets',
-  'Quiet Hours',
-  'Guest Limit',
-  'No Parties',
-  'No Unregistered Guests',
-  'No Shoes Indoors',
-  'Respect Neighbors',
-  'Proper Disposal of Trash',
-  'Lock Doors and Windows',
-  'Follow Local Laws and Regulations',
-  'No Subletting',
-  'Use of Amenities',
-  'No Illegal Activities',
-  'Keep Common Areas Tidy',
-  'Notify Owner of Damage',
-  'No Overnight Visitors',
-  'Follow Check-Out Procedures',
-  'Stick to Check-In/Out Times',
-  'Use of Fireplace or Grill',
-]
-
-const FEATURES = [
-  'Fully Furnished',
-  'Pet Friendly',
-  'Parking Available',
-  'Swimming Pool',
-  'Garden or Outdoor Space',
-  'Balcony or Terrace',
-  'Fireplace',
-  'Air Conditioning',
-  'Heating System',
-  'Laundry Facilities',
-  'Security Features (e.g., Alarm System)',
-  'Accessibility Features (e.g., Elevator, Wheelchair Access)',
-  'Built-in Appliances',
-  'Storage Space or Walk-in Closets',
-  'High-Speed Internet Availability',
-  'Utilities Included (e.g., Water, Electricity)',
-  'Nearby Amenities (e.g., Schools, Parks, Shopping Centers)',
-  'Public Transportation Access',
-  'Views (e.g., City, Water, Mountain)',
-  'Natural Light Availability',
-]
-
-interface DetailsState {
-  propertyType: string
-  listingType: string
-  title: string
-  description: string
-  address: string
-  country: string
-  city: string
-  state: string
-  postalCode: string
-  bedrooms: { bedroom: number; bedroomType: string }[]
-  bathrooms: { bathroom: number; bathroomType: string }[]
-  beds: { bed: number; bedType: string }[]
-  features: string[]
-  rules: string[]
-  guestsLimit: string
-  quietHours: string
-  checkIn: string
-  checkOut: string
-  pricePerNight: string
-  cleaningFee: string
-  securityFee: string
-}
+import { ObjectKey } from '@/types/types'
+import {
+  features,
+  bedChoices,
+  bedroomChoices,
+  bathroomChoices,
+} from 'utils/itemManagement/data/data'
+import DetailsSelection from './subComponents/DetailsSelection'
+import { useGlobalContext } from 'context/GlobalProvider'
 
 const ListingFrom = () => {
-  const [details, setDetails] = useState<DetailsState>({
-    propertyType: '',
-    listingType: '',
-    title: '',
-    description: '',
-    address: '',
-    country: '',
-    city: '',
-    state: '',
-    postalCode: '',
-    bedrooms: [{ bedroom: 1, bedroomType: '' }],
-    bathrooms: [{ bathroom: 1, bathroomType: '' }],
-    beds: [{ bed: 1, bedType: '' }],
-    features: [],
-    rules: [],
-    guestsLimit: '',
-    quietHours: '',
-    checkIn: '',
-    checkOut: '',
-    pricePerNight: '',
-    cleaningFee: '',
-    securityFee: '',
-  })
-  const [selectedBedroom, setSelectedBedroom] = useState(1)
-  const [selectedBathroom, setSelectedBathroom] = useState(1)
-  const [selectedBed, setSelectedBed] = useState(1)
-
-  const handleChange = (
-    e: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>,
-  ) => {
-    const { name, value } = e.target
-    if (/bedroom/g.test(name)) {
-      const modifiedBedrooms = details.bedrooms.map((item) => {
-        if (item.bedroom !== selectedBedroom) {
-          return item
-        } else {
-          return {
-            ...item,
-            bedroomType: value,
-          }
-        }
-      })
-      return setDetails((prevState) => ({
-        ...prevState,
-        bedrooms: modifiedBedrooms,
-      }))
-    }
-    if (/bathroom/g.test(name)) {
-      const modifiedBathrooms = details.bathrooms.map((item) => {
-        if (item.bathroom !== selectedBathroom) {
-          return item
-        } else {
-          return {
-            ...item,
-            bathroomType: value,
-          }
-        }
-      })
-      return setDetails((prevState) => ({
-        ...prevState,
-        bathrooms: modifiedBathrooms,
-      }))
-    }
-    if (/bed/g.test(name)) {
-      const modifiedBathrooms = details.beds.map((item) => {
-        if (item.bed !== selectedBathroom) {
-          return item
-        } else {
-          return {
-            ...item,
-            bedType: value,
-          }
-        }
-      })
-      return setDetails((prevState) => ({
-        ...prevState,
-        beds: modifiedBathrooms,
-      }))
-    }
-
-    return setDetails((prevState) => ({ ...prevState, [name]: value }))
-  }
-  const handleFeatures = (feature: string) => {
-    const alreadyExists = isAdded(feature, details.features)
-    if (alreadyExists) {
-      const modifiedFeatures = details.features.filter((f) => f !== feature)
-      return setDetails((prevState) => ({
-        ...prevState,
-        features: modifiedFeatures,
-      }))
-    }
-    const modifiedFeatures = [...details.features, feature]
-    return setDetails((prevState) => ({
-      ...prevState,
-      features: modifiedFeatures,
-    }))
-  }
-  const handleRules = (rule: string) => {
-    const alreadyExists = isAdded(rule, details.rules)
-    if (alreadyExists) {
-      const modifiedRules = details.rules.filter((r) => r !== rule)
-      return setDetails((prevState) => ({
-        ...prevState,
-        rules: modifiedRules,
-      }))
-    }
-    const modifiedRules = [...details.rules, rule]
-    return setDetails((prevState) => ({
-      ...prevState,
-      rules: modifiedRules,
-    }))
-  }
-
-  // make the reusable function
-
-  const addBedroom = () => {
-    if (!details.bedrooms[details.bedrooms.length - 1].bedroomType) return
-    const bedroomToAdd = details.bedrooms.length + 1
-
-    const modifiedBedrooms = [
-      ...details.bedrooms,
-      { bedroom: bedroomToAdd, bedroomType: '' },
-    ]
-    setDetails((prevState) => ({
-      ...prevState,
-      bedrooms: modifiedBedrooms,
-    }))
-    setSelectedBedroom(bedroomToAdd)
-  }
-  const removeBedroom = () => {
-    if (selectedBedroom <= 1) return
-    setSelectedBedroom(selectedBedroom - 1)
-    setDetails((prevState) => ({
-      ...prevState,
-      bedrooms: prevState.bedrooms.slice(0, -1),
-    }))
-  }
-  const addBathroom = () => {
-    if (!details.bathrooms[details.bathrooms.length - 1].bathroomType) return
-    const bathroomToAdd = details.bathrooms.length + 1
-
-    const modifiedBathrooms = [
-      ...details.bathrooms,
-      { bathroom: bathroomToAdd, bathroomType: '' },
-    ]
-    setDetails((prevState) => ({
-      ...prevState,
-      bathrooms: modifiedBathrooms,
-    }))
-    setSelectedBedroom(bathroomToAdd)
-  }
-  const removeBathroom = () => {
-    if (selectedBathroom <= 1) return
-    setSelectedBedroom(selectedBathroom - 1)
-    setDetails((prevState) => ({
-      ...prevState,
-      bathrooms: prevState.bathrooms.slice(0, -1),
-    }))
-  }
-  const addBed = () => {
-    if (!details.beds[details.beds.length - 1].bedType) return
-    const bedToAdd = details.beds.length + 1
-
-    const modifiedBeds = [...details.beds, { bed: bedToAdd, bedType: '' }]
-    setDetails((prevState) => ({
-      ...prevState,
-      beds: modifiedBeds,
-    }))
-    setSelectedBedroom(bedToAdd)
-  }
-  const removeBed = () => {
-    if (selectedBed <= 1) return
-    setSelectedBedroom(selectedBed - 1)
-    setDetails((prevState) => ({
-      ...prevState,
-      beds: prevState.beds.slice(0, -1),
-    }))
-  }
+  const {
+    details,
+    images,
+    selectedBedroom,
+    selectedBathroom,
+    selectedBed,
+    addBathroom,
+    addBed,
+    addBedroom,
+    removeBathroom,
+    removeBed,
+    removeBedroom,
+    handleChange,
+    setSelectedBedroom,
+    setSelectedBathroom,
+    setSelectedBed,
+    handleFeatures,
+  } = useGlobalContext()
 
   return (
     <div className="my-4 lg:mt-8">
@@ -275,45 +51,56 @@ const ListingFrom = () => {
       </MainContainer>
 
       <MainContainer order="03" title="property details">
-        <BedroomsSelection
-          bedrooms={details.bedrooms}
-          addBedroom={addBedroom}
-          removeBedroom={removeBedroom}
+        <DetailsSelection
+          title="Bedroom"
+          listItems={details.bedrooms}
+          selectedItem={selectedBedroom}
+          item={'bedroom' as ObjectKey}
+          itemType={'bedroomType' as ObjectKey}
+          choices={bedroomChoices}
+          setSelectedItem={setSelectedBedroom}
+          addItem={addBedroom}
+          removeItem={removeBedroom}
           handleChange={handleChange}
-          selectedBedroom={selectedBedroom}
-          setSelectedBedroom={setSelectedBedroom}
+          Icon={MdSingleBed}
         />
-        <BathroomsSelection
-          bathrooms={details.bathrooms}
-          addBathroom={addBathroom}
-          removeBathroom={removeBathroom}
+        <DetailsSelection
+          title="Bathroom"
+          listItems={details.bathrooms}
+          selectedItem={selectedBathroom}
+          item={'bathroom' as ObjectKey}
+          itemType={'bathroomType' as ObjectKey}
+          choices={bathroomChoices}
+          setSelectedItem={setSelectedBathroom}
+          addItem={addBathroom}
+          removeItem={removeBathroom}
           handleChange={handleChange}
-          selectedBathroom={selectedBathroom}
-          setSelectedBathroom={setSelectedBathroom}
+          Icon={BiBath}
         />
-        <BedsSelection
-          beds={details.beds}
-          addBed={addBed}
-          removeBed={removeBed}
+        <DetailsSelection
+          title="Bed"
+          listItems={details.beds}
+          selectedItem={selectedBed}
+          item={'bed' as ObjectKey}
+          itemType={'bedType' as ObjectKey}
+          choices={bedChoices}
+          setSelectedItem={setSelectedBed}
+          addItem={addBed}
+          removeItem={removeBed}
           handleChange={handleChange}
-          selectedBed={selectedBed}
-          setSelectedBed={setSelectedBed}
+          Icon={LuBed}
         />
         <Container title="Property features" type="normal">
           <SelectionList
             arr={details.features}
-            arrOfItems={FEATURES}
+            arrOfItems={features}
             handleClick={handleFeatures}
           />
         </Container>
       </MainContainer>
 
       <MainContainer order="04" title="property rules">
-        <Rules
-          arr={details.rules}
-          arrOfItems={RULES}
-          handleClick={handleRules}
-        />
+        <Rules />
       </MainContainer>
 
       <MainContainer order="05" title="property pricing">

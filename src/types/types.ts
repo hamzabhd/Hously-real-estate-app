@@ -13,7 +13,6 @@ export type UserObj = {
   destinations?: string[]
   links?: string[]
 }
-
 export interface UserDetails {
   fullName: string
   country: string
@@ -32,6 +31,49 @@ export interface UserDetails {
   link3: string
 }
 
+export type DetailsState = {
+  propertyType: string
+  listingType: string
+  title: string
+  description: string
+  address: string
+  country: string
+  city: string
+  state: string
+  postalCode: string
+  bedrooms: { bedroom: number; bedroomType: string }[]
+  bathrooms: { bathroom: number; bathroomType: string }[]
+  beds: { bed: number; bedType: string }[]
+  features: string[]
+  rules: string[]
+  guestsLimit: string
+  quietHours: string
+  checkIn: string
+  checkOut: string
+  pricePerNight: string
+  cleaningFee: string
+  securityFee: string
+}
+
 export interface InputErrors {
   [key: string]: string | { [key: string]: string }
 }
+export type bedroomObj = {
+  bedroom: number
+  bedroomType: string
+}
+export type BathroomObj = {
+  bathroom: number
+  bathroomType: string
+}
+export type BedObj = {
+  bed: number
+  bedType: string
+}
+export type ObjType<Type> = {
+  [Property in keyof Type]: Type[Property]
+}
+
+export type ArrType = ObjType<BedObj | bedroomObj | BathroomObj>[]
+
+export type ObjectKey = keyof (bedroomObj | BathroomObj | BedObj)
