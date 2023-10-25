@@ -1,10 +1,8 @@
 import { MdOutlineAttachMoney } from 'react-icons/md'
 import Container from '@/components/Container'
 import CustomInput from '@/components/CustomInput'
-import { useGlobalContext } from 'context/GlobalProvider'
-
-const Pricing = () => {
-  const { handleChange, details, detailsErrors } = useGlobalContext()
+import { PricingPropType } from '@/types/types'
+const Pricing = ({ handleChange, details, detailsErrors }: PricingPropType) => {
   return (
     <Container title="Pricing" type="normal">
       <div className="sm:grid sm:grid-cols-2 sm:gap-4 lg:gap-6">

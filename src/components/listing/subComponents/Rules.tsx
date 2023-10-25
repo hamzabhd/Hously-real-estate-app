@@ -1,12 +1,15 @@
 import Container from '@/components/Container'
 import SelectionList from './SelectionList'
 import CustomInput from '@/components/CustomInput'
-import { useGlobalContext } from 'context/GlobalProvider'
 import { rules } from 'utils/itemManagement/data/data'
+import { RulesPropType } from '@/types/types'
 
-const Rules = () => {
-  const { handleRules, details, handleChange, detailsErrors } =
-    useGlobalContext()
+const Rules = ({
+  handleRules,
+  details,
+  handleChange,
+  detailsErrors,
+}: RulesPropType) => {
   return (
     <>
       <Container

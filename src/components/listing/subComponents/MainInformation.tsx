@@ -15,17 +15,16 @@ import {
 } from 'react-icons/md'
 import { LuImagePlus } from 'react-icons/lu'
 import { HiOutlineHome } from 'react-icons/hi'
-import { useGlobalContext } from 'context/GlobalProvider'
+import { MainInformationPropType } from '@/types/types'
 
-const MainInformation = () => {
-  const {
-    details,
-    handleChange,
-    handleImage,
-    removeImages,
-    images,
-    detailsErrors,
-  } = useGlobalContext()
+const MainInformation = ({
+  details,
+  handleChange,
+  handleImage,
+  removeImages,
+  images,
+  detailsErrors,
+}: MainInformationPropType) => {
   return (
     <>
       {/* Property type */}

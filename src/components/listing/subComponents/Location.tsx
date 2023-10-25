@@ -1,10 +1,11 @@
 import Container from '@/components/Container'
 import CustomInput from '@/components/CustomInput'
-import { useGlobalContext } from 'context/GlobalProvider'
-
-const Location = () => {
-  const { details, handleChange, detailsErrors } = useGlobalContext()
-
+import { LocationPropType } from '@/types/types'
+const Location = ({
+  details,
+  handleChange,
+  detailsErrors,
+}: LocationPropType) => {
   return (
     <Container title="Property address" type="normal">
       <div className="sm:grid sm:grid-cols-2 sm:gap-4 lg:gap-5">

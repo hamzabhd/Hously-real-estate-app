@@ -1,3 +1,5 @@
+import { ChangeEvent } from 'react'
+
 export type UserObj = {
   username: string
   fullName: string
@@ -94,3 +96,24 @@ export type ObjType<Type> = {
 export type ArrType = ObjType<BedObj | bedroomObj | BathroomObj>[]
 
 export type ObjectKey = keyof (bedroomObj | BathroomObj | BedObj)
+
+export interface MainInformationPropType {
+  details: DetailsState
+  handleChange: (e: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => void
+  handleImage: (e: ChangeEvent<HTMLInputElement>) => void
+  removeImages: (index: number) => void
+  images: string[]
+  detailsErrors: DetailsStateErrors
+}
+
+export interface LocationPropType
+  extends Omit<
+    MainInformationPropType,
+    'handleImage' | 'removeImages' | 'images'
+  > {}
+
+export interface RulesPropType extends LocationPropType {
+  handleRules: (rule: string) => void
+}
+
+export interface PricingPropType extends LocationPropType {}
