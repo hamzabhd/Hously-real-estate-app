@@ -280,13 +280,14 @@ const ListingFrom = () => {
     e.preventDefault()
 
     try {
-      const result = validateForm(
-        listingSchema,
-        { ...details, images },
-        setDetailsErrors,
-      )
+      const result = validateForm(listingSchema, { ...details, images })
 
-      // if (!result.success) return
+      if (!result.success) {
+        return setDetailsErrors((prevState) => ({
+          ...prevState,
+          ...result.errors,
+        }))
+      }
     } catch (err) {
       console.log(err)
     }

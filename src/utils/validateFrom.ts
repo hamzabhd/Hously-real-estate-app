@@ -13,7 +13,6 @@ type SchemaType = typeof listingSchema | typeof userSchema
 export const validateForm = (
   schema: SchemaType,
   obj: UserDetails | ListingsDetails,
-  setErrorInputs: Dispatch<SetStateAction<DetailsStateErrors>>,
 ) => {
   try {
     const result = schema.safeParse(obj)
@@ -25,12 +24,11 @@ export const validateForm = (
       for (let i = 0; i < issues.length; i++) {
         errors[issues[i].path[0]] = issues[i].message
       }
-      setErrorInputs((prevState) => ({
-        ...prevState,
-        ...errors,
-      }))
-
-      return { success: false, message: 'Form does not pass validation' }
+      return {
+        success: false,
+        message: 'Form does not pass validation',
+        errors,
+      }
     }
     return { success: true, message: 'Form passed validation successfully' }
   } catch (err) {
