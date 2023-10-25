@@ -3,7 +3,7 @@ import CustomInput from '@/components/CustomInput'
 import { useGlobalContext } from 'context/GlobalProvider'
 
 const Location = () => {
-  const { details, handleChange } = useGlobalContext()
+  const { details, handleChange, detailsErrors } = useGlobalContext()
 
   return (
     <Container title="Property address" type="normal">
@@ -15,6 +15,7 @@ const Location = () => {
           type="text"
           label="Address"
           className="relative mb-4 sm:col-span-2 sm:my-0"
+          error={detailsErrors.address}
         />
         <CustomInput
           name="country"
@@ -23,6 +24,7 @@ const Location = () => {
           type="text"
           label="Country"
           className="relative mb-4 sm:my-0"
+          error={detailsErrors.country}
         />
 
         <CustomInput
@@ -32,15 +34,7 @@ const Location = () => {
           type="text"
           label="City"
           className="relative mb-4 sm:my-0"
-        />
-
-        <CustomInput
-          name="state"
-          value={details.state}
-          handleChange={handleChange}
-          type="text"
-          label="State"
-          className="relative mb-4 sm:my-0"
+          error={detailsErrors.city}
         />
 
         <CustomInput
@@ -49,6 +43,16 @@ const Location = () => {
           handleChange={handleChange}
           type="text"
           label="ZIP/Postal code"
+          className="relative mb-4 sm:my-0"
+          error={detailsErrors.postalCode}
+        />
+
+        <CustomInput
+          name="state"
+          value={details.state}
+          handleChange={handleChange}
+          type="text"
+          label="State"
           className="relative mb-4 sm:my-0"
         />
       </div>

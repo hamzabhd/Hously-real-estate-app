@@ -20,19 +20,15 @@ const Navbar = ({ user, session }: NavbarPropsType) => {
 
   return (
     <nav
-      className={`${
-        isOpen ? 'fixed bg-white' : 'relative bg-white/20'
-      } top-0 z-20 flex w-full items-center justify-between gap-x-2 px-4 backdrop-blur-lg lg:relative lg:bg-white/20 ${
-        session ? 'py-4' : 'py-3'
-      }`}
+      className={`top-0 z-20 flex w-full items-center justify-between gap-x-2 px-4 backdrop-blur-lg lg:relative lg:bg-white/20 
+      ${session ? 'py-4' : 'py-3'}
+      ${isOpen ? 'fixed bg-white' : 'relative bg-white/20'}`}
     >
       <Link
         href="/"
         className="w-fit cursor-pointer select-none rounded-lg py-2 transition-colors"
       >
-        <span className={`${montserrat.className} font-bold lg:text-xl`}>
-          Hously.
-        </span>
+        <span className="font-bold lg:text-xl">Hously.</span>
       </Link>
 
       <ul className="m-auto hidden gap-x-10 lg:flex">

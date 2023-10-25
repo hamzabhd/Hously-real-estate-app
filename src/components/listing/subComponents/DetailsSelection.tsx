@@ -25,6 +25,7 @@ type DetailsSelectionProps = {
   removeItem: () => void
   handleChange: (e: ChangeEvent<HTMLInputElement>) => void
   Icon: IconType
+  error?: string
 }
 
 const DetailsSelection = ({
@@ -39,10 +40,11 @@ const DetailsSelection = ({
   removeItem,
   handleChange,
   Icon,
+  error,
 }: DetailsSelectionProps) => {
   return (
     <>
-      <Container title={title + 's'} type="grid">
+      <Container title={title + 's'} type="grid" error={error}>
         <div
           onClick={addItem}
           className="group flex aspect-square h-full w-full cursor-pointer flex-col items-center justify-center gap-y-4 rounded-3xl border-2 border-dashed border-grey p-4 transition-colors hover:border-black/60"

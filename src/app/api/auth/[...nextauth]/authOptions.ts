@@ -12,7 +12,7 @@ export const authOptions: NextAuthOptions = {
     }),
   ],
   callbacks: {
-    async session({ session }) {
+    async session({ session, token }) {
       await connectToDb()
       const user = await User.findOne({ email: session.user.email })
       session.user.id = user._id.toString()
@@ -20,8 +20,6 @@ export const authOptions: NextAuthOptions = {
       return session
     },
     async signIn({ profile }) {
-      console.log(profile)
-
       try {
         await connectToDb()
 

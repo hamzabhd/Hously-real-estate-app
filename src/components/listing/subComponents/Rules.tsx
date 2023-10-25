@@ -5,10 +5,15 @@ import { useGlobalContext } from 'context/GlobalProvider'
 import { rules } from 'utils/itemManagement/data/data'
 
 const Rules = () => {
-  const { handleRules, details, handleChange } = useGlobalContext()
+  const { handleRules, details, handleChange, detailsErrors } =
+    useGlobalContext()
   return (
     <>
-      <Container title="General rules" type="normal">
+      <Container
+        title="General rules"
+        type="normal"
+        error={detailsErrors.rules}
+      >
         <SelectionList
           arr={details.rules}
           arrOfItems={rules}
@@ -25,6 +30,7 @@ const Rules = () => {
             name="guestsLimit"
             type="text"
             handleChange={handleChange}
+            error={detailsErrors.guestsLimit}
           />
 
           <CustomInput
@@ -34,6 +40,7 @@ const Rules = () => {
             name="quietHours"
             type="text"
             handleChange={handleChange}
+            error={detailsErrors.quietHours}
           />
 
           <CustomInput
@@ -43,6 +50,7 @@ const Rules = () => {
             name="checkIn"
             type="text"
             handleChange={handleChange}
+            error={detailsErrors.checkIn}
           />
 
           <CustomInput
@@ -52,6 +60,7 @@ const Rules = () => {
             name="checkOut"
             type="text"
             handleChange={handleChange}
+            error={detailsErrors.checkOut}
           />
         </div>
       </Container>

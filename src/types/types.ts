@@ -55,6 +55,23 @@ export type DetailsState = {
   securityFee: string
 }
 
+export interface ListingsDetails extends DetailsState {
+  images: string[]
+}
+
+export interface DetailsStateErrors
+  extends Omit<
+    DetailsState,
+    'bedrooms' | 'bathrooms' | 'beds' | 'rules' | 'features'
+  > {
+  bedrooms: string
+  bathrooms: string
+  beds: string
+  features: string
+  rules: string
+  images: string
+}
+
 export interface InputErrors {
   [key: string]: string | { [key: string]: string }
 }

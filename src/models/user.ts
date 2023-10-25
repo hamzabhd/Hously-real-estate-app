@@ -14,6 +14,7 @@ const userSchema = new Schema(
     facts: { type: [String], default: [] },
     destinations: { type: [String], default: [] },
     links: { type: [String], default: [] },
+    properties: [{ type: Schema.Types.ObjectId, ref: 'Property' }],
   },
   {
     timestamps: true,

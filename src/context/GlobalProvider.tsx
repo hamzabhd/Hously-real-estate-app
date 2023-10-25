@@ -8,18 +8,22 @@ import {
   useState,
   Dispatch,
   SetStateAction,
+  FormEvent,
 } from 'react'
-import { DetailsState, ObjectKey } from '@/types/types'
+import { DetailsState, DetailsStateErrors, ObjectKey } from '@/types/types'
 import {
   removeImage,
   removeItem,
   addItem,
 } from 'utils/itemManagement/itemManagement'
 import { isAdded } from 'utils/isAdded'
-import { useSession } from 'next-auth/react'
+import { listingSchema } from 'utils/validations/validations'
+import { validateForm } from 'utils/validateFrom'
+import axios from 'axios'
 
 type ContextType = {
   details: DetailsState
+  detailsErrors: DetailsStateErrors
   images: string[]
   selectedBedroom: number
   selectedBathroom: number
@@ -38,6 +42,7 @@ type ContextType = {
   setSelectedBedroom: Dispatch<SetStateAction<number>>
   setSelectedBathroom: Dispatch<SetStateAction<number>>
   setSelectedBed: Dispatch<SetStateAction<number>>
+  handleSubmit: (e: FormEvent<HTMLFormElement>) => void
 }
 
 const Context = createContext<ContextType>({
@@ -64,6 +69,30 @@ const Context = createContext<ContextType>({
     cleaningFee: '',
     securityFee: '',
   },
+  detailsErrors: {
+    propertyType: '',
+    listingType: '',
+    title: '',
+    description: '',
+    address: '',
+    country: '',
+    city: '',
+    state: '',
+    postalCode: '',
+    bedrooms: '',
+    bathrooms: '',
+    beds: '',
+    features: '',
+    rules: '',
+    guestsLimit: '',
+    quietHours: '',
+    checkIn: '',
+    checkOut: '',
+    price: '',
+    cleaningFee: '',
+    securityFee: '',
+    images: '',
+  },
   images: [],
   selectedBedroom: 1,
   selectedBathroom: 1,
@@ -83,6 +112,7 @@ const Context = createContext<ContextType>({
   setSelectedBedroom: () => undefined,
   setSelectedBathroom: () => undefined,
   setSelectedBed: () => undefined,
+  handleSubmit: (e: FormEvent<HTMLFormElement>) => undefined,
 })
 
 export const useGlobalContext = () => {
@@ -117,6 +147,30 @@ const GlobalProvider = ({ children }: { children: ReactNode }) => {
     cleaningFee: '',
     securityFee: '',
   })
+  const [detailsErrors, setDetailsErrors] = useState<DetailsStateErrors>({
+    propertyType: '',
+    listingType: '',
+    title: '',
+    description: '',
+    address: '',
+    country: '',
+    city: '',
+    state: '',
+    postalCode: '',
+    bedrooms: '',
+    bathrooms: '',
+    beds: '',
+    features: '',
+    rules: '',
+    guestsLimit: '',
+    quietHours: '',
+    checkIn: '',
+    checkOut: '',
+    price: '',
+    cleaningFee: '',
+    securityFee: '',
+    images: '',
+  })
   const [images, setImages] = useState<string[]>([])
   const [selectedBedroom, setSelectedBedroom] = useState(1)
   const [selectedBathroom, setSelectedBathroom] = useState(1)
@@ -144,6 +198,11 @@ const GlobalProvider = ({ children }: { children: ReactNode }) => {
           }
         }
       })
+
+      setDetailsErrors((prevState) => ({
+        ...prevState,
+        bedrooms: '',
+      }))
       return setDetails((prevState) => ({
         ...prevState,
         bedrooms: modifiedBedrooms,
@@ -160,6 +219,11 @@ const GlobalProvider = ({ children }: { children: ReactNode }) => {
           }
         }
       })
+
+      setDetailsErrors((prevState) => ({
+        ...prevState,
+        bathrooms: '',
+      }))
       return setDetails((prevState) => ({
         ...prevState,
         bathrooms: modifiedBathrooms,
@@ -176,11 +240,21 @@ const GlobalProvider = ({ children }: { children: ReactNode }) => {
           }
         }
       })
+
+      setDetailsErrors((prevState) => ({
+        ...prevState,
+        beds: '',
+      }))
+
       return setDetails((prevState) => ({
         ...prevState,
         beds: modifiedBeds,
       }))
     }
+    setDetailsErrors((prevState) => ({
+      ...prevState,
+      [name]: '',
+    }))
 
     return setDetails((prevState) => ({ ...prevState, [name]: value }))
   }
@@ -215,6 +289,10 @@ const GlobalProvider = ({ children }: { children: ReactNode }) => {
       }))
     }
     const modifiedFeatures = [...details.features, feature]
+    setDetailsErrors((prevState) => ({
+      ...prevState,
+      features: '',
+    }))
     return setDetails((prevState) => ({
       ...prevState,
       features: modifiedFeatures,
@@ -230,6 +308,11 @@ const GlobalProvider = ({ children }: { children: ReactNode }) => {
       }))
     }
     const modifiedRules = [...details.rules, rule]
+
+    setDetailsErrors((prevState) => ({
+      ...prevState,
+      rules: '',
+    }))
     return setDetails((prevState) => ({
       ...prevState,
       rules: modifiedRules,
@@ -293,13 +376,34 @@ const GlobalProvider = ({ children }: { children: ReactNode }) => {
     )
   }
 
-  const { data: session } = useSession()
-  console.log(session)
+  const handleSubmit = (e: FormEvent<HTMLFormElement>) => {
+    e.preventDefault()
+
+    try {
+      const result = validateForm(
+        listingSchema,
+        { ...details, images },
+        setDetailsErrors,
+      )
+
+      // if (!result.success) return
+    } catch (err) {
+      console.log(err)
+    }
+    axios
+      .post(`/api/listings/create-listing`, {
+        body: details,
+        images,
+      })
+      .then((res) => console.log(res.data))
+      .catch((err) => console.log(err))
+  }
 
   return (
     <Context.Provider
       value={{
         details,
+        detailsErrors,
         images,
         selectedBedroom,
         selectedBathroom,
@@ -318,6 +422,7 @@ const GlobalProvider = ({ children }: { children: ReactNode }) => {
         setSelectedBedroom,
         setSelectedBathroom,
         setSelectedBed,
+        handleSubmit,
       }}
     >
       {children}

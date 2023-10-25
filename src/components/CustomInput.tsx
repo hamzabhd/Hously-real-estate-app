@@ -48,7 +48,7 @@ const CustomInput = ({
             <label
               htmlFor={name}
               className={`absolute left-3 top-1 z-10 origin-[0] -translate-y-4 scale-75 transform cursor-text select-none bg-white px-1 font-medium text-black/40 duration-300 peer-placeholder-shown:top-1/2 peer-placeholder-shown:-translate-y-1/2 peer-placeholder-shown:scale-100 peer-focus:top-1 peer-focus:-translate-y-4 peer-focus:scale-75 peer-focus:cursor-default peer-focus:px-2 peer-focus:text-gray-600 ${
-                error && 'text-red-500'
+                error && 'text-red-400'
               }`}
             >
               {label}
@@ -74,7 +74,7 @@ const CustomInput = ({
               placeholder={placeholder}
               className={`peer block w-full appearance-none rounded-full border border-grey bg-transparent p-4 focus:border-black/60 focus:text-black focus:outline-none ${
                 message && 'focus:pr-10'
-              } ${error && 'border-red-500 pr-10 text-red-500'}`}
+              } ${error && 'border-red-500 pr-10 text-red-400'}`}
             />
             {(message || error) && (
               <InputValidator message={message} error={error} />
@@ -89,14 +89,23 @@ const CustomInput = ({
             value={value}
             onChange={handleChange}
             placeholder=" "
-            className="peer block h-36 w-full resize-none appearance-none rounded-3xl border border-grey bg-transparent p-4 text-black focus:border-black/60 focus:outline-none focus:ring-0"
+            className={`peer block h-36 w-full resize-none appearance-none rounded-3xl border border-grey bg-transparent p-4 text-black focus:border-black/60 focus:outline-none focus:ring-0
+            ${error && 'border-red-500 pr-10 text-red-400'}
+            `}
           />
           <label
             htmlFor={name}
-            className="absolute left-4 top-1 z-10 origin-[0] -translate-y-4 scale-75 transform cursor-text select-none bg-white px-1 font-medium text-gray-400 duration-300 peer-placeholder-shown:top-4 peer-placeholder-shown:-translate-y-0 peer-placeholder-shown:scale-100 peer-focus:top-1 peer-focus:-translate-y-4 peer-focus:scale-75 peer-focus:cursor-default peer-focus:border-black/60 peer-focus:px-2 peer-focus:text-gray-600"
+            className={`absolute left-4 top-1 z-10 origin-[0] -translate-y-4 scale-75 transform cursor-text select-none bg-white px-1 font-medium text-gray-400 duration-300 peer-placeholder-shown:top-4 peer-placeholder-shown:-translate-y-0 peer-placeholder-shown:scale-100 peer-focus:top-1 peer-focus:-translate-y-4 peer-focus:scale-75 peer-focus:cursor-default peer-focus:border-black/60 peer-focus:px-2 peer-focus:text-gray-600 ${
+              error && 'text-red-400'
+            }`}
           >
             {label}
           </label>
+          {(message || error) && (
+            <div className="absolute right-0 top-6">
+              <InputValidator message={message} error={error} />
+            </div>
+          )}
         </div>
       )}
     </>
@@ -124,7 +133,7 @@ const InputValidator = ({
         }`}
       />
       <span
-        className={`absolute right-0 z-30 mt-1 hidden w-fit whitespace-nowrap rounded-full border bg-white px-4 py-1.5 text-xs font-medium group-hover:block ${
+        className={`absolute right-0 z-30 mt-1 hidden w-fit whitespace-nowrap rounded-full border bg-white px-4 py-1.5 text-xs group-hover:block ${
           error
             ? 'border-red-400 text-red-500'
             : 'border-black/40 text-black/60'

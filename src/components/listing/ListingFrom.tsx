@@ -23,6 +23,7 @@ import { useGlobalContext } from 'context/GlobalProvider'
 const ListingFrom = () => {
   const {
     details,
+    detailsErrors,
     images,
     selectedBedroom,
     selectedBathroom,
@@ -38,10 +39,11 @@ const ListingFrom = () => {
     setSelectedBathroom,
     setSelectedBed,
     handleFeatures,
+    handleSubmit,
   } = useGlobalContext()
 
   return (
-    <div className="my-4 lg:mt-8">
+    <form className="my-4 lg:mt-8" onSubmit={handleSubmit}>
       <MainContainer
         order="01"
         title="main information"
@@ -75,6 +77,7 @@ const ListingFrom = () => {
           removeItem={removeBedroom}
           handleChange={handleChange}
           Icon={MdSingleBed}
+          error={detailsErrors.bedrooms}
         />
         <DetailsSelection
           title="Bathroom"
@@ -88,6 +91,7 @@ const ListingFrom = () => {
           removeItem={removeBathroom}
           handleChange={handleChange}
           Icon={BiBath}
+          error={detailsErrors.bathrooms}
         />
         <DetailsSelection
           title="Bed"
@@ -101,8 +105,13 @@ const ListingFrom = () => {
           removeItem={removeBed}
           handleChange={handleChange}
           Icon={LuBed}
+          error={detailsErrors.beds}
         />
-        <Container title="Property features" type="normal">
+        <Container
+          title="Property features"
+          type="normal"
+          error={detailsErrors.features}
+        >
           <SelectionList
             arr={details.features}
             arrOfItems={features}
@@ -128,7 +137,7 @@ const ListingFrom = () => {
       </MainContainer>
 
       <Buttons />
-    </div>
+    </form>
   )
 }
 

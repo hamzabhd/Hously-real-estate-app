@@ -28,6 +28,21 @@ export const destroyOldProfileImage = async (public_id: string) => {
   }
 }
 
+export const uploadImage = async (imagePath: string, folder: string) => {
+  const options = {
+    use_filename: true,
+    unique_filename: false,
+    folder: 'hously_app/' + folder,
+  }
+
+  try {
+    const result = await cloudinary.uploader.upload(imagePath, options)
+    return result.secure_url
+  } catch (e) {
+    console.error(e)
+  }
+}
+
 export const getPublicId = (url: string) => {
   const regEx = /[a-z]+\_\w+\/[a-z]+\/\w+/g
   const publicId = url.match(regEx)

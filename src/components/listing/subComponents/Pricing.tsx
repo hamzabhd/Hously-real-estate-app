@@ -4,7 +4,7 @@ import CustomInput from '@/components/CustomInput'
 import { useGlobalContext } from 'context/GlobalProvider'
 
 const Pricing = () => {
-  const { handleChange, details } = useGlobalContext()
+  const { handleChange, details, detailsErrors } = useGlobalContext()
   return (
     <Container title="Pricing" type="normal">
       <div className="sm:grid sm:grid-cols-2 sm:gap-4 lg:gap-6">
@@ -15,8 +15,11 @@ const Pricing = () => {
           name="price"
           type="text"
           handleChange={handleChange}
+          error={detailsErrors.price}
         >
-          <MdOutlineAttachMoney className="absolute right-4 top-1/2 h-4 w-4 -translate-y-1/2" />
+          {!detailsErrors.price && (
+            <MdOutlineAttachMoney className="absolute right-4 top-1/2 h-4 w-4 -translate-y-1/2" />
+          )}
         </CustomInput>
 
         <CustomInput
@@ -27,7 +30,9 @@ const Pricing = () => {
           type="text"
           handleChange={handleChange}
         >
-          <MdOutlineAttachMoney className="absolute right-4 top-1/2 h-4 w-4 -translate-y-1/2" />
+          {!detailsErrors.cleaningFee && (
+            <MdOutlineAttachMoney className="absolute right-4 top-1/2 h-4 w-4 -translate-y-1/2" />
+          )}
         </CustomInput>
 
         <CustomInput
@@ -38,7 +43,9 @@ const Pricing = () => {
           type="text"
           handleChange={handleChange}
         >
-          <MdOutlineAttachMoney className="absolute right-4 top-1/2 h-4 w-4 -translate-y-1/2" />
+          {!detailsErrors.securityFee && (
+            <MdOutlineAttachMoney className="absolute right-4 top-1/2 h-4 w-4 -translate-y-1/2" />
+          )}
         </CustomInput>
       </div>
     </Container>

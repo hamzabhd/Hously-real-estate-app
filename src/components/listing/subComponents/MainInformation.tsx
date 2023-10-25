@@ -18,12 +18,22 @@ import { HiOutlineHome } from 'react-icons/hi'
 import { useGlobalContext } from 'context/GlobalProvider'
 
 const MainInformation = () => {
-  const { details, handleChange, handleImage, removeImages, images } =
-    useGlobalContext()
+  const {
+    details,
+    handleChange,
+    handleImage,
+    removeImages,
+    images,
+    detailsErrors,
+  } = useGlobalContext()
   return (
     <>
       {/* Property type */}
-      <Container title="Property type" type="grid">
+      <Container
+        title="Property type"
+        type="grid"
+        error={detailsErrors.propertyType}
+      >
         <CustomRadioButton
           handleChange={handleChange}
           value="Apartment"
@@ -66,7 +76,11 @@ const MainInformation = () => {
         </CustomRadioButton>
       </Container>
       {/* Listing Type */}
-      <Container title="Listing type" type="grid">
+      <Container
+        title="Listing type"
+        type="grid"
+        error={detailsErrors.listingType}
+      >
         <CustomRadioButton
           handleChange={handleChange}
           value="Sell"
@@ -97,8 +111,8 @@ const MainInformation = () => {
           handleChange={handleChange}
           type="text"
           label="Title"
-          max={25}
           className="relative mb-4 md:mb-5"
+          error={detailsErrors.title}
         />
         <CustomInput
           name="description"
@@ -106,10 +120,11 @@ const MainInformation = () => {
           handleChange={handleChange}
           label="Description"
           className="relative mb-4 md:mb-5"
+          error={detailsErrors.description}
         />
       </Container>
       {/* Images */}
-      <Container type="grid" title="Images">
+      <Container type="grid" title="Images" error={detailsErrors.images}>
         {images!.length < 4 && (
           <label className="group flex aspect-square h-full w-full cursor-pointer flex-col items-center justify-center gap-y-4 rounded-3xl border-2 border-dashed border-grey p-4 transition-colors hover:border-black/60">
             <LuImagePlus className="h-8 w-8" />
