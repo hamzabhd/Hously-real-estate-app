@@ -1,5 +1,4 @@
 'use client'
-import Line from '../Line'
 import { MdSingleBed } from 'react-icons/md'
 import { BiBath } from 'react-icons/bi'
 import { LuBed } from 'react-icons/lu'
@@ -10,7 +9,7 @@ import MainContainer from '@/components/containers/MainContainer'
 import Rules from './subComponents/Rules'
 import Pricing from './subComponents/Pricing'
 import SelectionList from './subComponents/SelectionList'
-import { ObjectKey } from '@/types/types'
+import { ListingsDetails, ObjectKey } from '@/types/types'
 import {
   features,
   bedChoices,
@@ -30,30 +29,39 @@ import axios from 'axios'
 import { validateForm } from 'utils/validateFrom'
 import { listingSchema } from 'utils/validations/validations'
 import Buttons from '../custom/Buttons'
+import { useRouter } from 'next/navigation'
+import Spinner from '../loaders/Spinner'
 
-const ListingFrom = () => {
+const ListingFrom = ({
+  isEdit,
+  listing,
+}: {
+  isEdit: boolean
+  listing?: ListingsDetails
+}) => {
+  const router = useRouter()
   const [details, setDetails] = useState<DetailsState>({
-    propertyType: '',
-    listingType: '',
-    title: '',
-    description: '',
-    address: '',
-    country: '',
-    city: '',
-    state: '',
-    postalCode: '',
-    bedrooms: [{ bedroom: 1, bedroomType: '' }],
-    bathrooms: [{ bathroom: 1, bathroomType: '' }],
-    beds: [{ bed: 1, bedType: '' }],
-    features: [],
-    rules: [],
-    guestsLimit: '',
-    quietHours: '',
-    checkIn: '',
-    checkOut: '',
-    price: '',
-    cleaningFee: '',
-    securityFee: '',
+    propertyType: listing?.propertyType || '',
+    listingType: listing?.listingType || '',
+    title: listing?.title || '',
+    description: listing?.description || '',
+    address: listing?.address || '',
+    country: listing?.country || '',
+    city: listing?.city || '',
+    state: listing?.state || '',
+    postalCode: listing?.postalCode || '',
+    bedrooms: listing?.bedrooms || [{ bedroom: 1, bedroomType: '' }],
+    bathrooms: listing?.bathrooms || [{ bathroom: 1, bathroomType: '' }],
+    beds: listing?.beds || [{ bed: 1, bedType: '' }],
+    features: listing?.features || [],
+    rules: listing?.rules || [],
+    guestsLimit: listing?.guestsLimit || '',
+    quietHours: listing?.quietHours || '',
+    checkIn: listing?.checkIn || '',
+    checkOut: listing?.checkOut || '',
+    price: listing?.price || '',
+    cleaningFee: listing?.cleaningFee || '',
+    securityFee: listing?.securityFee || '',
   })
   const [detailsErrors, setDetailsErrors] = useState<DetailsStateErrors>({
     propertyType: '',
@@ -79,10 +87,11 @@ const ListingFrom = () => {
     securityFee: '',
     images: '',
   })
-  const [images, setImages] = useState<string[]>([])
+  const [images, setImages] = useState<string[]>(listing?.images || [])
   const [selectedBedroom, setSelectedBedroom] = useState(1)
   const [selectedBathroom, setSelectedBathroom] = useState(1)
   const [selectedBed, setSelectedBed] = useState(1)
+  const [isLoading, setIsLoading] = useState(false)
 
   const handleChange = (
     e: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>,
@@ -277,7 +286,7 @@ const ListingFrom = () => {
     )
   }
 
-  const handleSubmit = (e: FormEvent<HTMLFormElement>) => {
+  const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault()
 
     try {
@@ -292,131 +301,149 @@ const ListingFrom = () => {
     } catch (err) {
       console.log(err)
     }
-    axios
-      .post(`/api/listings/create-listing`, {
-        body: details,
-        images,
-      })
-      .then((res) => console.log(res.data))
-      .catch((err) => console.log(err))
+
+    setIsLoading(true)
+    const response = await axios.post(`/api/listings/create-listing`, {
+      body: details,
+      images,
+    })
+
+    if (response.status === 200) {
+      console.log(response.data.message)
+      router.refresh()
+      router.push(`/listing/${response.data.id}`)
+      setIsLoading(false)
+    }
   }
 
   return (
-    <form className="my-4 lg:mt-8" onSubmit={handleSubmit}>
-      <MainContainer
-        order="01"
-        title="main information"
-        message="Please note that all fields in the section are required."
-      >
-        <MainInformation
-          details={details}
-          detailsErrors={detailsErrors}
-          handleChange={handleChange}
-          handleImage={handleImage}
-          removeImages={removeImages}
-          images={images}
+    <>
+      {isLoading && (
+        <Spinner
+          label={isEdit ? 'Updating listing...' : 'Creating listing...'}
         />
-      </MainContainer>
-
-      <MainContainer
-        order="02"
-        title="location details"
-        message="Please ensure you input accurate location details, including the state if applicable."
-      >
-        <Location
-          details={details}
-          handleChange={handleChange}
-          detailsErrors={detailsErrors}
-        />
-      </MainContainer>
-
-      <MainContainer
-        order="03"
-        title="property details"
-        message="Please make sure to select at least one option for each item."
-      >
-        <DetailsSelection
-          title="Bedroom"
-          listItems={details.bedrooms}
-          selectedItem={selectedBedroom}
-          item={'bedroom' as ObjectKey}
-          itemType={'bedroomType' as ObjectKey}
-          choices={bedroomChoices}
-          setSelectedItem={setSelectedBedroom}
-          addItem={addBedroom}
-          removeItem={removeBedroom}
-          handleChange={handleChange}
-          Icon={MdSingleBed}
-          error={detailsErrors.bedrooms}
-        />
-        <DetailsSelection
-          title="Bathroom"
-          listItems={details.bathrooms}
-          selectedItem={selectedBathroom}
-          item={'bathroom' as ObjectKey}
-          itemType={'bathroomType' as ObjectKey}
-          choices={bathroomChoices}
-          setSelectedItem={setSelectedBathroom}
-          addItem={addBathroom}
-          removeItem={removeBathroom}
-          handleChange={handleChange}
-          Icon={BiBath}
-          error={detailsErrors.bathrooms}
-        />
-        <DetailsSelection
-          title="Bed"
-          listItems={details.beds}
-          selectedItem={selectedBed}
-          item={'bed' as ObjectKey}
-          itemType={'bedType' as ObjectKey}
-          choices={bedChoices}
-          setSelectedItem={setSelectedBed}
-          addItem={addBed}
-          removeItem={removeBed}
-          handleChange={handleChange}
-          Icon={LuBed}
-          error={detailsErrors.beds}
-        />
-        <Container
-          title="Property features"
-          type="normal"
-          error={detailsErrors.features}
+      )}
+      <form className="my-4 lg:mt-8" onSubmit={handleSubmit}>
+        <MainContainer
+          order="01"
+          title="main information"
+          message={
+            isEdit
+              ? 'Please note that all fields in the section are required. and also note that images are not editable otherwise create a new listing'
+              : 'Please note that all fields in the section are required.'
+          }
         >
-          <SelectionList
-            arr={details.features}
-            arrOfItems={features}
-            handleClick={handleFeatures}
+          <MainInformation
+            details={details}
+            detailsErrors={detailsErrors}
+            handleChange={handleChange}
+            handleImage={handleImage}
+            removeImages={removeImages}
+            images={images}
+            isEdit={isEdit}
           />
-        </Container>
-      </MainContainer>
+        </MainContainer>
 
-      <MainContainer
-        order="04"
-        title="property rules"
-        message="Kindly select the property rules that best align with your requirements, and feel free to provide specific rules if necessary."
-      >
-        <Rules
-          handleChange={handleChange}
-          handleRules={handleRules}
-          details={details}
-          detailsErrors={detailsErrors}
-        />
-      </MainContainer>
+        <MainContainer
+          order="02"
+          title="location details"
+          message="Please ensure you input accurate location details, including the state if applicable."
+        >
+          <Location
+            details={details}
+            handleChange={handleChange}
+            detailsErrors={detailsErrors}
+          />
+        </MainContainer>
 
-      <MainContainer
-        order="05"
-        title="property pricing"
-        message="Please note that only the price field is mandatory. The other fees are optional."
-      >
-        <Pricing
-          details={details}
-          detailsErrors={detailsErrors}
-          handleChange={handleChange}
-        />
-      </MainContainer>
+        <MainContainer
+          order="03"
+          title="property details"
+          message="Please make sure to select at least one option for each item."
+        >
+          <DetailsSelection
+            title="Bedroom"
+            listItems={details.bedrooms}
+            selectedItem={selectedBedroom}
+            item={'bedroom' as ObjectKey}
+            itemType={'bedroomType' as ObjectKey}
+            choices={bedroomChoices}
+            setSelectedItem={setSelectedBedroom}
+            addItem={addBedroom}
+            removeItem={removeBedroom}
+            handleChange={handleChange}
+            Icon={MdSingleBed}
+            error={detailsErrors.bedrooms}
+          />
+          <DetailsSelection
+            title="Bathroom"
+            listItems={details.bathrooms}
+            selectedItem={selectedBathroom}
+            item={'bathroom' as ObjectKey}
+            itemType={'bathroomType' as ObjectKey}
+            choices={bathroomChoices}
+            setSelectedItem={setSelectedBathroom}
+            addItem={addBathroom}
+            removeItem={removeBathroom}
+            handleChange={handleChange}
+            Icon={BiBath}
+            error={detailsErrors.bathrooms}
+          />
+          <DetailsSelection
+            title="Bed"
+            listItems={details.beds}
+            selectedItem={selectedBed}
+            item={'bed' as ObjectKey}
+            itemType={'bedType' as ObjectKey}
+            choices={bedChoices}
+            setSelectedItem={setSelectedBed}
+            addItem={addBed}
+            removeItem={removeBed}
+            handleChange={handleChange}
+            Icon={LuBed}
+            error={detailsErrors.beds}
+          />
+          <Container
+            title="Property features"
+            type="normal"
+            error={detailsErrors.features}
+          >
+            <SelectionList
+              arr={details.features}
+              arrOfItems={features}
+              handleClick={handleFeatures}
+            />
+          </Container>
+        </MainContainer>
 
-      <Buttons name="Create" />
-    </form>
+        <MainContainer
+          order="04"
+          title="property rules"
+          message="Kindly select the property rules that best align with your requirements, and feel free to provide specific rules if necessary."
+        >
+          <Rules
+            handleChange={handleChange}
+            handleRules={handleRules}
+            details={details}
+            detailsErrors={detailsErrors}
+          />
+        </MainContainer>
+
+        <MainContainer
+          order="05"
+          title="property pricing"
+          message="Please note that only the price field is mandatory. The other fees are optional."
+        >
+          <Pricing
+            details={details}
+            detailsErrors={detailsErrors}
+            handleChange={handleChange}
+          />
+        </MainContainer>
+
+        <Buttons name="Create" />
+      </form>
+    </>
   )
 }
 

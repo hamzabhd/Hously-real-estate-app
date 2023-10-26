@@ -104,12 +104,13 @@ export interface MainInformationPropType {
   removeImages: (index: number) => void
   images: string[]
   detailsErrors: DetailsStateErrors
+  isEdit: boolean
 }
 
 export interface LocationPropType
   extends Omit<
     MainInformationPropType,
-    'handleImage' | 'removeImages' | 'images'
+    'handleImage' | 'removeImages' | 'images' | 'isEdit'
   > {}
 
 export interface RulesPropType extends LocationPropType {

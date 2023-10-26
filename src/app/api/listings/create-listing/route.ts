@@ -17,6 +17,7 @@ export const POST = async (req: NextRequest) => {
     }
 
     let imagesArr: string[] = []
+
     for (let i = 0; i < images.length; i++) {
       const secure_url = await uploadImage(images[i], 'properties')
       imagesArr.push(secure_url!)
@@ -31,6 +32,12 @@ export const POST = async (req: NextRequest) => {
     })
     await User.findByIdAndUpdate(user?.user.id, {
       $addToSet: { properties: property._id },
+    })
+
+    return NextResponse.json({
+      success: true,
+      message: 'Your property has been successfully saved!',
+      id: property._id,
     })
   } catch (err) {
     console.error(err)
