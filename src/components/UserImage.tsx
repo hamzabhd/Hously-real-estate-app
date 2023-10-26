@@ -12,8 +12,9 @@ const UserImage = ({
   width?: number
   height?: number
 }) => {
-  const username =
-    name.split(' ')[0].slice(0, 1) + name.split(' ')[1].slice(0, 1)
+  const username = /\s+/g.test(name.trim())
+    ? name.split(' ')[0].slice(0, 1) + name.split(' ')[1].slice(0, 1)
+    : name.slice(0, 1)
 
   const imgHeight = height ? 'h-' + height / 4 : 'h-10'
   const imgWidth = width ? 'w-' + width / 4 : 'w-10'

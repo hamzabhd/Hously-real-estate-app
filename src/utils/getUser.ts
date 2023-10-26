@@ -14,6 +14,7 @@ export const getUser = async () => {
 
   const response = await fetch(
     `${process.env.NEXTAUTH_URL}/api/users/${session?.user.id}`,
+    { cache: 'no-cache' },
   )
   return response.json()
 }

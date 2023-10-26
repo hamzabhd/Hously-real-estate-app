@@ -137,65 +137,87 @@ const ProfileDetails = ({ user }: { user: UserObj }) => {
             <h3 className="mb-4 mt-6 text-xl font-medium text-black lg:mt-0 lg:text-2xl">
               Biography
             </h3>
-            <p className="font-normal leading-relaxed text-black/60">
-              {user.bio}
-            </p>
+            {
+              <p className="font-normal leading-relaxed text-black/60">
+                {user.bio ||
+                  "Looks like the user didn't update this section yet."}
+              </p>
+            }
 
             <h3 className="mb-4 mt-6 text-xl font-medium text-black lg:mt-8 lg:text-2xl">
               Professional background
             </h3>
             <p className="font-normal leading-relaxed text-black/60">
-              {user.background}
+              {user.background ||
+                "Looks like the user didn't update this section yet."}
             </p>
 
             <h3 className="mb-4 mt-6 text-xl font-medium text-black lg:mt-8 lg:text-2xl">
               Fun facts
             </h3>
-            <ul className="list-disc">
-              {user.facts
-                ?.filter((item) => item)
-                .map((fact, i) => (
-                  <li className="mb-4 ml-6 last:mb-0" key={i}>
-                    <span className="block pl-4  font-normal leading-relaxed text-black/60">
-                      {fact}
-                    </span>
-                  </li>
-                ))}
-            </ul>
+            {user.facts?.filter((item) => item).length !== 0 ? (
+              <ul className="list-disc">
+                {user.facts
+                  ?.filter((item) => item)
+                  .map((fact, i) => (
+                    <li className="mb-4 ml-6 last:mb-0" key={i}>
+                      <span className="block pl-4  font-normal leading-relaxed text-black/60">
+                        {fact}
+                      </span>
+                    </li>
+                  ))}
+              </ul>
+            ) : (
+              <p className="font-normal leading-relaxed text-black/60">
+                Looks like the user didn't update this section yet.
+              </p>
+            )}
 
             <h3 className="mb-4 mt-6 text-xl font-medium text-black lg:mt-8 lg:text-2xl">
               Favorite destinations
             </h3>
 
-            <ul className=" list-disc">
-              {user.destinations
-                ?.filter((item) => item)
-                .map((destination, i) => (
-                  <li className="mb-4 ml-6 last:mb-0" key={i}>
-                    <span className="block pl-4 font-normal leading-relaxed text-black/60">
-                      {destination}
-                    </span>
-                  </li>
-                ))}
-            </ul>
+            {user.destinations?.filter((item) => item).length !== 0 ? (
+              <ul className=" list-disc">
+                {user.destinations
+                  ?.filter((item) => item)
+                  .map((destination, i) => (
+                    <li className="mb-4 ml-6 last:mb-0" key={i}>
+                      <span className="block pl-4 font-normal leading-relaxed text-black/60">
+                        {destination}
+                      </span>
+                    </li>
+                  ))}
+              </ul>
+            ) : (
+              <p className="font-normal leading-relaxed text-black/60">
+                Looks like the user didn't update this section yet.
+              </p>
+            )}
 
             <h3 className="mb-4 mt-6 text-xl font-medium text-black lg:mt-8 lg:text-2xl">
               Connect with me
             </h3>
-            <ul className="mb-6 flex gap-x-8">
-              {user.links
-                ?.filter((item) => item)
-                .map((link, i) => (
-                  <li key={i}>
-                    <Link
-                      href={link}
-                      className="group inline-block cursor-pointer rounded-full border border-grey p-2 transition-colors hover:border-black/60"
-                    >
-                      <LinkIcon link={link} />
-                    </Link>
-                  </li>
-                ))}
-            </ul>
+            {user.links?.filter((item) => item).length !== 0 ? (
+              <ul className="mb-6 flex gap-x-8">
+                {user.links
+                  ?.filter((item) => item)
+                  .map((link, i) => (
+                    <li key={i}>
+                      <Link
+                        href={link}
+                        className="group inline-block cursor-pointer rounded-full border border-grey p-2 transition-colors hover:border-black/60"
+                      >
+                        <LinkIcon link={link} />
+                      </Link>
+                    </li>
+                  ))}
+              </ul>
+            ) : (
+              <p className="font-normal leading-relaxed text-black/60">
+                Looks like the user didn't update this section yet.
+              </p>
+            )}
           </div>
 
           <ul className="container-shadow rounded-3xl bg-white px-4 py-6 lg:col-start-3 lg:col-end-4 lg:h-fit lg:p-6">
@@ -213,9 +235,15 @@ const ProfileDetails = ({ user }: { user: UserObj }) => {
                     className="absolute left-0 top-0 object-cover "
                   />
                 </span>
-                <span className="font-medium text-black">
-                  {user.country}, {user.city}
-                </span>
+                {user.country ? (
+                  <span className="text-sm font-medium text-black/60">
+                    {user.country}, {user.city}
+                  </span>
+                ) : (
+                  <span className="font-medium text-black/60">
+                    No location specified
+                  </span>
+                )}
               </div>
             </li>
             <li>
@@ -223,12 +251,18 @@ const ProfileDetails = ({ user }: { user: UserObj }) => {
                 Phone number
               </span>
               <div className="flex items-center gap-x-4">
-                <span className="group inline-block cursor-pointer rounded-full border hover:border-black/60 border-grey p-2 transition-colors">
+                <span className="group inline-block cursor-pointer rounded-full border border-grey p-2 transition-colors hover:border-black/60">
                   <MdOutlineLocalPhone className="h-4 w-4 text-base text-black/60 transition-colors group-hover:text-black" />
                 </span>
-                <span className="font-medium text-black">
-                  +{user.phoneNumber}
-                </span>
+                {user.phoneNumber ? (
+                  <span className="text-sm font-medium text-black/60">
+                    +{user.phoneNumber}
+                  </span>
+                ) : (
+                  <span className="font-medium text-black/60">
+                    No phone number specified
+                  </span>
+                )}
               </div>
             </li>
             <li>
@@ -239,7 +273,7 @@ const ProfileDetails = ({ user }: { user: UserObj }) => {
                 <span className="group inline-block cursor-pointer rounded-full border border-grey p-2 transition-colors hover:border-black/60">
                   <MdOutlineEmail className="h-4 w-4 text-base text-black/60 transition-colors group-hover:text-black" />
                 </span>
-                <span className="font-medium text-black">
+                <span className="text-sm font-medium text-black/60">
                   janasmith@example.com
                 </span>
               </div>

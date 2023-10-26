@@ -29,6 +29,7 @@ import {
 import axios from 'axios'
 import { validateForm } from 'utils/validateFrom'
 import { listingSchema } from 'utils/validations/validations'
+import Buttons from '../custom/Buttons'
 
 const ListingFrom = () => {
   const [details, setDetails] = useState<DetailsState>({
@@ -414,24 +415,8 @@ const ListingFrom = () => {
         />
       </MainContainer>
 
-      <Buttons />
+      <Buttons name="Create" />
     </form>
-  )
-}
-
-const Buttons = () => {
-  return (
-    <>
-      <Line />
-      <div className="mb-4 mt-auto flex gap-x-2 md:mb-5 md:ml-auto md:w-fit">
-        <button className="flex w-full cursor-pointer items-center justify-center rounded-full border border-grey px-8 py-3 font-medium text-black transition-colors hover:border-black/60 focus:outline-none focus-visible:ring-4 focus-visible:ring-neutral-600">
-          <span className="block">Cancel</span>
-        </button>
-        <button className="flex w-full cursor-pointer items-center justify-center rounded-full bg-black px-8 py-3 font-medium text-white transition-colors hover:bg-neutral-800 focus:outline-none focus-visible:ring-4 focus-visible:ring-neutral-600">
-          <span className="block">Create</span>
-        </button>
-      </div>
-    </>
   )
 }
 
