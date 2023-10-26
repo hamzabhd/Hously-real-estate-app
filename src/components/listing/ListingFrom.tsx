@@ -9,7 +9,7 @@ import MainContainer from '@/components/containers/MainContainer'
 import Rules from './subComponents/Rules'
 import Pricing from './subComponents/Pricing'
 import SelectionList from './subComponents/SelectionList'
-import { ListingsDetails, ObjectKey } from '@/types/types'
+import { ListingsDetails, ListingsObj, ObjectKey } from '@/types/types'
 import {
   features,
   bedChoices,
@@ -37,7 +37,7 @@ const ListingFrom = ({
   listing,
 }: {
   isEdit: boolean
-  listing?: ListingsDetails
+  listing?: ListingsObj
 }) => {
   const router = useRouter()
   const [details, setDetails] = useState<DetailsState>({
@@ -303,16 +303,36 @@ const ListingFrom = ({
     }
 
     setIsLoading(true)
-    const response = await axios.post(`/api/listings/create-listing`, {
-      body: details,
-      images,
-    })
 
-    if (response.status === 200) {
-      console.log(response.data.message)
-      router.refresh()
-      router.push(`/listing/${response.data.id}`)
-      setIsLoading(false)
+    if (isEdit) {
+      const response = await axios.post(
+        `/api/listings/edit-listing/${listing?._id}`,
+        {
+          body: details,
+          images,
+        },
+      )
+
+      if (response.status === 200) {
+        console.log(response.data.message)
+        router.refresh()
+        // router.push(`/listing/${response.data.id}`)
+        router.push('/profile')
+        setIsLoading(false)
+      }
+    } else {
+      const response = await axios.post(`/api/listings/create-listing`, {
+        body: details,
+        images,
+      })
+
+      if (response.status === 200) {
+        console.log(response.data.message)
+        router.refresh()
+        // router.push(`/listing/${response.data.id}`)
+        router.push('/profile')
+        setIsLoading(false)
+      }
     }
   }
 

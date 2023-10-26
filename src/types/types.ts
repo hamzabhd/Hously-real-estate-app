@@ -61,6 +61,11 @@ export interface ListingsDetails extends DetailsState {
   images: string[]
 }
 
+export interface ListingsObj extends DetailsState {
+  images: string[]
+  _id: string
+}
+
 export interface DetailsStateErrors
   extends Omit<
     DetailsState,
