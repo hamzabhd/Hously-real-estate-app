@@ -5,7 +5,7 @@ import { userSchema } from 'utils/validations/validations'
 import { IoClose } from 'react-icons/io5'
 import UserImage from '@/components/UserImage'
 import Line from '@/components/Line'
-import CustomInput from './CustomInput'
+import CustomInput from '../custom/CustomInput'
 const EditProfileForm = ({
   user,
   updateProfile,

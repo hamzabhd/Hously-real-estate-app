@@ -1,4 +1,4 @@
-import EditProfileForm from '../../../../components/EditProfileFrom'
+import EditProfileForm from '../../../../components/profile/EditProfileFrom'
 import { userSchema } from 'utils/validations/validations'
 import { getUser, serverSession } from 'utils/getUser'
 import User from 'models/user'

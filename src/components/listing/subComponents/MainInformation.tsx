@@ -2,9 +2,9 @@
 
 import { Fragment } from 'react'
 import Image from 'next/image'
-import Container from '@/components/Container'
-import CustomRadioButton from '@/components/CustomRadioButton'
-import CustomInput from '@/components/CustomInput'
+import Container from '@/components/containers/Container'
+import CustomRadioButton from '@/components/custom/CustomRadioButton'
+import CustomInput from '@/components/custom/CustomInput'
 import {
   MdOutlineVilla,
   MdOutlineCabin,

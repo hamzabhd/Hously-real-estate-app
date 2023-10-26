@@ -1,6 +1,6 @@
-import Container from '@/components/Container'
+import Container from '@/components/containers/Container'
 import SelectionList from './SelectionList'
-import CustomInput from '@/components/CustomInput'
+import CustomInput from '@/components/custom/CustomInput'
 import { rules } from 'utils/itemManagement/data/data'
 import { RulesPropType } from '@/types/types'
 

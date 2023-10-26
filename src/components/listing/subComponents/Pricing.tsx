@@ -1,6 +1,6 @@
 import { MdOutlineAttachMoney } from 'react-icons/md'
-import Container from '@/components/Container'
-import CustomInput from '@/components/CustomInput'
+import Container from '@/components/containers/Container'
+import CustomInput from '@/components/custom/CustomInput'
 import { PricingPropType } from '@/types/types'
 const Pricing = ({ handleChange, details, detailsErrors }: PricingPropType) => {
   return (

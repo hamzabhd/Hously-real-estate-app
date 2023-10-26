@@ -1,12 +1,5 @@
 import { listingSchema, userSchema } from './validations/validations'
-import {
-  UserDetails,
-  ListingsDetails,
-  InputErrors,
-  DetailsStateErrors,
-} from '@/types/types'
-import { Dispatch, SetStateAction } from 'react'
-import { ZodError } from 'zod'
+import { UserDetails, ListingsDetails, InputErrors } from '@/types/types'
 
 type SchemaType = typeof listingSchema | typeof userSchema
 

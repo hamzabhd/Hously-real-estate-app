@@ -1,5 +1,5 @@
-import Container from '@/components/Container'
-import CustomInput from '@/components/CustomInput'
+import Container from '@/components/containers/Container'
+import CustomInput from '@/components/custom/CustomInput'
 import { LocationPropType } from '@/types/types'
 const Location = ({
   details,

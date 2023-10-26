@@ -1,9 +1,9 @@
 import UserImage from '@/components/UserImage'
 import { montserrat } from '@/app/fonts'
 import { UserObj } from '@/types/types'
-import ProfileDetails from '../../../../components/ProfileDetails'
 import { getUser } from 'utils/getUser'
 import Link from 'next/link'
+import ProfileDetails from '@/components/profile/ProfileDetails'
 
 const Profile = async () => {
   const user = await getUser()

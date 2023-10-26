@@ -1,5 +1,5 @@
-import Footer from '@/components/Footer'
-import Navbar from '@/components/Navbar'
+import Footer from '@/components/grouping/Footer'
+import Navbar from '@/components/grouping/Navbar'
 import { ReactNode } from 'react'
 import { getUser, serverSession } from 'utils/getUser'
 const MainLayout = async ({ children }: { children: ReactNode }) => {
