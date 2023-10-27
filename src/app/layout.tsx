@@ -1,7 +1,7 @@
 import './globals.css'
 import type { Metadata } from 'next'
 import AuthProvider from 'context/AuthProvider'
-import { roboto } from './fonts'
+import { roboto, poppins } from './fonts'
 
 export const metadata: Metadata = {
   title: 'Hously-Project',
@@ -15,7 +15,7 @@ export default function RootLayout({
 }) {
   return (
     <html lang="en">
-      <body className={`${roboto.className} relative box-border`}>
+      <body className={`${poppins.className} relative box-border`}>
         <AuthProvider>{children}</AuthProvider>
       </body>
     </html>

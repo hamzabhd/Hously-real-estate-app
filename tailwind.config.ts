@@ -25,6 +25,7 @@ const config: Config = {
           100: '#F8F8F8',
           50: '#F9F9F9',
         },
+        tealBlue: '#009688',
       },
       backgroundImage: {
         'gradient-radial': 'radial-gradient(var(--tw-gradient-stops))',
