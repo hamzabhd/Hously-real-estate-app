@@ -85,10 +85,10 @@ const Navbar = ({ user, session }: NavbarPropsType) => {
             <ul className="absolute right-4 top-[74px] hidden rounded-3xl border border-grey bg-white p-2 lg:block">
               <li>
                 <Link
-                  href="/create-listing"
+                  href="create-property"
                   className="mt-auto block cursor-pointer items-center justify-center rounded-2xl px-4 py-2 text-black/60 transition-all hover:bg-lightGrey  hover:text-black"
                 >
-                  <span>Create listing</span>
+                  <span>List your property</span>
                 </Link>
               </li>
               <li
@@ -189,10 +189,10 @@ const Navbar = ({ user, session }: NavbarPropsType) => {
           <>
             <li className="mt-auto">
               <Link
-                href="/create-listing"
+                href="create-property"
                 className=" block cursor-pointer items-center justify-center rounded-2xl px-4 py-2 text-black/60 transition-all hover:bg-lightGrey hover:text-black"
               >
-                <span>Create listing</span>
+                <span>List your property</span>
               </Link>
             </li>
             <li

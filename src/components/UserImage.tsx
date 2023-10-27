@@ -4,8 +4,8 @@ import Image from 'next/image'
 const UserImage = ({
   name,
   imageUrl,
-  width,
-  height,
+  width = 40,
+  height = 40,
 }: {
   name: string
   imageUrl?: string
@@ -26,8 +26,8 @@ const UserImage = ({
         <Image
           src={imageUrl}
           alt="user profile image"
-          width={width || 40}
-          height={height || 40}
+          width={width}
+          height={height}
           className={`${imgHeight} ${imgWidth} flex-shrink-0 rounded-full bg-white object-cover`}
         />
       ) : (

@@ -9,7 +9,7 @@ import MainContainer from '@/components/containers/MainContainer'
 import Rules from './subComponents/Rules'
 import Pricing from './subComponents/Pricing'
 import SelectionList from './subComponents/SelectionList'
-import { ListingsDetails, ListingsObj, ObjectKey } from '@/types/types'
+import { ListingsObj, ObjectKey } from '@/types/types'
 import {
   features,
   bedChoices,
@@ -306,7 +306,7 @@ const ListingFrom = ({
 
     if (isEdit) {
       const response = await axios.post(
-        `/api/listings/edit-listing/${listing?._id}`,
+        `/api/properties/edit-property/${listing?._id}`,
         {
           body: details,
           images,
@@ -316,12 +316,11 @@ const ListingFrom = ({
       if (response.status === 200) {
         console.log(response.data.message)
         router.refresh()
-        // router.push(`/listing/${response.data.id}`)
-        router.push('/profile')
+        router.push(`/property/${response.data.id}`)
         setIsLoading(false)
       }
     } else {
-      const response = await axios.post(`/api/listings/create-listing`, {
+      const response = await axios.post(`/api/properties/create-property`, {
         body: details,
         images,
       })
@@ -329,8 +328,7 @@ const ListingFrom = ({
       if (response.status === 200) {
         console.log(response.data.message)
         router.refresh()
-        // router.push(`/listing/${response.data.id}`)
-        router.push('/profile')
+        router.push(`/property/${response.data.id}`)
         setIsLoading(false)
       }
     }

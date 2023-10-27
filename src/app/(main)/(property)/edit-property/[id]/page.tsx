@@ -1,8 +1,8 @@
-import ListingFrom from '@/components/listing/ListingFrom'
-import { getListing } from 'utils/getListings'
+import ListingFrom from '@/components/property/ListingFrom'
+import { getProperty } from 'utils/getProperties'
 
-const EditListing = async ({ params }: { params: { id: string } }) => {
-  const listing = await getListing(params.id)
+const EditProperty = async ({ params }: { params: { id: string } }) => {
+  const listing = await getProperty(params.id)
   // 653a99e7157df98909647f18
   return (
     <div className="mx-auto max-w-[1248px] px-4 md:px-6">
@@ -17,4 +17,4 @@ const EditListing = async ({ params }: { params: { id: string } }) => {
   )
 }
 
-export default EditListing
+export default EditProperty
