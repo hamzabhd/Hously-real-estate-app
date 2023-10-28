@@ -1,4 +1,4 @@
-import Form from '@/components/Form'
+import Form from '@/components/grouping/Form'
 
 const Register = () => {
   return <Form />
