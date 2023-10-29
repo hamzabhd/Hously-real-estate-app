@@ -1,5 +1,4 @@
 import PropertyDetails from '@/components/property/PropertyDetails'
-import React from 'react'
 
 const PropertyPage = () => {
   return (

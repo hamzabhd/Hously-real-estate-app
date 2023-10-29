@@ -4,7 +4,6 @@ import {
   MdOutlineClose,
   MdMoreHoriz,
   MdOutlineModeComment,
-  MdSingleBed,
 } from 'react-icons/md'
 import { TbResize } from 'react-icons/tb'
 import { HiLocationMarker } from 'react-icons/hi'
@@ -13,17 +12,14 @@ import { LuBed, LuBedDouble } from 'react-icons/lu'
 import { PiFlagBold } from 'react-icons/pi'
 import { GoShare } from 'react-icons/go'
 import UserImage from '../UserImage'
-import { useState } from 'react'
+import { useEffect, useLayoutEffect, useRef, useState } from 'react'
 import Image from 'next/image'
-import { montserrat } from '@/app/fonts'
 import SeeMoreBtn from '../custom/SeeMoreBtn'
 import { HiOutlineBookmark } from 'react-icons/hi'
 import { features, rules } from 'utils/itemManagement/data/data'
-import { icons } from 'utils/icons'
-import { PiCaretRightBold, PiCaretLeftBold } from 'react-icons/pi'
 import ImageSlider from '../custom/ImageSlider'
-import { IoClose } from 'react-icons/io5'
 import ImagePreviewer from '../custom/ImagePreviewer'
+import { montserrat } from '@/app/fonts'
 
 const PropertyDetails = () => {
   const isIntercepted = true
@@ -37,9 +33,9 @@ const PropertyDetails = () => {
 }
 
 const imagesArr = [
-  '/images/house.jpg',
+  '/images/1.webp',
   '/images/person.jpg',
-  '/images/house.jpg',
+  '/images/1.webp',
   '/images/person.jpg',
 ]
 
@@ -47,107 +43,111 @@ const MainDetails = () => {
   const [selectedImage, setSelectedImage] = useState('')
 
   return (
-    <div className="items-start lg:grid lg:grid-cols-2 lg:gap-x-8">
+    <div className="h-[732] items-start lg:grid lg:grid-cols-2 lg:gap-x-8">
       {/* Image previewer */}
-      <div className="lg:hidden">
-        <ImageSlider imagesArr={imagesArr} />
-      </div>
-
-      <div className="hidden lg:col-span-1 lg:grid lg:grid-cols-2 lg:gap-4">
-        {imagesArr.map((image, i) => (
-          <div
-            key={i}
-            className="relative aspect-[16/10] cursor-pointer overflow-hidden rounded-3xl first:col-span-2 first:aspect-video last:col-span-2 last:aspect-video"
-            onClick={() => setSelectedImage(image)}
-          >
-            <Image
-              src={image}
-              alt="property image"
-              className="object-cover"
-              fill
-            />
-          </div>
-        ))}
-      </div>
-
+      <ImageSlider
+        imagesArr={imagesArr}
+        selectImage={(image: string) => setSelectedImage(image)}
+      />
       <ImagePreviewer
         image={selectedImage}
         clearImage={() => setSelectedImage('')}
       />
 
-      <div>
-        <div>
-          <PropertyOptions />
+      <div className="h-full">
+        <PropertyOptions />
 
-          <div className="px-4 md:p-0">
-            <div className="mb-8 mt-4 lg:mt-6">
-              <h1 className={`mb-1 text-3xl font-medium lg:text-4xl`}>
-                Cozy Urban Apartment
-              </h1>
-              <div className="flex items-center gap-x-2">
-                <HiLocationMarker className="h-4 w-4 text-grey" />
-                <span className="text-sm text-black/60">
-                  1621 Libby Street/Los angles, USA{' '}
-                </span>
+        <div className="px-4 md:p-0">
+          <div className="mb-8 mt-4 lg:mt-6">
+            <h1 className={`mb-1 text-3xl font-medium lg:text-4xl`}>
+              Cozy Urban Apartment
+            </h1>
+            <div className="flex items-center gap-x-2">
+              <HiLocationMarker className="h-4 w-4 text-grey" />
+              <span className="text-sm text-black/60">
+                1621 Libby Street/Los angles, USA{' '}
+              </span>
+            </div>
+          </div>
+
+          <div className="mb-8 flex items-center gap-x-4">
+            <span className={`${montserrat.className} text-2xl font-bold`}>
+              $1,200{' '}
+              <span className="text-base font-normal text-black/60">/ </span>
+              <span className="text-base font-normal text-black/60">night</span>
+            </span>
+          </div>
+
+          <div className="mb-8">
+            <div className="flex flex-wrap items-center justify-between sm:justify-normal sm:gap-x-6 lg:gap-x-10">
+              <div className="flex flex-col items-start gap-y-1">
+                <LuBedDouble className="h-6 w-6" />
+                <span className="text-sm font-medium">3 bedrooms</span>
+              </div>
+              <div className="flex flex-col gap-y-1">
+                <BiBath className="h-6 w-6" />
+                <span className="text-sm font-medium">2 bathrooms</span>
+              </div>
+
+              <div className="flex flex-col gap-y-1">
+                <LuBed className="h-6 w-6" />
+                <span className="text-sm font-medium">5 beds</span>
+              </div>
+
+              <div className="flex flex-col gap-y-1">
+                <TbResize className="h-6 w-6" />
+                <span className="text-sm font-medium">1,200 Ft²</span>
               </div>
             </div>
+          </div>
 
-            <div className="mb-8">
-              <div className="flex flex-wrap items-center justify-between sm:justify-normal sm:gap-x-6 lg:gap-x-10">
-                <div className="flex flex-col items-start gap-y-1">
-                  <LuBedDouble className="h-6 w-6" />
-                  <span className="text-sm font-medium">3 bedrooms</span>
-                </div>
-                <div className="flex flex-col gap-y-1">
-                  <BiBath className="h-6 w-6" />
-                  <span className="text-sm font-medium">2 bathrooms</span>
-                </div>
-
-                <div className="flex flex-col gap-y-1">
-                  <LuBed className="h-6 w-6" />
-                  <span className="text-sm font-medium">5 beds</span>
-                </div>
-
-                <div className="flex flex-col gap-y-1">
-                  <TbResize className="h-6 w-6" />
-                  <span className="text-sm font-medium">1,200 Ft²</span>
-                </div>
-              </div>
-            </div>
-
-            <p className="mb-12 leading-relaxed text-black/60">
+          <div className="mb-6">
+            <p className="mb-4 leading-relaxed text-black/60">
               This modern urban apartment offers a comfortable and convenient
               city living experience. Enjoy breathtaking views of the city
-              skyline from the large windows in the spacious living area. The
-              open-concept design provides a seamless flow between the kitchen,
-              dining, and living spaces.{' '}
-              <span className="cursor-pointer font-medium text-tealBlue hover:underline">
-                Read more.
-              </span>
+              skyline from the large windows...{' '}
             </p>
-
-            <div className="mb-12">
-              <ul className="grid list-disc grid-cols-2 gap-2 px-6">
-                {features.slice(0, 8).map((item, i) => (
-                  <li key={i}>
-                    <span className="ml-2 text-sm text-black/60">{item}</span>
-                  </li>
-                ))}
-              </ul>
-            </div>
-
-            <div className="mb-8">
-              <ul className="grid list-disc grid-cols-2 gap-2 px-6">
-                {rules.slice(0, 1).map((item, i) => (
-                  <li key={i}>
-                    <span className="ml-2 text-sm text-black/60">{item}</span>
-                  </li>
-                ))}
-              </ul>
-            </div>
-
-            <SeeMoreBtn label="View more details" />
+            <SeeMoreBtn label="Read more" />
           </div>
+
+          <div className="mb-6 gap-x-4 sm:grid sm:grid-cols-2">
+            <div>
+              <h2 className="mb-4 text-xl font-medium tracking-wide">
+                Property features
+              </h2>
+              <ul className="list-style mb-4 list-image-[url(/images/check.png)] px-6">
+                {features.slice(0, 3).map((item, i) => (
+                  <li key={i}>
+                    <span className="ml-2 text-sm text-black/60">{item}</span>
+                  </li>
+                ))}
+              </ul>
+            </div>
+
+            <div>
+              <h2 className="mb-4 text-xl font-medium tracking-wide">
+                Property rules
+              </h2>
+              <ul className="list-style mb-4 list-image-[url(/images/check.png)] px-6">
+                {rules.slice(0, 3).map((item, i) => (
+                  <li key={i}>
+                    <span className="ml-2 text-sm text-black/60">{item}</span>
+                  </li>
+                ))}
+              </ul>
+            </div>
+            <SeeMoreBtn label="Read more" className="justify-self-start" />
+          </div>
+
+          <div className="mb-4 flex gap-x-2">
+            <button className="flex-grow rounded-full bg-black px-6 py-3 font-medium text-white transition-colors hover:bg-neutral-800">
+              Reserve
+            </button>
+            <button className="flex w-1/4 items-center justify-center rounded-full border-2 border-grey px-6 py-3 transition-colors hover:border-black/60">
+              <MdMoreHoriz />
+            </button>
+          </div>
+          {/* <SeeMoreBtn label="View more" /> */}
         </div>
       </div>
     </div>

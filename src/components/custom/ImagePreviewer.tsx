@@ -11,16 +11,19 @@ const ImagePreviewer = ({
 }) => {
   return (
     <div
-      className={`fixed left-0 top-0 z-50 flex h-full w-full items-center justify-center bg-black/60 backdrop-blur-sm ${
-        !image ? 'hidden' : 'block'
+      className={`left-0 top-0 z-50 hidden h-full w-full items-center justify-center bg-black/60 backdrop-blur-sm lg:fixed ${
+        !image ? 'hidden' : 'lg:flex'
       }`}
     >
-      <div className="relative aspect-video w-3/4 overflow-hidden rounded-3xl shadow-md">
+      <div className="relative aspect-square h-full overflow-hidden  rounded-3xl shadow-md lg:w-3/4 xl:w-1/2">
         {image && (
           <Image
             src={image}
             alt="property image"
-            className="object-cover"
+            style={{
+              objectFit: 'cover',
+            }}
+            sizes="(max-width: 1530px) 75vw"
             fill
           />
         )}

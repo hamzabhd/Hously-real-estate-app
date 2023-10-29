@@ -2,7 +2,13 @@ import Image from 'next/image'
 import React, { useState } from 'react'
 import { PiCaretLeftBold, PiCaretRightBold } from 'react-icons/pi'
 
-const ImageSlider = ({ imagesArr }: { imagesArr: string[] }) => {
+const ImageSlider = ({
+  imagesArr,
+  selectImage,
+}: {
+  imagesArr: string[]
+  selectImage: (image: string) => void
+}) => {
   const [imageCount, setImageCount] = useState(0)
 
   const nextImage = () => {
@@ -23,7 +29,7 @@ const ImageSlider = ({ imagesArr }: { imagesArr: string[] }) => {
     })
   }
   return (
-    <div className="group relative flex w-full overflow-hidden lg:row-span-2 lg:grid lg:h-full lg:grid-cols-2 lg:gap-4">
+    <div className="group relative flex w-full overflow-hidden lg:row-span-2 lg:h-full">
       <button
         type="button"
         className="absolute left-4 top-1/2 z-50 -translate-y-1/2 rounded-full bg-white/60 p-2 opacity-0 transition hover:bg-white group-hover:opacity-100"
@@ -36,12 +42,16 @@ const ImageSlider = ({ imagesArr }: { imagesArr: string[] }) => {
         <div
           key={i}
           style={{ translate: `${-100 * imageCount}%` }}
-          className="relative aspect-video w-full flex-shrink-0 flex-grow-0 overflow-hidden transition-all ease-in sm:rounded-3xl md:col-span-2 md:h-full"
+          className="relative aspect-video w-full flex-shrink-0 flex-grow-0 overflow-hidden transition-all ease-in sm:rounded-3xl md:col-span-2 md:h-full lg:cursor-pointer"
+          onClick={() => selectImage(image)}
         >
           <Image
             src={image}
             alt="property image"
-            className="object-cover"
+            sizes="(max-width: 1200px) 100vw, (max-width: 1530px) 33vw"
+            style={{
+              objectFit: 'cover',
+            }}
             fill
           />
         </div>
