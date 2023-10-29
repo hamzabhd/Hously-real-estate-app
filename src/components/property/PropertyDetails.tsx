@@ -20,6 +20,10 @@ import SeeMoreBtn from '../custom/SeeMoreBtn'
 import { HiOutlineBookmark } from 'react-icons/hi'
 import { features, rules } from 'utils/itemManagement/data/data'
 import { icons } from 'utils/icons'
+import { PiCaretRightBold, PiCaretLeftBold } from 'react-icons/pi'
+import ImageSlider from '../custom/ImageSlider'
+import { IoClose } from 'react-icons/io5'
+import ImagePreviewer from '../custom/ImagePreviewer'
 
 const PropertyDetails = () => {
   const isIntercepted = true
@@ -32,120 +36,118 @@ const PropertyDetails = () => {
   )
 }
 
+const imagesArr = [
+  '/images/house.jpg',
+  '/images/person.jpg',
+  '/images/house.jpg',
+  '/images/person.jpg',
+]
+
 const MainDetails = () => {
+  const [selectedImage, setSelectedImage] = useState('')
+
   return (
     <div className="items-start lg:grid lg:grid-cols-2 lg:gap-x-8">
       {/* Image previewer */}
-      <div className="lg:row-span-2 lg:grid lg:h-full lg:grid-cols-2 lg:gap-4">
-        <div className="relative aspect-video w-full overflow-hidden sm:rounded-3xl md:col-span-2 md:h-full">
-          <Image
-            src="/images/house.jpg"
-            alt="property image"
-            className="object-cover"
-            fill
-          />
-        </div>
-
-        <div className="relative hidden aspect-square w-full overflow-hidden sm:rounded-3xl lg:block lg:h-full">
-          <Image
-            src="/images/person.jpg"
-            alt="property image"
-            className="object-cover"
-            fill
-          />
-        </div>
-
-        <div className="relative hidden aspect-square w-full overflow-hidden sm:rounded-3xl  lg:block lg:h-full">
-          <Image
-            src="/images/house.jpg"
-            alt="property image"
-            className="object-cover"
-            fill
-          />
-        </div>
-
-        <div className="relative hidden aspect-video w-full overflow-hidden sm:rounded-3xl md:col-span-2 lg:block lg:h-full">
-          <Image
-            src="/images/person.jpg"
-            alt="property image"
-            className="object-cover"
-            fill
-          />
-        </div>
+      <div className="lg:hidden">
+        <ImageSlider imagesArr={imagesArr} />
       </div>
 
+      <div className="hidden lg:col-span-1 lg:grid lg:grid-cols-2 lg:gap-4">
+        {imagesArr.map((image, i) => (
+          <div
+            key={i}
+            className="relative aspect-[16/10] cursor-pointer overflow-hidden rounded-3xl first:col-span-2 first:aspect-video last:col-span-2 last:aspect-video"
+            onClick={() => setSelectedImage(image)}
+          >
+            <Image
+              src={image}
+              alt="property image"
+              className="object-cover"
+              fill
+            />
+          </div>
+        ))}
+      </div>
+
+      <ImagePreviewer
+        image={selectedImage}
+        clearImage={() => setSelectedImage('')}
+      />
+
       <div>
-        <PropertyOptions />
+        <div>
+          <PropertyOptions />
 
-        {/* Property Details */}
-        <div className="px-4 md:p-0">
-          <div className="mb-8 mt-4 lg:mt-6">
-            <h1 className={`mb-1 text-3xl font-medium lg:text-4xl`}>
-              Cozy Urban Apartment
-            </h1>
-            <div className="flex items-center gap-x-2">
-              <HiLocationMarker className="h-4 w-4 text-grey" />
-              <span className="text-sm text-black/60">
-                1621 Libby Street/Los angles, USA{' '}
+          <div className="px-4 md:p-0">
+            <div className="mb-8 mt-4 lg:mt-6">
+              <h1 className={`mb-1 text-3xl font-medium lg:text-4xl`}>
+                Cozy Urban Apartment
+              </h1>
+              <div className="flex items-center gap-x-2">
+                <HiLocationMarker className="h-4 w-4 text-grey" />
+                <span className="text-sm text-black/60">
+                  1621 Libby Street/Los angles, USA{' '}
+                </span>
+              </div>
+            </div>
+
+            <div className="mb-8">
+              <div className="flex flex-wrap items-center justify-between sm:justify-normal sm:gap-x-6 lg:gap-x-10">
+                <div className="flex flex-col items-start gap-y-1">
+                  <LuBedDouble className="h-6 w-6" />
+                  <span className="text-sm font-medium">3 bedrooms</span>
+                </div>
+                <div className="flex flex-col gap-y-1">
+                  <BiBath className="h-6 w-6" />
+                  <span className="text-sm font-medium">2 bathrooms</span>
+                </div>
+
+                <div className="flex flex-col gap-y-1">
+                  <LuBed className="h-6 w-6" />
+                  <span className="text-sm font-medium">5 beds</span>
+                </div>
+
+                <div className="flex flex-col gap-y-1">
+                  <TbResize className="h-6 w-6" />
+                  <span className="text-sm font-medium">1,200 Ft²</span>
+                </div>
+              </div>
+            </div>
+
+            <p className="mb-12 leading-relaxed text-black/60">
+              This modern urban apartment offers a comfortable and convenient
+              city living experience. Enjoy breathtaking views of the city
+              skyline from the large windows in the spacious living area. The
+              open-concept design provides a seamless flow between the kitchen,
+              dining, and living spaces.{' '}
+              <span className="cursor-pointer font-medium text-tealBlue hover:underline">
+                Read more.
               </span>
+            </p>
+
+            <div className="mb-12">
+              <ul className="grid list-disc grid-cols-2 gap-2 px-6">
+                {features.slice(0, 8).map((item, i) => (
+                  <li key={i}>
+                    <span className="ml-2 text-sm text-black/60">{item}</span>
+                  </li>
+                ))}
+              </ul>
             </div>
-          </div>
 
-          <div className="mb-8">
-            <div className="flex flex-wrap items-center justify-between sm:justify-normal sm:gap-x-6 lg:gap-x-10">
-              <div className="flex flex-col items-start gap-y-1">
-                <LuBedDouble className="h-6 w-6" />
-                <span className="text-sm font-medium">3 bedrooms</span>
-              </div>
-              <div className="flex flex-col gap-y-1">
-                <BiBath className="h-6 w-6" />
-                <span className="text-sm font-medium">2 bathrooms</span>
-              </div>
-
-              <div className="flex flex-col gap-y-1">
-                <LuBed className="h-6 w-6" />
-                <span className="text-sm font-medium">5 beds</span>
-              </div>
-
-              <div className="flex flex-col gap-y-1">
-                <TbResize className="h-6 w-6" />
-                <span className="text-sm font-medium">1,200 Ft²</span>
-              </div>
+            <div className="mb-8">
+              <ul className="grid list-disc grid-cols-2 gap-2 px-6">
+                {rules.slice(0, 1).map((item, i) => (
+                  <li key={i}>
+                    <span className="ml-2 text-sm text-black/60">{item}</span>
+                  </li>
+                ))}
+              </ul>
             </div>
+
+            <SeeMoreBtn label="View more details" />
           </div>
-
-          <p className="mb-12 leading-relaxed text-black/60">
-            This modern urban apartment offers a comfortable and convenient city
-            living experience. Enjoy breathtaking views of the city skyline from
-            the large windows in the spacious living area. The open-concept
-            design provides a seamless flow between the kitchen, dining, and
-            living spaces.{' '}
-            <span className="cursor-pointer font-medium text-tealBlue hover:underline">
-              Read more.
-            </span>
-          </p>
-
-          <div className="mb-12">
-            <ul className="grid list-disc grid-cols-2 gap-2 px-6">
-              {features.slice(0, 8).map((item, i) => (
-                <li key={i}>
-                  <span className="ml-2 text-sm text-black/60">{item}</span>
-                </li>
-              ))}
-            </ul>
-          </div>
-
-          <div className="mb-8">
-            <ul className="grid list-disc grid-cols-2 gap-2 px-6">
-              {rules.slice(0, 1).map((item, i) => (
-                <li key={i}>
-                  <span className="ml-2 text-sm text-black/60">{item}</span>
-                </li>
-              ))}
-            </ul>
-          </div>
-
-          <SeeMoreBtn label="View more details" />
         </div>
       </div>
     </div>
