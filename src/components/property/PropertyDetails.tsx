@@ -1,5 +1,6 @@
 'use client'
 
+import { Fragment, useState } from 'react'
 import {
   MdOutlineClose,
   MdMoreHoriz,
@@ -11,26 +12,19 @@ import { BiBath } from 'react-icons/bi'
 import { LuBed, LuBedDouble } from 'react-icons/lu'
 import { PiFlagBold } from 'react-icons/pi'
 import { GoShare } from 'react-icons/go'
-import UserImage from '../UserImage'
-import { useEffect, useLayoutEffect, useRef, useState } from 'react'
-import Image from 'next/image'
-import SeeMoreBtn from '../custom/SeeMoreBtn'
 import { HiOutlineBookmark } from 'react-icons/hi'
-import { features, rules } from 'utils/itemManagement/data/data'
+import { features, reviewsArr, rules } from 'utils/itemManagement/data/data'
+import { montserrat } from '@/app/fonts'
+import UserImage from '../UserImage'
 import ImageSlider from '../custom/ImageSlider'
 import ImagePreviewer from '../custom/ImagePreviewer'
-import { montserrat } from '@/app/fonts'
-
-const PropertyDetails = () => {
-  const isIntercepted = true
-
-  return (
-    // px-4 md:px-6
-    <div className="lg:mt-4">
-      <MainDetails />
-    </div>
-  )
-}
+import SeeMoreBtn from '../custom/SeeMoreBtn'
+import ReviewCard from '../custom/ReviewCard'
+import useReviews from 'hooks/useReviews'
+import ReviewFound from '../custom/ReviewFound'
+import ReviewContainer from '../containers/ReviewContainer'
+import { IoIosStar } from 'react-icons/io'
+import Reviews from '../custom/Reviews'
 
 const imagesArr = [
   '/images/1.webp',
@@ -39,11 +33,23 @@ const imagesArr = [
   '/images/person.jpg',
 ]
 
+const PropertyDetails = () => {
+  const isIntercepted = true
+
+  return (
+    // px-4 md:px-6
+    <div className="lg:mt-4">
+      <MainDetails />
+      <PropertyReviews />
+    </div>
+  )
+}
+
 const MainDetails = () => {
   const [selectedImage, setSelectedImage] = useState('')
 
   return (
-    <div className="h-[732] items-start lg:grid lg:grid-cols-2 lg:gap-x-8">
+    <div className="items-start lg:grid lg:h-[736px] lg:grid-cols-2 lg:gap-x-8">
       {/* Image previewer */}
       <ImageSlider
         imagesArr={imagesArr}
@@ -59,7 +65,7 @@ const MainDetails = () => {
 
         <div className="px-4 md:p-0">
           <div className="mb-8 mt-4 lg:mt-6">
-            <h1 className={`mb-1 text-3xl font-medium lg:text-4xl`}>
+            <h1 className="mb-1 text-3xl font-medium lg:text-4xl">
               Cozy Urban Apartment
             </h1>
             <div className="flex items-center gap-x-2">
@@ -140,14 +146,13 @@ const MainDetails = () => {
           </div>
 
           <div className="mb-4 flex gap-x-2">
-            <button className="flex-grow rounded-full bg-black px-6 py-3 font-medium text-white transition-colors hover:bg-neutral-800">
+            <button className="flex-grow cursor-pointer items-center justify-center rounded-full bg-black px-8 py-3 font-medium text-white transition-colors hover:bg-neutral-800 focus:outline-none focus-visible:ring-4 focus-visible:ring-neutral-600">
               Reserve
             </button>
             <button className="flex w-1/4 items-center justify-center rounded-full border-2 border-grey px-6 py-3 transition-colors hover:border-black/60">
               <MdMoreHoriz />
             </button>
           </div>
-          {/* <SeeMoreBtn label="View more" /> */}
         </div>
       </div>
     </div>
@@ -192,6 +197,41 @@ const PropertyOptions = () => {
           </>
         )}
       </ul>
+    </div>
+  )
+}
+
+const PropertyReviews = () => {
+  const [reviewsToSee, setReviewsToSee] = useState(3)
+
+  const handleReviews = () => {
+    setReviewsToSee((prevState) => {
+      if (reviewsArr.length <= prevState) {
+        return 3
+      }
+      return prevState + 3
+    })
+  }
+
+  return (
+    <div className="mt-6 lg:mt-8">
+      <h2 className="ml-4 text-xl font-medium md:ml-0 lg:text-2xl">
+        What people say about this property
+      </h2>
+
+      <Reviews reviewsArr={reviewsArr} reviewsToShow={reviewsToSee} />
+
+      {reviewsArr.length > 3 && (
+        <SeeMoreBtn
+          label={
+            reviewsArr.length <= reviewsToSee
+              ? 'Hide all reviews'
+              : 'View more reviews'
+          }
+          onClick={handleReviews}
+          className="ml-4 md:ml-0"
+        />
+      )}
     </div>
   )
 }

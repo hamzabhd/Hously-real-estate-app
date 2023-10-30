@@ -123,3 +123,12 @@ export interface RulesPropType extends LocationPropType {
 }
 
 export interface PricingPropType extends LocationPropType {}
+
+export interface ReviewObj {
+  id: string
+  username: string
+  userImage: string
+  reviewDate: string
+  review: string
+  rating: string
+}
