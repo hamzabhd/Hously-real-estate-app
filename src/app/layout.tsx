@@ -1,7 +1,7 @@
 import './globals.css'
 import type { Metadata } from 'next'
 import AuthProvider from 'context/AuthProvider'
-import { roboto, poppins } from './fonts'
+import { poppins } from './fonts'
 
 export const metadata: Metadata = {
   title: 'Hously-Project',

@@ -1,6 +1,6 @@
 'use client'
 
-import { Fragment, useState } from 'react'
+import { useState } from 'react'
 import {
   MdOutlineClose,
   MdMoreHoriz,
@@ -19,12 +19,8 @@ import UserImage from '../UserImage'
 import ImageSlider from '../custom/ImageSlider'
 import ImagePreviewer from '../custom/ImagePreviewer'
 import SeeMoreBtn from '../custom/SeeMoreBtn'
-import ReviewCard from '../custom/ReviewCard'
-import useReviews from 'hooks/useReviews'
-import ReviewFound from '../custom/ReviewFound'
-import ReviewContainer from '../containers/ReviewContainer'
-import { IoIosStar } from 'react-icons/io'
 import Reviews from '../custom/Reviews'
+import Map from '../custom/Map'
 
 const imagesArr = [
   '/images/1.webp',
@@ -41,6 +37,7 @@ const PropertyDetails = () => {
     <div className="lg:mt-4">
       <MainDetails />
       <PropertyReviews />
+      <PropertyLocation address="1987 Linda Street, Portland, Pennsylvania 97205, USA" />
     </div>
   )
 }
@@ -234,6 +231,11 @@ const PropertyReviews = () => {
       )}
     </div>
   )
+}
+
+const PropertyLocation = ({ address }: { address: string }) => {
+  // return <></>
+  return <Map address={address} />
 }
 
 export default PropertyDetails
