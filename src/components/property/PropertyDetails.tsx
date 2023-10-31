@@ -1,11 +1,7 @@
 'use client'
 
-import { useState } from 'react'
-import {
-  MdOutlineClose,
-  MdMoreHoriz,
-  MdOutlineModeComment,
-} from 'react-icons/md'
+import { ReactNode, useState } from 'react'
+import { MdOutlineModeComment, MdPersonOutline } from 'react-icons/md'
 import { TbResize } from 'react-icons/tb'
 import {
   HiOutlineLocationMarker,
@@ -13,11 +9,13 @@ import {
   HiOutlineTag,
   HiOutlineFlag,
   HiOutlineMail,
+  HiOutlineShare,
+  HiOutlineX,
+  HiOutlineDotsHorizontal,
 } from 'react-icons/hi'
 import { BiBath } from 'react-icons/bi'
-import { LuBed, LuBedDouble } from 'react-icons/lu'
+import { LuBed, LuBedDouble, LuClock10, LuClock7 } from 'react-icons/lu'
 import { PiFlagBold } from 'react-icons/pi'
-import { GoShare } from 'react-icons/go'
 import { HiOutlineBookmark } from 'react-icons/hi'
 import { features, reviewsArr, rules } from 'utils/itemManagement/data/data'
 import UserImage from '../UserImage'
@@ -49,6 +47,7 @@ const PropertyDetails = () => {
 
 const MainDetails = () => {
   const [selectedImage, setSelectedImage] = useState('')
+  const [selected, setSelected] = useState('description')
 
   return (
     <div className="items-start lg:grid lg:h-[736px] lg:grid-cols-2 lg:gap-x-8">
@@ -64,7 +63,15 @@ const MainDetails = () => {
 
       <div className="h-full">
         <PropertyOptions />
-
+        {selected && (
+          <ViewMore
+            description="Lorem ipsum dolor sit amet consectetur, adipisicing elit. Maiores repellendus eligendi delectus ipsa totam quaerat error, in, sequi itaque illo enim assumenda fugit laudantium est sint accusamus numquam, ducimus corporis?"
+            features={features}
+            rules={rules}
+            selected={selected}
+            setSelected={setSelected}
+          />
+        )}
         <div className="px-4 md:p-0">
           <div className="mb-8 mt-4 lg:mt-6">
             <h1 className="mb-1 text-3xl font-medium lg:text-4xl">
@@ -115,7 +122,10 @@ const MainDetails = () => {
               city living experience. Enjoy breathtaking views of the city
               skyline from the large windows...{' '}
             </p>
-            <SeeMoreBtn label="Read more" />
+            <SeeMoreBtn
+              label="Read more"
+              onClick={() => setSelected('description')}
+            />
           </div>
 
           <div className="mb-6 gap-x-4 sm:grid sm:grid-cols-2">
@@ -130,6 +140,11 @@ const MainDetails = () => {
                   </li>
                 ))}
               </ul>
+              <SeeMoreBtn
+                label="View more"
+                className="justify-self-start"
+                onClick={() => setSelected('features')}
+              />
             </div>
 
             <div>
@@ -143,8 +158,12 @@ const MainDetails = () => {
                   </li>
                 ))}
               </ul>
+              <SeeMoreBtn
+                label="View more"
+                className="justify-self-start"
+                onClick={() => setSelected('rules')}
+              />
             </div>
-            <SeeMoreBtn label="Read more" className="justify-self-start" />
           </div>
 
           <div className="mb-4 flex gap-x-2">
@@ -152,7 +171,7 @@ const MainDetails = () => {
               Reserve
             </button>
             <button className="flex w-1/4 items-center justify-center rounded-full border-2 border-grey px-6 py-3 transition-colors hover:border-black/60">
-              <MdMoreHoriz />
+              <HiOutlineDotsHorizontal />
             </button>
           </div>
         </div>
@@ -170,35 +189,189 @@ const PropertyOptions = () => {
           <UserImage imageUrl="/images/person.jpg" name="Jana Lorene" />
         </li>
 
-        <li className="border-gray group block cursor-pointer rounded-full border p-3 transition-colors hover:border-black/60">
-          <HiOutlineBookmark className="h-4 w-4 text-black/40 transition-colors group-hover:text-black" />
+        <li>
+          <SpecialIcon name="save">
+            <HiOutlineBookmark className="h-4 w-4 text-black/40 transition-colors group-hover:text-black" />
+          </SpecialIcon>
         </li>
 
-        <li className="border-gray group block cursor-pointer rounded-full border p-3 transition-colors hover:border-black/60">
-          <GoShare className="h-4 w-4 text-black/60 transition-colors group-hover:text-black" />
+        <li>
+          <SpecialIcon name="Share">
+            <HiOutlineShare className="h-4 w-4 text-black/60 transition-colors group-hover:text-black" />
+          </SpecialIcon>
         </li>
 
-        <li
-          className="border-gray group block cursor-pointer rounded-full border p-3 transition-colors hover:border-black/60"
-          onClick={() => setShowMore(!showMore)}
-        >
+        <li onClick={() => setShowMore(!showMore)}>
           {showMore ? (
-            <MdOutlineClose className="h-4 w-4 text-black/60 transition-colors group-hover:text-black" />
+            <SpecialIcon name="Close">
+              <HiOutlineX className="h-4 w-4 text-black/60 transition-colors group-hover:text-black" />
+            </SpecialIcon>
           ) : (
-            <MdMoreHoriz className="h-4 w-4 text-black/60 transition-colors group-hover:text-black" />
+            <SpecialIcon name="More">
+              <HiOutlineDotsHorizontal className="h-4 w-4 text-black/60 transition-colors group-hover:text-black" />
+            </SpecialIcon>
           )}
         </li>
         {showMore && (
           <>
-            <li className="border-gray group block cursor-pointer rounded-full border p-3 transition-colors hover:border-black/60">
-              <MdOutlineModeComment className="h-4 w-4 text-black/60 transition-colors group-hover:text-black" />
+            <li>
+              <SpecialIcon name="Review">
+                <MdOutlineModeComment className="h-4 w-4 text-black/60 transition-colors group-hover:text-black" />
+              </SpecialIcon>
             </li>
-            <li className="border-gray group block cursor-pointer rounded-full border p-3 transition-colors hover:border-black/60">
-              <PiFlagBold className="h-4 w-4 text-black/60 transition-colors group-hover:text-black" />
+            <li>
+              <SpecialIcon name="Report">
+                <HiOutlineFlag className="h-4 w-4 text-black/60 transition-colors group-hover:text-black" />
+              </SpecialIcon>
             </li>
           </>
         )}
       </ul>
+    </div>
+  )
+}
+
+const SpecialIcon = ({
+  name,
+  children,
+}: {
+  name: string
+  children: ReactNode
+}) => {
+  return (
+    <span className="border-gray group relative block cursor-pointer rounded-full border p-3 transition-colors hover:border-black/60">
+      {children}
+      <span className="absolute left-1/2 top-full mt-1 hidden -translate-x-1/2 rounded-xl  border bg-white px-4 py-2 text-sm opacity-0 transition-opacity group-hover:block group-hover:opacity-100">
+        {name}
+      </span>
+    </span>
+  )
+}
+
+const ViewMore = ({
+  description,
+  features,
+  rules,
+  selected,
+  setSelected,
+}: {
+  description: string
+  features: string[]
+  rules: string[]
+  selected: string
+  setSelected: (selected: string) => void
+}) => {
+  return (
+    <div className="align fixed left-0 top-0 z-50 grid min-h-full w-full items-center bg-black/20 px-4 backdrop-blur-[2px]">
+      <div className="container-shadow mx-auto h-fit w-full max-w-[500px] animate-popup overflow-hidden rounded-3xl bg-white duration-1000">
+        <ul className="flex items-center justify-between gap-x-4 border-b border-grey px-4 lg:px-6">
+          <li className="relative py-5">
+            <span
+              className={`cursor-pointer font-medium ${
+                selected === 'description' ? 'text-black' : 'text-black/60'
+              } transition-colors hover:text-black`}
+              onClick={() => setSelected('description')}
+            >
+              Description
+            </span>
+            <span
+              className={`absolute bottom-0 ${
+                selected === 'description' ? 'block' : 'hidden'
+              } h-1.5 w-[calc(100%-8px)] translate-x-1 rounded-t-lg bg-black`}
+            ></span>
+          </li>
+          <li className="relative py-5">
+            <span
+              className={`cursor-pointer font-medium ${
+                selected === 'features' ? 'text-black' : 'text-black/60'
+              } transition-colors hover:text-black`}
+              onClick={() => setSelected('features')}
+            >
+              Features
+            </span>
+            <span
+              className={`absolute bottom-0 ${
+                selected === 'features' ? 'block' : 'hidden'
+              } h-1.5 w-[calc(100%-8px)] translate-x-1 rounded-t-lg bg-black`}
+            ></span>
+          </li>
+          <li className="relative py-5">
+            <span
+              className={`cursor-pointer font-medium ${
+                selected === 'rules' ? 'text-black/100' : 'text-black/60'
+              } transition-colors hover:text-black`}
+              onClick={() => setSelected('rules')}
+            >
+              Rules
+            </span>
+            <span
+              className={`absolute bottom-0 ${
+                selected === 'rules' ? 'block' : 'hidden'
+              } h-1.5 w-[calc(100%-8px)] translate-x-1 rounded-t-lg bg-black`}
+            ></span>
+          </li>
+          <li
+            className="cursor-pointer rounded-full bg-light-100 p-2 transition-colors hover:bg-grey"
+            onClick={() => setSelected('')}
+          >
+            <HiOutlineX className="h-4 w-4" />
+          </li>
+        </ul>
+        <div className="max-h-[500px] overflow-y-auto px-4 md:max-h-[700px] lg:px-6">
+          {selected === 'description' && (
+            <p className="py-6 leading-relaxed">{description}</p>
+          )}
+
+          {selected === 'features' && (
+            <ul>
+              {features.map((item, i) => (
+                <li
+                  key={i}
+                  className="border-b border-grey py-4 last:border-none"
+                >
+                  <span className="text-sm text-black">{item}</span>
+                </li>
+              ))}
+            </ul>
+          )}
+
+          {selected === 'rules' && (
+            <>
+              <h2 className="mt-4 text-lg font-medium lg:mt-6">
+                Specific rules
+              </h2>
+              <div className="mb-6">
+                <div className="flex items-center justify-between border-b border-b-grey py-4 text-sm text-black">
+                  <div className="flex items-center gap-x-4">
+                    <LuClock10 className="h-4 w-4 text-black/60" />
+                    <span>Quiet hours</span>
+                  </div>
+                  <span className="font-medium">10:00 PM - 08:00 AM</span>
+                </div>
+                <div className="flex items-center justify-between border-b border-b-grey py-4 text-sm text-black">
+                  <div className="flex items-center gap-x-4">
+                    <MdPersonOutline className="h-4 w-4 text-black/60" />
+                    <span>Guest Limit</span>
+                  </div>
+                  <span className="font-medium">10 People</span>
+                </div>
+              </div>
+
+              <h2 className="text-lg font-medium">General rules</h2>
+              <ul>
+                {rules.map((item, i) => (
+                  <li
+                    key={i}
+                    className="border-b border-grey py-4 last:border-none"
+                  >
+                    <span className="text-sm text-black">{item}</span>
+                  </li>
+                ))}
+              </ul>
+            </>
+          )}
+        </div>
+      </div>
     </div>
   )
 }
@@ -296,7 +469,8 @@ const PropertyLocation = ({ address }: { address: string }) => {
           </ul>
         </div>
         <div className="relative h-[600px] w-full overflow-hidden rounded-3xl">
-          <Map address={address} />
+          {/* <Map address={address} /> */}
+          Map goes here
         </div>
       </div>
     </div>

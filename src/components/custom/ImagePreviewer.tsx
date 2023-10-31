@@ -1,6 +1,6 @@
 import Image from 'next/image'
 import React from 'react'
-import { IoClose } from 'react-icons/io5'
+import { HiOutlineX } from 'react-icons/hi'
 
 const ImagePreviewer = ({
   image,
@@ -32,7 +32,7 @@ const ImagePreviewer = ({
         className="group absolute right-6 top-6 cursor-pointer rounded-full bg-white/60 p-2 transition-colors hover:bg-white"
         onClick={clearImage}
       >
-        <IoClose className="h-4 w-4" />
+        <HiOutlineX className="h-4 w-4" />
       </div>
     </div>
   )

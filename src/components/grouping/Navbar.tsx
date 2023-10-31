@@ -148,7 +148,7 @@ const Navbar = ({ user, session }: NavbarPropsType) => {
         className={`${
           !isOpen
             ? 'hidden md:hidden'
-            : 'absolute right-0 top-[73px] flex h-[calc(100vh-73px)] w-full flex-col gap-1 bg-white p-2 pb-3 lg:hidden'
+            : 'absolute right-0 top-[72px] flex h-[calc(100vh-72px)] w-full flex-col gap-1 bg-white p-2 pb-3 lg:hidden'
         }`}
       >
         <li>
