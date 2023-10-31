@@ -9,12 +9,11 @@ interface MapPropsType {
 const Map = ({ address }: MapPropsType) => {
   const { isLoaded } = useLoadScript({
     googleMapsApiKey: process.env.NEXT_PUBLIC_GOOGLE_MAPS_API_KEY as string,
-    // mapIds: ['2f5bd5d1f59e0ae4'],
   })
 
   const [coordinates, setCoordinates] = useState({
-    lat: 35.7594651,
-    lng: -5.833954299999999,
+    lat: 0,
+    lng: 0,
   })
 
   useEffect(() => {
@@ -39,11 +38,13 @@ const Map = ({ address }: MapPropsType) => {
   return (
     <>
       <GoogleMap
+        mapTypeId="roadmap"
         zoom={10}
         center={coordinates}
         mapContainerClassName="map-container"
+        options={{ mapId: process.env.NEXT_PUBLIC_MAP }}
       >
-        <Marker position={coordinates} />
+        <Marker position={coordinates} icon="/images/icon.png" />
       </GoogleMap>
     </>
   )

@@ -17,9 +17,7 @@ const ProfileCard = ({ user }: { user: UserObj }) => {
       </div>
 
       <div className="mt-2 flex items-center justify-center gap-2">
-        <span
-          className={`text-xl font-bold leading-3 text-black ${montserrat.className}`}
-        >
+        <span className="text-xl font-bold leading-3 text-black">
           {user.fullName}
         </span>
         <span className="block h-[5px] w-[5px] rounded-full bg-black"></span>

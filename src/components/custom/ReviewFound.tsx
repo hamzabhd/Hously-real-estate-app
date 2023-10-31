@@ -11,7 +11,7 @@ const ReviewFound = ({
   setReviewToShow: (review: string) => void
 }) => {
   return (
-    <div className="fixed left-0 top-0 grid min-h-full w-full place-content-center bg-black/20 px-4 backdrop-blur-[2px]">
+    <div className="fixed left-0 top-0 z-50 grid min-h-full w-full place-content-center bg-black/20 px-4 backdrop-blur-[2px]">
       <div className="container-shadow h-full w-full max-w-[500px] animate-popup overflow-hidden rounded-3xl bg-white duration-1000">
         <div className="m-4 flex items-center justify-between rounded-2xl bg-lightGrey p-4">
           <span className="text-xl font-bold">User review</span>

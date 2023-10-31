@@ -20,7 +20,7 @@ const Reviews = ({
 
   return (
     <>
-      <div className="mx-4 mb-4 mt-4 flex w-fit items-center gap-x-2 rounded-full border border-grey px-5 py-3 md:mx-0 lg:my-6">
+      <div className="mx-4 my-4 flex w-fit items-center gap-x-2 rounded-full border border-grey px-5 py-3 md:mx-0 lg:my-6">
         <IoIosStar className="h-4 w-4 text-black/60 lg:h-6 lg:w-6" />
         <span className="font-bold lg:text-lg">{reviewsRate}</span>
         <span className="font-light lg:text-lg">

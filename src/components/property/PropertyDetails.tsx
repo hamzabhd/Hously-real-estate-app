@@ -7,14 +7,19 @@ import {
   MdOutlineModeComment,
 } from 'react-icons/md'
 import { TbResize } from 'react-icons/tb'
-import { HiLocationMarker } from 'react-icons/hi'
+import {
+  HiOutlineLocationMarker,
+  HiOutlineOfficeBuilding,
+  HiOutlineTag,
+  HiOutlineFlag,
+  HiOutlineMail,
+} from 'react-icons/hi'
 import { BiBath } from 'react-icons/bi'
 import { LuBed, LuBedDouble } from 'react-icons/lu'
 import { PiFlagBold } from 'react-icons/pi'
 import { GoShare } from 'react-icons/go'
 import { HiOutlineBookmark } from 'react-icons/hi'
 import { features, reviewsArr, rules } from 'utils/itemManagement/data/data'
-import { montserrat } from '@/app/fonts'
 import UserImage from '../UserImage'
 import ImageSlider from '../custom/ImageSlider'
 import ImagePreviewer from '../custom/ImagePreviewer'
@@ -66,7 +71,7 @@ const MainDetails = () => {
               Cozy Urban Apartment
             </h1>
             <div className="flex items-center gap-x-2">
-              <HiLocationMarker className="h-4 w-4 text-grey" />
+              <HiOutlineLocationMarker className="h-4 w-4 text-black/40" />
               <span className="text-sm text-black/60">
                 1621 Libby Street/Los angles, USA{' '}
               </span>
@@ -74,7 +79,7 @@ const MainDetails = () => {
           </div>
 
           <div className="mb-8 flex items-center gap-x-4">
-            <span className={`${montserrat.className} text-2xl font-bold`}>
+            <span className="text-2xl font-bold">
               $1,200{' '}
               <span className="text-base font-normal text-black/60">/ </span>
               <span className="text-base font-normal text-black/60">night</span>
@@ -234,8 +239,68 @@ const PropertyReviews = () => {
 }
 
 const PropertyLocation = ({ address }: { address: string }) => {
-  // return <></>
-  return <Map address={address} />
+  return (
+    <div className="mt-6 px-4  md:p-0 lg:mt-8">
+      <h2 className="text-xl font-medium md:ml-0 lg:text-2xl">
+        Where is this property located
+      </h2>
+
+      <div className="my-4 gap-x-8 lg:my-6 lg:grid lg:grid-cols-2">
+        <div className="pt-4">
+          <h2 className="mb-4 text-xl font-medium">Property location</h2>
+
+          <p className="mb-8 leading-relaxed text-black/60">
+            The details supplied are specific to the property's exact location.
+            The address may be shown on the map as a precise position or as a
+            close approximation.
+          </p>
+
+          <ul className="sm:grid sm:grid-cols-2 sm:gap-x-4 lg:block">
+            <li className="mb-6 lg:mb-8">
+              <span className="mb-1 block font-medium">Address</span>
+              <div className="flex items-center gap-x-2">
+                <HiOutlineLocationMarker className="h-4 w-4 text-black/40" />
+                <span className="text-sm text-black/60">
+                  1987 Linda Street, Portland, Pennsylvania 97205, USA
+                </span>
+              </div>
+            </li>
+            <li className="mb-6 lg:mb-8">
+              <span className="mb-1 block font-medium">Country</span>
+              <div className="flex items-center gap-x-2">
+                <HiOutlineFlag className="h-4 w-4 text-black/40" />
+                <span className="text-sm text-black/60">United State</span>
+              </div>
+            </li>
+            <li className="mb-6 lg:mb-8">
+              <span className="mb-1 block font-medium">City</span>
+              <div className="flex items-center gap-x-2">
+                <HiOutlineOfficeBuilding className="h-4 w-4 text-black/40" />
+                <span className="text-sm text-black/60">Portland</span>
+              </div>
+            </li>
+            <li className="mb-6 lg:mb-8">
+              <span className="mb-1 block font-medium">Provenance</span>
+              <div className="flex items-center gap-x-2">
+                <HiOutlineTag className="h-4 w-4 text-black/40" />
+                <span className="text-sm text-black/60">Pennsylvania</span>
+              </div>
+            </li>
+            <li className="mb-6 lg:mb-0">
+              <span className="mb-1 block font-medium">ZIP/Postal Code</span>
+              <div className="flex items-center gap-x-2">
+                <HiOutlineMail className="h-4 w-4 text-black/40" />
+                <span className="text-sm text-black/60">97205</span>
+              </div>
+            </li>
+          </ul>
+        </div>
+        <div className="relative h-[600px] w-full overflow-hidden rounded-3xl">
+          <Map address={address} />
+        </div>
+      </div>
+    </div>
+  )
 }
 
 export default PropertyDetails
