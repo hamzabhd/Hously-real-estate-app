@@ -1,7 +1,11 @@
 'use client'
 
-import { ReactNode, useState } from 'react'
-import { MdOutlineModeComment, MdPersonOutline } from 'react-icons/md'
+import { ChangeEvent, ReactNode, useEffect, useRef, useState } from 'react'
+import {
+  MdAccessTime,
+  MdOutlineModeComment,
+  MdPersonOutline,
+} from 'react-icons/md'
 import { TbResize } from 'react-icons/tb'
 import {
   HiOutlineLocationMarker,
@@ -14,16 +18,18 @@ import {
   HiOutlineDotsHorizontal,
 } from 'react-icons/hi'
 import { BiBath } from 'react-icons/bi'
-import { LuBed, LuBedDouble, LuClock10, LuClock7 } from 'react-icons/lu'
-import { PiFlagBold } from 'react-icons/pi'
+import { LuBed, LuBedDouble, LuClock10 } from 'react-icons/lu'
 import { HiOutlineBookmark } from 'react-icons/hi'
 import { features, reviewsArr, rules } from 'utils/itemManagement/data/data'
-import UserImage from '../UserImage'
+import UserImage from '../custom/UserImage'
 import ImageSlider from '../custom/ImageSlider'
 import ImagePreviewer from '../custom/ImagePreviewer'
 import SeeMoreBtn from '../custom/SeeMoreBtn'
 import Reviews from '../custom/Reviews'
 import Map from '../custom/Map'
+import CustomRadioButton from '../custom/CustomRadioButton'
+import Buttons from '../custom/Buttons'
+import { useRouter } from 'next/navigation'
 
 const imagesArr = [
   '/images/1.webp',
@@ -32,22 +38,66 @@ const imagesArr = [
   '/images/person.jpg',
 ]
 
+interface ReviewType {
+  reviewerType: string
+  reviewRange: string
+  reviewContent: string
+}
+
 const PropertyDetails = () => {
   const isIntercepted = true
+  const session = true
+  const router = useRouter()
+
+  const [addReview, setAddReview] = useState(false)
+  const [review, setReview] = useState<ReviewType>({
+    reviewerType: '',
+    reviewRange: '0.5',
+    reviewContent: '',
+  })
+
+  const toggleAddReview = () => {
+    if (!session) {
+      return router.push('sign-up')
+    }
+    setAddReview(!addReview)
+    setReview({
+      reviewerType: '',
+      reviewRange: '0.5',
+      reviewContent: '',
+    })
+  }
+
+  const handleChange = (
+    e: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>,
+  ) => {
+    const { value, name } = e.target
+    setReview((prevState) => ({
+      ...prevState,
+      [name]: value,
+    }))
+  }
 
   return (
     // px-4 md:px-6
     <div className="lg:mt-4">
-      <MainDetails />
-      <PropertyReviews />
+      {addReview && (
+        <AddReview
+          review={review}
+          handleChange={handleChange}
+          toggleAddReview={toggleAddReview}
+        />
+      )}
+      <MainDetails toggleAddReview={toggleAddReview} />
+      <PropertyReviews toggleAddReview={toggleAddReview} />
       <PropertyLocation address="1987 Linda Street, Portland, Pennsylvania 97205, USA" />
     </div>
   )
 }
 
-const MainDetails = () => {
+const MainDetails = ({ toggleAddReview }: { toggleAddReview: () => void }) => {
   const [selectedImage, setSelectedImage] = useState('')
-  const [selected, setSelected] = useState('description')
+  const [selected, setSelected] = useState('')
 
   return (
     <div className="items-start lg:grid lg:h-[736px] lg:grid-cols-2 lg:gap-x-8">
@@ -62,7 +112,7 @@ const MainDetails = () => {
       />
 
       <div className="h-full">
-        <PropertyOptions />
+        <PropertyOptions toggleAddReview={toggleAddReview} />
         {selected && (
           <ViewMore
             description="Lorem ipsum dolor sit amet consectetur, adipisicing elit. Maiores repellendus eligendi delectus ipsa totam quaerat error, in, sequi itaque illo enim assumenda fugit laudantium est sint accusamus numquam, ducimus corporis?"
@@ -180,7 +230,11 @@ const MainDetails = () => {
   )
 }
 
-const PropertyOptions = () => {
+const PropertyOptions = ({
+  toggleAddReview,
+}: {
+  toggleAddReview: () => void
+}) => {
   const [showMore, setShowMore] = useState(false)
   return (
     <div className="border-b p-4 md:mt-4 md:border-none md:p-0">
@@ -214,7 +268,7 @@ const PropertyOptions = () => {
         </li>
         {showMore && (
           <>
-            <li>
+            <li onClick={toggleAddReview}>
               <SpecialIcon name="Review">
                 <MdOutlineModeComment className="h-4 w-4 text-black/60 transition-colors group-hover:text-black" />
               </SpecialIcon>
@@ -248,6 +302,16 @@ const SpecialIcon = ({
   )
 }
 
+const ViewMoreContainer = ({ children }: { children: ReactNode }) => {
+  return (
+    <div className="align fixed left-0 top-0 z-50 grid min-h-full w-full items-center bg-black/20 px-4 backdrop-blur-[2px]">
+      <div className="container-shadow mx-auto h-fit w-full max-w-[500px] animate-popup overflow-hidden rounded-3xl bg-white duration-1000">
+        {children}
+      </div>
+    </div>
+  )
+}
+
 const ViewMore = ({
   description,
   features,
@@ -262,69 +326,101 @@ const ViewMore = ({
   setSelected: (selected: string) => void
 }) => {
   return (
-    <div className="align fixed left-0 top-0 z-50 grid min-h-full w-full items-center bg-black/20 px-4 backdrop-blur-[2px]">
-      <div className="container-shadow mx-auto h-fit w-full max-w-[500px] animate-popup overflow-hidden rounded-3xl bg-white duration-1000">
-        <ul className="flex items-center justify-between gap-x-4 border-b border-grey px-4 lg:px-6">
-          <li className="relative py-5">
-            <span
-              className={`cursor-pointer font-medium ${
-                selected === 'description' ? 'text-black' : 'text-black/60'
-              } transition-colors hover:text-black`}
-              onClick={() => setSelected('description')}
-            >
-              Description
-            </span>
-            <span
-              className={`absolute bottom-0 ${
-                selected === 'description' ? 'block' : 'hidden'
-              } h-1.5 w-[calc(100%-8px)] translate-x-1 rounded-t-lg bg-black`}
-            ></span>
-          </li>
-          <li className="relative py-5">
-            <span
-              className={`cursor-pointer font-medium ${
-                selected === 'features' ? 'text-black' : 'text-black/60'
-              } transition-colors hover:text-black`}
-              onClick={() => setSelected('features')}
-            >
-              Features
-            </span>
-            <span
-              className={`absolute bottom-0 ${
-                selected === 'features' ? 'block' : 'hidden'
-              } h-1.5 w-[calc(100%-8px)] translate-x-1 rounded-t-lg bg-black`}
-            ></span>
-          </li>
-          <li className="relative py-5">
-            <span
-              className={`cursor-pointer font-medium ${
-                selected === 'rules' ? 'text-black/100' : 'text-black/60'
-              } transition-colors hover:text-black`}
-              onClick={() => setSelected('rules')}
-            >
-              Rules
-            </span>
-            <span
-              className={`absolute bottom-0 ${
-                selected === 'rules' ? 'block' : 'hidden'
-              } h-1.5 w-[calc(100%-8px)] translate-x-1 rounded-t-lg bg-black`}
-            ></span>
-          </li>
-          <li
-            className="cursor-pointer rounded-full bg-light-100 p-2 transition-colors hover:bg-grey"
-            onClick={() => setSelected('')}
+    <ViewMoreContainer>
+      <ul className="flex items-center justify-between gap-x-4 border-b border-grey px-4 lg:px-6">
+        <li className="relative py-5">
+          <span
+            className={`cursor-pointer font-medium ${
+              selected === 'description' ? 'text-black' : 'text-black/60'
+            } transition-colors hover:text-black`}
+            onClick={() => setSelected('description')}
           >
-            <HiOutlineX className="h-4 w-4" />
-          </li>
-        </ul>
-        <div className="max-h-[500px] overflow-y-auto px-4 md:max-h-[700px] lg:px-6">
-          {selected === 'description' && (
-            <p className="py-6 leading-relaxed">{description}</p>
-          )}
+            Description
+          </span>
+          <span
+            className={`absolute bottom-0 ${
+              selected === 'description' ? 'block' : 'hidden'
+            } h-1.5 w-[calc(100%-8px)] translate-x-1 rounded-t-lg bg-black`}
+          ></span>
+        </li>
+        <li className="relative py-5">
+          <span
+            className={`cursor-pointer font-medium ${
+              selected === 'features' ? 'text-black' : 'text-black/60'
+            } transition-colors hover:text-black`}
+            onClick={() => setSelected('features')}
+          >
+            Features
+          </span>
+          <span
+            className={`absolute bottom-0 ${
+              selected === 'features' ? 'block' : 'hidden'
+            } h-1.5 w-[calc(100%-8px)] translate-x-1 rounded-t-lg bg-black`}
+          ></span>
+        </li>
+        <li className="relative py-5">
+          <span
+            className={`cursor-pointer font-medium ${
+              selected === 'rules' ? 'text-black/100' : 'text-black/60'
+            } transition-colors hover:text-black`}
+            onClick={() => setSelected('rules')}
+          >
+            Rules
+          </span>
+          <span
+            className={`absolute bottom-0 ${
+              selected === 'rules' ? 'block' : 'hidden'
+            } h-1.5 w-[calc(100%-8px)] translate-x-1 rounded-t-lg bg-black`}
+          ></span>
+        </li>
+        <li
+          className="cursor-pointer rounded-full bg-light-100 p-2 transition-colors hover:bg-grey"
+          onClick={() => setSelected('')}
+        >
+          <HiOutlineX className="h-4 w-4" />
+        </li>
+      </ul>
+      <div className="max-h-[500px] overflow-y-auto px-4 md:max-h-[700px] lg:px-6">
+        {selected === 'description' && (
+          <p className="py-6 leading-relaxed">{description}</p>
+        )}
 
-          {selected === 'features' && (
+        {selected === 'features' && (
+          <ul>
+            {features.map((item, i) => (
+              <li
+                key={i}
+                className="border-b border-grey py-4 last:border-none"
+              >
+                <span className="text-sm text-black">{item}</span>
+              </li>
+            ))}
+          </ul>
+        )}
+
+        {selected === 'rules' && (
+          <>
+            <h2 className="mt-4 text-lg font-medium lg:mt-6">Specific rules</h2>
+            <div className="mb-6">
+              <div className="flex items-center justify-between border-b border-b-grey py-4 text-sm text-black">
+                <div className="flex items-center gap-x-4">
+                  <LuClock10 className="h-4 w-4 text-black/60" />
+                  <span>Quiet hours</span>
+                </div>
+                <span className="font-medium">10:00 PM - 08:00 AM</span>
+              </div>
+              <div className="flex items-center justify-between border-b border-b-grey py-4 text-sm text-black">
+                <div className="flex items-center gap-x-4">
+                  <MdPersonOutline className="h-4 w-4 text-black/60" />
+                  <span>Guest Limit</span>
+                </div>
+                <span className="font-medium">10 People</span>
+              </div>
+            </div>
+
+            <h2 className="text-lg font-medium">General rules</h2>
             <ul>
-              {features.map((item, i) => (
+              {rules.map((item, i) => (
                 <li
                   key={i}
                   className="border-b border-grey py-4 last:border-none"
@@ -333,50 +429,18 @@ const ViewMore = ({
                 </li>
               ))}
             </ul>
-          )}
-
-          {selected === 'rules' && (
-            <>
-              <h2 className="mt-4 text-lg font-medium lg:mt-6">
-                Specific rules
-              </h2>
-              <div className="mb-6">
-                <div className="flex items-center justify-between border-b border-b-grey py-4 text-sm text-black">
-                  <div className="flex items-center gap-x-4">
-                    <LuClock10 className="h-4 w-4 text-black/60" />
-                    <span>Quiet hours</span>
-                  </div>
-                  <span className="font-medium">10:00 PM - 08:00 AM</span>
-                </div>
-                <div className="flex items-center justify-between border-b border-b-grey py-4 text-sm text-black">
-                  <div className="flex items-center gap-x-4">
-                    <MdPersonOutline className="h-4 w-4 text-black/60" />
-                    <span>Guest Limit</span>
-                  </div>
-                  <span className="font-medium">10 People</span>
-                </div>
-              </div>
-
-              <h2 className="text-lg font-medium">General rules</h2>
-              <ul>
-                {rules.map((item, i) => (
-                  <li
-                    key={i}
-                    className="border-b border-grey py-4 last:border-none"
-                  >
-                    <span className="text-sm text-black">{item}</span>
-                  </li>
-                ))}
-              </ul>
-            </>
-          )}
-        </div>
+          </>
+        )}
       </div>
-    </div>
+    </ViewMoreContainer>
   )
 }
 
-const PropertyReviews = () => {
+const PropertyReviews = ({
+  toggleAddReview,
+}: {
+  toggleAddReview: () => void
+}) => {
   const [reviewsToSee, setReviewsToSee] = useState(3)
 
   const handleReviews = () => {
@@ -394,7 +458,11 @@ const PropertyReviews = () => {
         What people say about this property
       </h2>
 
-      <Reviews reviewsArr={reviewsArr} reviewsToShow={reviewsToSee} />
+      <Reviews
+        reviewsArr={reviewsArr}
+        reviewsToShow={reviewsToSee}
+        toggleAddReview={toggleAddReview}
+      />
 
       {reviewsArr.length > 3 && (
         <SeeMoreBtn
@@ -413,16 +481,16 @@ const PropertyReviews = () => {
 
 const PropertyLocation = ({ address }: { address: string }) => {
   return (
-    <div className="mt-6 px-4  md:p-0 lg:mt-8">
+    <div className="mt-6 px-4 md:p-0 lg:mt-8">
       <h2 className="text-xl font-medium md:ml-0 lg:text-2xl">
         Where is this property located
       </h2>
 
       <div className="my-4 gap-x-8 lg:my-6 lg:grid lg:grid-cols-2">
-        <div className="pt-4">
+        <div className="pt-2">
           <h2 className="mb-4 text-xl font-medium">Property location</h2>
 
-          <p className="mb-8 leading-relaxed text-black/60">
+          <p className="mb-6 leading-relaxed text-black/60 lg:mb-8">
             The details supplied are specific to the property's exact location.
             The address may be shown on the map as a precise position or as a
             close approximation.
@@ -474,6 +542,108 @@ const PropertyLocation = ({ address }: { address: string }) => {
         </div>
       </div>
     </div>
+  )
+}
+
+const AddReview = ({
+  review,
+  handleChange,
+  toggleAddReview,
+}: {
+  review: ReviewType
+  handleChange: (e: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => void
+  toggleAddReview: () => void
+}) => {
+  return (
+    <ViewMoreContainer>
+      <div className="flex items-center justify-between gap-x-4 border-b border-grey p-4 lg:p-6">
+        <span className="cursor-pointer font-medium text-black">
+          Add Review
+        </span>
+
+        <div
+          className="cursor-pointer rounded-full bg-light-100 p-2 transition-colors hover:bg-grey"
+          onClick={toggleAddReview}
+        >
+          <HiOutlineX className="h-4 w-4" />
+        </div>
+      </div>
+      <div className="max-h-[580px] overflow-y-scroll p-4 pb-0 lg:max-h-none lg:overflow-auto lg:px-6">
+        <h2 className="mb-4 text-xl font-medium">
+          What do you think about this property?
+        </h2>
+        <p className="mb-4 leading-relaxed text-black/60 lg:mb-6">
+          Share your thoughts on this property, but please remember to keep it
+          respectful. Inappropriate reviews may result in account restrictions.
+        </p>
+
+        <form>
+          <span className="mb-4 block font-medium lg:mb-5">
+            Who you might be?
+          </span>
+          <div className="mb-6 grid grid-cols-2 gap-4 sm:grid-cols-3">
+            <CustomRadioButton
+              id="renter"
+              name="reviewerType"
+              value="Renter"
+              handleChange={handleChange}
+            >
+              <span className="font-medium">Already rented</span>
+            </CustomRadioButton>
+            <CustomRadioButton
+              id="buyer"
+              name="reviewerType"
+              value="Buyer"
+              handleChange={handleChange}
+            >
+              <span className="font-medium">Already bought</span>
+            </CustomRadioButton>
+            <CustomRadioButton
+              id="explorer"
+              name="reviewerType"
+              value="Explorer"
+              handleChange={handleChange}
+            >
+              <span className="font-medium">Just Exploring</span>
+            </CustomRadioButton>
+          </div>
+          <div className="mb-6">
+            <span className="mb-4 block font-medium lg:mb-5">
+              How would you rate this place?
+            </span>
+            <div className="flex items-center gap-x-4">
+              <input
+                type="range"
+                name="reviewRange"
+                value={review.reviewRange}
+                onChange={handleChange}
+                step={0.5}
+                min={0.5}
+                max={5}
+              />
+              <span className="inline-block min-w-[130px] rounded-2xl border px-4 py-2 text-center font-medium">
+                {review.reviewRange} / 5 stars
+              </span>
+            </div>
+          </div>
+
+          <div>
+            <span className="mb-4 block font-medium lg:mb-5">
+              What would you say about this property?
+            </span>
+            <textarea
+              className="block h-36 w-full resize-none appearance-none rounded-3xl border border-grey bg-transparent p-4 text-black focus:border-black/60 focus:outline-none focus:ring-0"
+              placeholder="Share your thoughts here..."
+              name="reviewContent"
+              onChange={handleChange}
+              value={review.reviewContent}
+            />
+          </div>
+
+          <Buttons name="Share" handleCancel={toggleAddReview} />
+        </form>
+      </div>
+    </ViewMoreContainer>
   )
 }
 

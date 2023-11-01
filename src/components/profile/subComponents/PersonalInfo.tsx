@@ -1,7 +1,7 @@
 import { ChangeEvent } from 'react'
 import { UserDetails } from '@/types/types'
 import { IoClose } from 'react-icons/io5'
-import UserImage from '@/components/UserImage'
+import UserImage from '@/components/custom/UserImage'
 import CustomInput from '@/components/custom/CustomInput'
 
 type PersonalInfoPropType = {

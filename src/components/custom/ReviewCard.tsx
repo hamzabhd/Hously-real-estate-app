@@ -1,6 +1,6 @@
 import { ReactNode } from 'react'
 import { IoIosStar, IoIosStarOutline } from 'react-icons/io'
-import UserImage from '../UserImage'
+import UserImage from './UserImage'
 
 const ReviewCard = ({
   review,

@@ -28,6 +28,10 @@
   input[type='radio']:checked::before {
     @apply opacity-100;
   }
+
+  input[type='range'] {
+    @apply flex-grow cursor-pointer  bg-transparent accent-black focus:outline-none;
+  }
 }
 
 @layer components {

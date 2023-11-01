@@ -1,5 +1,5 @@
 import { UserObj } from '@/types/types'
-import UserImage from '../UserImage'
+import UserImage from '../custom/UserImage'
 import { montserrat } from '@/app/fonts'
 import Link from 'next/link'
 
