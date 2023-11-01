@@ -113,6 +113,7 @@ const MainInformation = ({
           label="Title"
           className="relative mb-4 md:mb-5"
           error={detailsErrors.title}
+          letterCounter={20}
         />
         <CustomInput
           name="description"
@@ -121,6 +122,7 @@ const MainInformation = ({
           label="Description"
           className="relative mb-4 md:mb-5"
           error={detailsErrors.description}
+          letterCounter={160}
         />
       </Container>
       {/* Images */}

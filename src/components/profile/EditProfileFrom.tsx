@@ -131,6 +131,9 @@ const EditProfileForm = ({ user }: { user: UserObj }) => {
       alert(err)
     }
   }
+  const handleCancel = () => {
+    return router.back()
+  }
   return (
     <>
       {isLoading && <Spinner label="Updating profile..." />}
@@ -163,7 +166,7 @@ const EditProfileForm = ({ user }: { user: UserObj }) => {
           />
         </MainContainer>
 
-        <Buttons name="Save" />
+        <Buttons name="Save" handleCancel={handleCancel}/>
       </form>
     </>
   )

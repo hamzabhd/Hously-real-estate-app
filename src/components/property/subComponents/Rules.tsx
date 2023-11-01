@@ -44,6 +44,7 @@ const Rules = ({
             type="text"
             handleChange={handleChange}
             error={detailsErrors.quietHours}
+            message="E.g. 10 PM - 08 AM"
           />
 
           <CustomInput
@@ -54,6 +55,7 @@ const Rules = ({
             type="text"
             handleChange={handleChange}
             error={detailsErrors.checkIn}
+            message="E.g. 10 PM"
           />
 
           <CustomInput
@@ -64,6 +66,7 @@ const Rules = ({
             type="text"
             handleChange={handleChange}
             error={detailsErrors.checkOut}
+            message="E.g. 08 AM"
           />
         </div>
       </Container>

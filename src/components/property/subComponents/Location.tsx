@@ -53,8 +53,9 @@ const Location = ({
           value={details.state}
           handleChange={handleChange}
           type="text"
-          label="State"
+          label="State/Provence"
           className="relative mb-4 sm:my-0"
+          error={detailsErrors.state}
         />
       </div>
     </Container>

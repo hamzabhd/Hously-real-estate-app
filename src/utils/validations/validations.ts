@@ -30,8 +30,14 @@ export const listingSchema = z.object({
   listingType: z
     .string()
     .min(1, { message: 'You should select one type at least' }),
-  title: z.string().min(1, { message: 'This field is required' }),
-  description: z.string().min(1, { message: 'This field is required' }),
+  title: z
+    .string()
+    .min(20, { message: 'Title should be at least 20 characters long' }),
+  description: z
+    .string()
+    .min(160, {
+      message: 'Description should be at least 160 characters long',
+    }),
   images: z
     .string()
     .array()
@@ -39,7 +45,7 @@ export const listingSchema = z.object({
   address: z.string().min(1, { message: 'This field is required' }),
   country: z.string().min(1, { message: 'This field is required' }),
   city: z.string().min(1, { message: 'This field is required' }),
-  state: z.string().optional(),
+  state: z.string().min(1, { message: 'This field is required' }),
   postalCode: z.string().min(1, { message: 'This field is required' }),
   bedrooms: z
     .object({
@@ -68,22 +74,21 @@ export const listingSchema = z.object({
   features: z
     .string()
     .array()
-    .nonempty({ message: 'You should select one feature at least' }),
+    .refine((item) => item.length >= 3, {
+      message: 'You should select 3 features at least',
+    }),
   rules: z
     .string()
     .array()
-    .nonempty({ message: 'You should select one rule at least' }),
+    .refine((item) => item.length >= 3, {
+      message: 'You should select 3 rules at least',
+    }),
   guestsLimit: z
-    .union([
-      z
-        .string()
-        .refine((val) => Number(val), { message: 'Please enter a number' }),
-      z.string().length(0),
-    ])
-    .optional(),
-  quietHours: z.string().optional(),
-  checkIn: z.string().optional(),
-  checkOut: z.string().optional(),
+    .string()
+    .refine((val) => Number(val), { message: 'Please enter a number' }),
+  quietHours: z.string().min(1, { message: 'This field is required' }),
+  checkIn: z.string().min(1, { message: 'This field is required' }),
+  checkOut: z.string().min(1, { message: 'This field is required' }),
   price: z.string().refine((val) => Number(val), {
     message: 'Please enter a number',
   }),

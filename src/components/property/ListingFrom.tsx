@@ -334,6 +334,10 @@ const ListingFrom = ({
     }
   }
 
+  const handleCancel = () => {
+    return router.back()
+  }
+
   return (
     <>
       {isLoading && (
@@ -459,7 +463,7 @@ const ListingFrom = ({
           />
         </MainContainer>
 
-        <Buttons name="Create" />
+        <Buttons name="Create" handleCancel={handleCancel} />
       </form>
     </>
   )

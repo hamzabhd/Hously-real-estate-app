@@ -1,5 +1,5 @@
 import { MdOutlineInfo } from 'react-icons/md'
-import { ChangeEvent, ReactNode } from 'react'
+import { ChangeEvent, ReactNode, useEffect, useRef, useState } from 'react'
 
 const CustomInput = ({
   name,
@@ -13,6 +13,7 @@ const CustomInput = ({
   message,
   error,
   children,
+  letterCounter,
 }: {
   name: string
   value: string
@@ -25,7 +26,10 @@ const CustomInput = ({
   message?: string
   error?: string
   children?: ReactNode
+  letterCounter?: number
 }) => {
+  const isValidInput = letterCounter === value.length
+
   return (
     <>
       {type ? (
@@ -62,6 +66,12 @@ const CustomInput = ({
               <InputValidator message={message} error={error} />
             )}
             {children}
+            {letterCounter && (!message || !error) && (
+              <span className="absolute bottom-1 right-4 text-xs text-black/60">
+                <span className="font-medium">{value.length || 0}</span>/
+                {letterCounter}
+              </span>
+            )}
           </div>
         ) : (
           <div className={className}>
@@ -106,6 +116,12 @@ const CustomInput = ({
               <InputValidator message={message} error={error} />
             </div>
           )}
+          {letterCounter && (!message || !error) && (
+            <span className="absolute bottom-1 right-4 text-xs text-black/60">
+              <span className="font-medium">{value.length || 0}</span>/
+              {letterCounter}
+            </span>
+          )}
         </div>
       )}
     </>
@@ -123,7 +139,7 @@ const InputValidator = ({
 }) => {
   return (
     <div
-      className={`group absolute right-4 top-1/2 -translate-y-1/2 ${
+      className={`group absolute right-4 top-1/2 z-50 -translate-y-1/2 ${
         error ? 'block' : 'hidden peer-focus:block'
       } `}
     >
@@ -133,7 +149,7 @@ const InputValidator = ({
         }`}
       />
       <span
-        className={`absolute right-0 z-30 mt-1 hidden w-fit whitespace-nowrap rounded-full border bg-white px-4 py-1.5 text-xs group-hover:block ${
+        className={`absolute right-0 z-50 mt-1 hidden w-fit whitespace-nowrap rounded-full border bg-white px-4 py-1.5 text-xs group-hover:block ${
           error
             ? 'border-red-400 text-red-500'
             : 'border-black/40 text-black/60'
