@@ -134,7 +134,7 @@ const PropertyDetails = () => {
     }))
   }
 
-  const handleSubmitReview = (e: FormEvent) => {
+  const handleSubmitReview = (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault()
 
     const result = validateForm(reviewSchema, review)
@@ -148,7 +148,7 @@ const PropertyDetails = () => {
     alert('Review has been successfully sent!')
   }
 
-  const handleSubmitReport = (e: FormEvent) => {
+  const handleSubmitReport = (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault()
 
     const result = validateForm(reportSchema, report)
@@ -654,7 +654,7 @@ const AddReview = ({
   review: ReviewType
   handleChange: (e: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => void
   toggleAddReview: () => void
-  handleSubmit: (e: FormEvent) => void
+  handleSubmit: (e: FormEvent<HTMLFormElement>) => void
   errors?: ReviewType
 }) => {
   return (
@@ -767,7 +767,7 @@ const ReportProperty = ({
   handleChange: (e: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => void
   toggleReportProperty: () => void
   errors: ReportType
-  handleSubmit: (e: FormEvent) => void
+  handleSubmit: (e: FormEvent<HTMLFormElement>) => void
 }) => {
   return (
     <DetailsContainer>
