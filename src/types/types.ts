@@ -65,6 +65,10 @@ export interface ListingsObj extends DetailsState {
   images: string[]
   _id: string
 }
+export interface PropertyType extends ListingsObj {
+  reviews: string[]
+  owner: UserObj
+}
 
 export interface DetailsStateErrors
   extends Omit<

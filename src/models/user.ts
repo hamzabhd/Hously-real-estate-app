@@ -15,6 +15,7 @@ const userSchema = new Schema(
     destinations: { type: [String], default: [] },
     links: { type: [String], default: [] },
     properties: [{ type: Schema.Types.ObjectId, ref: 'Property' }],
+    savedProperties: [{ type: Schema.Types.ObjectId, ref: 'Property' }],
   },
   {
     timestamps: true,

@@ -33,6 +33,7 @@ const propertySchema = new Schema({
   cleaningFee: { type: String },
   securityFee: { type: String },
   images: { type: [String], default: [] },
+  reviews: [{ type: Schema.Types.ObjectId, ref: 'Review' }],
 })
 
 const Property = models.Property || model('Property', propertySchema)

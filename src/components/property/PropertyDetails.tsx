@@ -1,15 +1,7 @@
 'use client'
 
+import { ReactNode, useEffect, useState } from 'react'
 import {
-  ChangeEvent,
-  FormEvent,
-  ReactNode,
-  useEffect,
-  useRef,
-  useState,
-} from 'react'
-import {
-  MdAccessTime,
   MdOutlineInfo,
   MdOutlineModeComment,
   MdPersonOutline,
@@ -36,12 +28,16 @@ import SeeMoreBtn from '../custom/SeeMoreBtn'
 import Reviews from '../custom/Reviews'
 import Map from '../custom/Map'
 import CustomRadioButton from '../custom/CustomRadioButton'
-import Buttons from '../custom/Buttons'
 import { useRouter } from 'next/navigation'
-import { ReviewType, ReportType } from '@/types/types'
-import { validateForm } from 'utils/validateFrom'
-import { reportSchema, reviewSchema } from 'utils/validations/validations'
 import DetailsContainer from '../containers/DetailsContainer'
+import { addReview, makeReport } from '@/app/actions'
+// @ts-ignore
+import { experimental_useFormState as useFormState } from 'react-dom'
+// @ts-ignore
+import { experimental_useFormStatus as useFormStatus } from 'react-dom'
+import Line from '../custom/Line'
+import { PropertyType } from '@/types/types'
+import { useSession } from 'next-auth/react'
 
 const imagesArr = [
   '/images/1.webp',
@@ -50,116 +46,26 @@ const imagesArr = [
   '/images/person.jpg',
 ]
 
-const PropertyDetails = () => {
+const PropertyDetails = ({ property }: { property: PropertyType }) => {
   const isIntercepted = true
-  const session = true
+  const { data: session } = useSession()
   const router = useRouter()
 
   const [addReview, setAddReview] = useState(false)
-  const [review, setReview] = useState<ReviewType>({
-    reviewerType: '',
-    reviewRange: '0.5',
-    reviewContent: '',
-  })
-  const [reviewErrors, setReviewErrors] = useState<ReviewType>({
-    reviewerType: '',
-    reviewRange: '',
-    reviewContent: '',
-  })
   const [reportProperty, setReportProperty] = useState(false)
-  const [report, setReport] = useState<ReportType>({
-    reportReason: '',
-    reportDescription: '',
-  })
-  const [reportErrors, setReportErrors] = useState<ReportType>({
-    reportReason: '',
-    reportDescription: '',
-  })
 
   const toggleAddReview = () => {
     if (!session) {
-      return router.push('sign-up')
+      return router.push('/sign-up')
     }
     setAddReview(!addReview)
-    setReviewErrors({
-      reviewerType: '',
-      reviewRange: '',
-      reviewContent: '',
-    })
-    setReview({
-      reviewerType: '',
-      reviewRange: '0.5',
-      reviewContent: '',
-    })
-  }
-  const handleReview = (
-    e: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>,
-  ) => {
-    const { value, name } = e.target
-    setReviewErrors((prevState) => ({
-      ...prevState,
-      [name]: '',
-    }))
-    setReview((prevState) => ({
-      ...prevState,
-      [name]: value,
-    }))
   }
 
   const toggleReportProperty = () => {
     if (!session) {
-      return router.push('sign-up')
+      return router.push('/sign-up')
     }
     setReportProperty(!reportProperty)
-    setReportErrors({
-      reportReason: '',
-      reportDescription: '',
-    })
-    setReport({
-      reportReason: '',
-      reportDescription: '',
-    })
-  }
-  const handleReport = (
-    e: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>,
-  ) => {
-    const { value, name } = e.target
-    setReportErrors((prevState) => ({
-      ...prevState,
-      [name]: '',
-    }))
-    setReport((prevState) => ({
-      ...prevState,
-      [name]: value,
-    }))
-  }
-
-  const handleSubmitReview = (e: FormEvent<HTMLFormElement>) => {
-    e.preventDefault()
-
-    const result = validateForm(reviewSchema, review)
-
-    if (!result.success) {
-      return setReviewErrors((prevState) => ({
-        ...prevState,
-        ...result.errors,
-      }))
-    }
-    alert('Review has been successfully sent!')
-  }
-
-  const handleSubmitReport = (e: FormEvent<HTMLFormElement>) => {
-    e.preventDefault()
-
-    const result = validateForm(reportSchema, report)
-
-    if (!result.success) {
-      return setReportErrors((prevState) => ({
-        ...prevState,
-        ...result.errors,
-      }))
-    }
-    alert('Report has been successfully sent!')
   }
 
   return (
@@ -167,20 +73,14 @@ const PropertyDetails = () => {
     <div className="lg:mt-4">
       {addReview && (
         <AddReview
-          review={review}
-          handleChange={handleReview}
           toggleAddReview={toggleAddReview}
-          handleSubmit={handleSubmitReview}
-          errors={reviewErrors}
+          propertyId={property._id}
         />
       )}
       {reportProperty && (
         <ReportProperty
-          handleChange={handleReport}
-          report={report}
           toggleReportProperty={toggleReportProperty}
-          errors={reportErrors}
-          handleSubmit={handleSubmitReport}
+          propertyId={property._id}
         />
       )}
       <MainDetails
@@ -644,19 +544,38 @@ const PropertyLocation = ({ address }: { address: string }) => {
   )
 }
 
+const SubmitButton = ({ name }: { name: string }) => {
+  const { pending } = useFormStatus()
+
+  return (
+    <button
+      disabled={pending}
+      className={`flex w-full cursor-pointer items-center justify-center rounded-full bg-black px-8 py-3 font-medium text-white transition-colors hover:bg-neutral-800 focus:outline-none focus-visible:ring-4 focus-visible:ring-neutral-600 disabled:cursor-default disabled:bg-neutral-800`}
+    >
+      <span className="block">{pending ? name + 'ing...' : name}</span>
+    </button>
+  )
+}
+
 const AddReview = ({
-  review,
-  handleChange,
   toggleAddReview,
-  handleSubmit,
-  errors,
+  propertyId,
 }: {
-  review: ReviewType
-  handleChange: (e: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => void
   toggleAddReview: () => void
-  handleSubmit: (e: FormEvent<HTMLFormElement>) => void
-  errors?: ReviewType
+  propertyId: string
 }) => {
+  const initialState = {
+    message: null,
+    success: null,
+  }
+  const [state, formAction] = useFormState(addReview, initialState)
+  const [range, setRange] = useState('0.5')
+
+  useEffect(() => {
+    if (!state.success) return
+    toggleAddReview()
+  }, [state])
+
   return (
     <DetailsContainer>
       <div className="flex items-center justify-between gap-x-4 border-b border-grey p-4 lg:px-6">
@@ -680,35 +599,27 @@ const AddReview = ({
           respectful. Inappropriate reviews may result in account restrictions.
         </p>
 
-        <form onSubmit={handleSubmit}>
+        <form
+          action={async (formData) => {
+            formData.append('propertyId', propertyId)
+            await formAction(formData)
+          }}
+        >
           <span className="mb-4 block font-medium lg:mb-5">
             Who you might be?
           </span>
-          {errors?.reviewerType && (
-            <ErrorContainer error={errors.reviewerType} />
-          )}
+          {!state.success && <ErrorContainer error={state.message} />}
           <div className="mb-6 grid grid-cols-2 gap-4 sm:grid-cols-3">
-            <CustomRadioButton
-              id="renter"
-              name="reviewerType"
-              value="Renter"
-              handleChange={handleChange}
-            >
+            <CustomRadioButton id="renter" name="reviewerType" value="Renter">
               <span className="font-medium">Already rented</span>
             </CustomRadioButton>
-            <CustomRadioButton
-              id="buyer"
-              name="reviewerType"
-              value="Buyer"
-              handleChange={handleChange}
-            >
+            <CustomRadioButton id="buyer" name="reviewerType" value="Buyer">
               <span className="font-medium">Already bought</span>
             </CustomRadioButton>
             <CustomRadioButton
               id="explorer"
               name="reviewerType"
               value="Explorer"
-              handleChange={handleChange}
             >
               <span className="font-medium">Just Exploring</span>
             </CustomRadioButton>
@@ -721,14 +632,14 @@ const AddReview = ({
               <input
                 type="range"
                 name="reviewRange"
-                value={review.reviewRange}
-                onChange={handleChange}
                 step={0.5}
                 min={0.5}
                 max={5}
+                defaultValue={0.5}
+                onChange={(e) => setRange(e.target.value)}
               />
               <span className="inline-block min-w-[130px] rounded-2xl border px-4 py-2 text-center font-medium">
-                {review.reviewRange} / 5 stars
+                {range} / 5 stars
               </span>
             </div>
           </div>
@@ -737,19 +648,26 @@ const AddReview = ({
             <span className="mb-4 block font-medium lg:mb-5">
               What would you say about this property?
             </span>
-            {errors?.reviewContent && (
-              <ErrorContainer error={errors.reviewContent} />
-            )}
             <textarea
               className="block h-36 w-full resize-none appearance-none rounded-3xl border border-grey bg-transparent p-4 text-black focus:border-black/60 focus:outline-none focus:ring-0"
               placeholder="Share your thoughts here..."
               name="reviewContent"
-              onChange={handleChange}
-              value={review.reviewContent}
             />
           </div>
 
-          <Buttons name="Share" handleCancel={toggleAddReview} />
+          <div className="mt-12">
+            <Line />
+            <div className="mb-4 mt-auto flex gap-x-2 md:mb-5 md:ml-auto md:w-fit">
+              <button
+                type="button"
+                className="flex w-full cursor-pointer items-center justify-center rounded-full border border-grey px-8 py-3 font-medium text-black transition-colors hover:border-black/60 focus:outline-none focus-visible:ring-4 focus-visible:ring-neutral-600"
+                onClick={toggleAddReview}
+              >
+                <span className="block">Cancel</span>
+              </button>
+              <SubmitButton name="Review" />
+            </div>
+          </div>
         </form>
       </div>
     </DetailsContainer>
@@ -757,18 +675,23 @@ const AddReview = ({
 }
 
 const ReportProperty = ({
-  report,
-  handleChange,
   toggleReportProperty,
-  errors,
-  handleSubmit,
+  propertyId,
 }: {
-  report: ReportType
-  handleChange: (e: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => void
   toggleReportProperty: () => void
-  errors: ReportType
-  handleSubmit: (e: FormEvent<HTMLFormElement>) => void
+  propertyId: string
 }) => {
+  const initialState = {
+    success: null,
+    message: null,
+  }
+  const [state, formAction] = useFormState(makeReport, initialState)
+
+  useEffect(() => {
+    if (!state.success) return
+    toggleReportProperty()
+  }, [state])
+
   return (
     <DetailsContainer>
       <div className="flex items-center justify-between gap-x-4 border-b border-grey p-4 lg:px-6">
@@ -784,19 +707,21 @@ const ReportProperty = ({
         </div>
       </div>
       <div className="max-h-[580px] overflow-y-scroll p-4 pb-0 lg:max-h-[760px] lg:overflow-auto lg:px-6">
-        <form onSubmit={handleSubmit}>
+        <form
+          action={async (formData) => {
+            formData.append('propertyId', propertyId)
+            await formAction(formData)
+          }}
+        >
           <span className="mb-4 block font-medium lg:mb-5">
             What is the reason for reporting this property?
           </span>
-          {errors.reportReason && (
-            <ErrorContainer error={errors.reportReason} />
-          )}
+          {!state.success && <ErrorContainer error={state.message} />}
           <div className="mb-6 flex flex-col gap-4">
             <CustomRadioButton
               id="inaccurate"
               name="reportReason"
               value="Inaccurate Listing"
-              handleChange={handleChange}
             >
               <span className="block font-medium">Inaccurate Listing</span>
               <span className="block text-sm text-black/60">
@@ -807,7 +732,6 @@ const ReportProperty = ({
               id="suspicious"
               name="reportReason"
               value="Suspicious Activity"
-              handleChange={handleChange}
             >
               <span className="block font-medium">Suspicious Activity</span>
               <span className="block text-sm text-black/60">
@@ -818,7 +742,6 @@ const ReportProperty = ({
               id="misleading"
               name="reportReason"
               value="Misleading Info"
-              handleChange={handleChange}
             >
               <span className="block font-medium">Misleading Info</span>
               <span className="block text-sm text-black/60">
@@ -829,7 +752,6 @@ const ReportProperty = ({
               id="inappropriate"
               name="reportReason"
               value="Inappropriate Content"
-              handleChange={handleChange}
             >
               <span className="block font-medium">Inappropriate Content</span>
               <span className="block text-sm text-black/60">
@@ -845,12 +767,22 @@ const ReportProperty = ({
               className="block h-36 w-full resize-none appearance-none rounded-3xl border border-grey bg-transparent p-4 text-black focus:border-black/60 focus:outline-none focus:ring-0"
               placeholder="Share your thoughts here..."
               name="reportDescription"
-              onChange={handleChange}
-              value={report.reportDescription}
             />
           </div>
 
-          <Buttons name="Share" handleCancel={toggleReportProperty} />
+          <div className="mt-12">
+            <Line />
+            <div className="mb-4 mt-auto flex gap-x-2 md:mb-5 md:ml-auto md:w-fit">
+              <button
+                type="button"
+                className="flex w-full cursor-pointer items-center justify-center rounded-full border border-grey px-8 py-3 font-medium text-black transition-colors hover:border-black/60 focus:outline-none focus-visible:ring-4 focus-visible:ring-neutral-600"
+                onClick={toggleReportProperty}
+              >
+                <span className="block">Cancel</span>
+              </button>
+              <SubmitButton name="Report" />
+            </div>
+          </div>
         </form>
       </div>
     </DetailsContainer>

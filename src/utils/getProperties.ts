@@ -1,11 +1,7 @@
-import axios from 'axios'
-
 export const getProperties = async () => {
   try {
-    const response = await axios.get(
-      `${process.env.NEXTAUTH_URL}/api/properties`,
-    )
-    return response.data
+    const response = await fetch(`${process.env.NEXTAUTH_URL}/api/properties`)
+    return response.json()
   } catch (e) {
     console.log(e)
   }
@@ -13,10 +9,11 @@ export const getProperties = async () => {
 
 export const getProperty = async (id: string) => {
   try {
-    const response = await axios.get(
+    const response = await fetch(
       `${process.env.NEXTAUTH_URL}/api/properties/${id}`,
+      { cache: 'no-cache' },
     )
-    return response.data
+    return response.json()
   } catch (e) {
     console.log(e)
   }

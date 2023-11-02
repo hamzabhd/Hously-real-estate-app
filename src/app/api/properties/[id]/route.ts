@@ -8,7 +8,7 @@ export const GET = async (
 ) => {
   try {
     await connectToDb()
-    const data = await Property.findById(params.id)
+    const data = await Property.findById(params.id).populate('owner')
     return NextResponse.json(data)
   } catch (e) {
     throw new Error('Getting data failed')
