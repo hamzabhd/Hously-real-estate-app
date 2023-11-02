@@ -2,6 +2,8 @@ import React from 'react'
 import { IoClose } from 'react-icons/io5'
 import ReviewCard from './ReviewCard'
 import { ReviewObj } from '@/types/types'
+import DetailsContainer from '../containers/DetailsContainer'
+import { HiOutlineX } from 'react-icons/hi'
 
 const ReviewFound = ({
   reviewFound,
@@ -11,24 +13,25 @@ const ReviewFound = ({
   setReviewToShow: (review: string) => void
 }) => {
   return (
-    <div className="fixed left-0 top-0 z-50 grid min-h-full w-full place-content-center bg-black/20 px-4 backdrop-blur-[2px]">
-      <div className="container-shadow h-full w-full max-w-[500px] animate-popup overflow-hidden rounded-3xl bg-white duration-1000">
-        <div className="m-4 flex items-center justify-between rounded-2xl bg-lightGrey p-4">
-          <span className="text-xl font-bold">User review</span>
-          <div
-            className="group w-fit cursor-pointer rounded-lg border p-1 transition-colors hover:bg-whiteHover"
-            onClick={() => setReviewToShow('')}
-          >
-            <IoClose className="transition-color text-xl text-black/60 transition-colors group-hover:text-black" />
-          </div>
+    <DetailsContainer>
+      <div className="mb-4 flex items-center justify-between gap-x-4 border-b border-grey p-4 lg:px-6">
+        <span className="cursor-pointer font-medium text-black">
+          User review
+        </span>
+
+        <div
+          className="cursor-pointer rounded-full bg-light-100 p-2 transition-colors hover:bg-grey"
+          onClick={() => setReviewToShow('')}
+        >
+          <HiOutlineX className="h-4 w-4" />
         </div>
-        <ReviewCard
-          review={reviewFound}
-          setReviewToShow={setReviewToShow}
-          showReview={true}
-        />
       </div>
-    </div>
+      <ReviewCard
+        review={reviewFound}
+        setReviewToShow={setReviewToShow}
+        showReview={true}
+      />
+    </DetailsContainer>
   )
 }
 

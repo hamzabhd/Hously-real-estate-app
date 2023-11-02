@@ -33,11 +33,9 @@ export const listingSchema = z.object({
   title: z
     .string()
     .min(20, { message: 'Title should be at least 20 characters long' }),
-  description: z
-    .string()
-    .min(160, {
-      message: 'Description should be at least 160 characters long',
-    }),
+  description: z.string().min(160, {
+    message: 'Description should be at least 160 characters long',
+  }),
   images: z
     .string()
     .array()
@@ -94,4 +92,17 @@ export const listingSchema = z.object({
   }),
   cleaningFee: z.string().optional(),
   securityFee: z.string().optional(),
+})
+
+export const reviewSchema = z.object({
+  reviewerType: z.string().min(1, { message: 'Please provide your role' }),
+  reviewRange: z.string().optional(),
+  reviewContent: z.string().min(1, {
+    message: 'This field is required',
+  }),
+})
+
+export const reportSchema = z.object({
+  reportReason: z.string().min(1, { message: 'Please provide a reason' }),
+  reportDescription: z.string().optional(),
 })

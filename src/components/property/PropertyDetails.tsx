@@ -1,8 +1,16 @@
 'use client'
 
-import { ChangeEvent, ReactNode, useEffect, useRef, useState } from 'react'
+import {
+  ChangeEvent,
+  FormEvent,
+  ReactNode,
+  useEffect,
+  useRef,
+  useState,
+} from 'react'
 import {
   MdAccessTime,
+  MdOutlineInfo,
   MdOutlineModeComment,
   MdPersonOutline,
 } from 'react-icons/md'
@@ -30,6 +38,10 @@ import Map from '../custom/Map'
 import CustomRadioButton from '../custom/CustomRadioButton'
 import Buttons from '../custom/Buttons'
 import { useRouter } from 'next/navigation'
+import { ReviewType, ReportType } from '@/types/types'
+import { validateForm } from 'utils/validateFrom'
+import { reportSchema, reviewSchema } from 'utils/validations/validations'
+import DetailsContainer from '../containers/DetailsContainer'
 
 const imagesArr = [
   '/images/1.webp',
@@ -37,12 +49,6 @@ const imagesArr = [
   '/images/1.webp',
   '/images/person.jpg',
 ]
-
-interface ReviewType {
-  reviewerType: string
-  reviewRange: string
-  reviewContent: string
-}
 
 const PropertyDetails = () => {
   const isIntercepted = true
@@ -55,27 +61,105 @@ const PropertyDetails = () => {
     reviewRange: '0.5',
     reviewContent: '',
   })
+  const [reviewErrors, setReviewErrors] = useState<ReviewType>({
+    reviewerType: '',
+    reviewRange: '',
+    reviewContent: '',
+  })
+  const [reportProperty, setReportProperty] = useState(false)
+  const [report, setReport] = useState<ReportType>({
+    reportReason: '',
+    reportDescription: '',
+  })
+  const [reportErrors, setReportErrors] = useState<ReportType>({
+    reportReason: '',
+    reportDescription: '',
+  })
 
   const toggleAddReview = () => {
     if (!session) {
       return router.push('sign-up')
     }
     setAddReview(!addReview)
+    setReviewErrors({
+      reviewerType: '',
+      reviewRange: '',
+      reviewContent: '',
+    })
     setReview({
       reviewerType: '',
       reviewRange: '0.5',
       reviewContent: '',
     })
   }
-
-  const handleChange = (
+  const handleReview = (
     e: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>,
   ) => {
     const { value, name } = e.target
+    setReviewErrors((prevState) => ({
+      ...prevState,
+      [name]: '',
+    }))
     setReview((prevState) => ({
       ...prevState,
       [name]: value,
     }))
+  }
+
+  const toggleReportProperty = () => {
+    if (!session) {
+      return router.push('sign-up')
+    }
+    setReportProperty(!reportProperty)
+    setReportErrors({
+      reportReason: '',
+      reportDescription: '',
+    })
+    setReport({
+      reportReason: '',
+      reportDescription: '',
+    })
+  }
+  const handleReport = (
+    e: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>,
+  ) => {
+    const { value, name } = e.target
+    setReportErrors((prevState) => ({
+      ...prevState,
+      [name]: '',
+    }))
+    setReport((prevState) => ({
+      ...prevState,
+      [name]: value,
+    }))
+  }
+
+  const handleSubmitReview = (e: FormEvent) => {
+    e.preventDefault()
+
+    const result = validateForm(reviewSchema, review)
+
+    if (!result.success) {
+      return setReviewErrors((prevState) => ({
+        ...prevState,
+        ...result.errors,
+      }))
+    }
+    alert('Review has been successfully sent!')
+  }
+
+  const handleSubmitReport = (e: FormEvent) => {
+    e.preventDefault()
+
+    const result = validateForm(reportSchema, report)
+
+    if (!result.success) {
+      return setReportErrors((prevState) => ({
+        ...prevState,
+        ...result.errors,
+      }))
+    }
+    alert('Report has been successfully sent!')
   }
 
   return (
@@ -84,18 +168,38 @@ const PropertyDetails = () => {
       {addReview && (
         <AddReview
           review={review}
-          handleChange={handleChange}
+          handleChange={handleReview}
           toggleAddReview={toggleAddReview}
+          handleSubmit={handleSubmitReview}
+          errors={reviewErrors}
         />
       )}
-      <MainDetails toggleAddReview={toggleAddReview} />
+      {reportProperty && (
+        <ReportProperty
+          handleChange={handleReport}
+          report={report}
+          toggleReportProperty={toggleReportProperty}
+          errors={reportErrors}
+          handleSubmit={handleSubmitReport}
+        />
+      )}
+      <MainDetails
+        toggleAddReview={toggleAddReview}
+        toggleReportProperty={toggleReportProperty}
+      />
       <PropertyReviews toggleAddReview={toggleAddReview} />
       <PropertyLocation address="1987 Linda Street, Portland, Pennsylvania 97205, USA" />
     </div>
   )
 }
 
-const MainDetails = ({ toggleAddReview }: { toggleAddReview: () => void }) => {
+const MainDetails = ({
+  toggleAddReview,
+  toggleReportProperty,
+}: {
+  toggleAddReview: () => void
+  toggleReportProperty: () => void
+}) => {
   const [selectedImage, setSelectedImage] = useState('')
   const [selected, setSelected] = useState('')
 
@@ -112,7 +216,10 @@ const MainDetails = ({ toggleAddReview }: { toggleAddReview: () => void }) => {
       />
 
       <div className="h-full">
-        <PropertyOptions toggleAddReview={toggleAddReview} />
+        <PropertyOptions
+          toggleAddReview={toggleAddReview}
+          toggleReportProperty={toggleReportProperty}
+        />
         {selected && (
           <ViewMore
             description="Lorem ipsum dolor sit amet consectetur, adipisicing elit. Maiores repellendus eligendi delectus ipsa totam quaerat error, in, sequi itaque illo enim assumenda fugit laudantium est sint accusamus numquam, ducimus corporis?"
@@ -232,8 +339,10 @@ const MainDetails = ({ toggleAddReview }: { toggleAddReview: () => void }) => {
 
 const PropertyOptions = ({
   toggleAddReview,
+  toggleReportProperty,
 }: {
   toggleAddReview: () => void
+  toggleReportProperty: () => void
 }) => {
   const [showMore, setShowMore] = useState(false)
   return (
@@ -273,7 +382,7 @@ const PropertyOptions = ({
                 <MdOutlineModeComment className="h-4 w-4 text-black/60 transition-colors group-hover:text-black" />
               </SpecialIcon>
             </li>
-            <li>
+            <li onClick={toggleReportProperty}>
               <SpecialIcon name="Report">
                 <HiOutlineFlag className="h-4 w-4 text-black/60 transition-colors group-hover:text-black" />
               </SpecialIcon>
@@ -302,16 +411,6 @@ const SpecialIcon = ({
   )
 }
 
-const ViewMoreContainer = ({ children }: { children: ReactNode }) => {
-  return (
-    <div className="align fixed left-0 top-0 z-50 grid min-h-full w-full items-center bg-black/20 px-4 backdrop-blur-[2px]">
-      <div className="container-shadow mx-auto h-fit w-full max-w-[500px] animate-popup overflow-hidden rounded-3xl bg-white duration-1000">
-        {children}
-      </div>
-    </div>
-  )
-}
-
 const ViewMore = ({
   description,
   features,
@@ -326,7 +425,7 @@ const ViewMore = ({
   setSelected: (selected: string) => void
 }) => {
   return (
-    <ViewMoreContainer>
+    <DetailsContainer>
       <ul className="flex items-center justify-between gap-x-4 border-b border-grey px-4 lg:px-6">
         <li className="relative py-5">
           <span
@@ -432,7 +531,7 @@ const ViewMore = ({
           </>
         )}
       </div>
-    </ViewMoreContainer>
+    </DetailsContainer>
   )
 }
 
@@ -549,14 +648,18 @@ const AddReview = ({
   review,
   handleChange,
   toggleAddReview,
+  handleSubmit,
+  errors,
 }: {
   review: ReviewType
   handleChange: (e: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => void
   toggleAddReview: () => void
+  handleSubmit: (e: FormEvent) => void
+  errors?: ReviewType
 }) => {
   return (
-    <ViewMoreContainer>
-      <div className="flex items-center justify-between gap-x-4 border-b border-grey p-4 lg:p-6">
+    <DetailsContainer>
+      <div className="flex items-center justify-between gap-x-4 border-b border-grey p-4 lg:px-6">
         <span className="cursor-pointer font-medium text-black">
           Add Review
         </span>
@@ -568,7 +671,7 @@ const AddReview = ({
           <HiOutlineX className="h-4 w-4" />
         </div>
       </div>
-      <div className="max-h-[580px] overflow-y-scroll p-4 pb-0 lg:max-h-none lg:overflow-auto lg:px-6">
+      <div className="max-h-[580px] overflow-y-scroll p-4 pb-0 lg:max-h-[760px] lg:overflow-auto lg:px-6">
         <h2 className="mb-4 text-xl font-medium">
           What do you think about this property?
         </h2>
@@ -577,10 +680,13 @@ const AddReview = ({
           respectful. Inappropriate reviews may result in account restrictions.
         </p>
 
-        <form>
+        <form onSubmit={handleSubmit}>
           <span className="mb-4 block font-medium lg:mb-5">
             Who you might be?
           </span>
+          {errors?.reviewerType && (
+            <ErrorContainer error={errors.reviewerType} />
+          )}
           <div className="mb-6 grid grid-cols-2 gap-4 sm:grid-cols-3">
             <CustomRadioButton
               id="renter"
@@ -631,6 +737,9 @@ const AddReview = ({
             <span className="mb-4 block font-medium lg:mb-5">
               What would you say about this property?
             </span>
+            {errors?.reviewContent && (
+              <ErrorContainer error={errors.reviewContent} />
+            )}
             <textarea
               className="block h-36 w-full resize-none appearance-none rounded-3xl border border-grey bg-transparent p-4 text-black focus:border-black/60 focus:outline-none focus:ring-0"
               placeholder="Share your thoughts here..."
@@ -643,7 +752,121 @@ const AddReview = ({
           <Buttons name="Share" handleCancel={toggleAddReview} />
         </form>
       </div>
-    </ViewMoreContainer>
+    </DetailsContainer>
+  )
+}
+
+const ReportProperty = ({
+  report,
+  handleChange,
+  toggleReportProperty,
+  errors,
+  handleSubmit,
+}: {
+  report: ReportType
+  handleChange: (e: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => void
+  toggleReportProperty: () => void
+  errors: ReportType
+  handleSubmit: (e: FormEvent) => void
+}) => {
+  return (
+    <DetailsContainer>
+      <div className="flex items-center justify-between gap-x-4 border-b border-grey p-4 lg:px-6">
+        <span className="cursor-pointer font-medium text-black">
+          Report Property
+        </span>
+
+        <div
+          className="cursor-pointer rounded-full bg-light-100 p-2 transition-colors hover:bg-grey"
+          onClick={toggleReportProperty}
+        >
+          <HiOutlineX className="h-4 w-4" />
+        </div>
+      </div>
+      <div className="max-h-[580px] overflow-y-scroll p-4 pb-0 lg:max-h-[760px] lg:overflow-auto lg:px-6">
+        <form onSubmit={handleSubmit}>
+          <span className="mb-4 block font-medium lg:mb-5">
+            What is the reason for reporting this property?
+          </span>
+          {errors.reportReason && (
+            <ErrorContainer error={errors.reportReason} />
+          )}
+          <div className="mb-6 flex flex-col gap-4">
+            <CustomRadioButton
+              id="inaccurate"
+              name="reportReason"
+              value="Inaccurate Listing"
+              handleChange={handleChange}
+            >
+              <span className="block font-medium">Inaccurate Listing</span>
+              <span className="block text-sm text-black/60">
+                Report incorrect property details
+              </span>
+            </CustomRadioButton>
+            <CustomRadioButton
+              id="suspicious"
+              name="reportReason"
+              value="Suspicious Activity"
+              handleChange={handleChange}
+            >
+              <span className="block font-medium">Suspicious Activity</span>
+              <span className="block text-sm text-black/60">
+                Flag potentially fraudulent behavior
+              </span>
+            </CustomRadioButton>
+            <CustomRadioButton
+              id="misleading"
+              name="reportReason"
+              value="Misleading Info"
+              handleChange={handleChange}
+            >
+              <span className="block font-medium">Misleading Info</span>
+              <span className="block text-sm text-black/60">
+                Report deceptive property information
+              </span>
+            </CustomRadioButton>
+            <CustomRadioButton
+              id="inappropriate"
+              name="reportReason"
+              value="Inappropriate Content"
+              handleChange={handleChange}
+            >
+              <span className="block font-medium">Inappropriate Content</span>
+              <span className="block text-sm text-black/60">
+                Flag offensive or unsuitable content
+              </span>
+            </CustomRadioButton>
+          </div>
+          <div>
+            <span className="mb-4 block font-medium lg:mb-5">
+              Can you provide more details about the issue?
+            </span>
+            <textarea
+              className="block h-36 w-full resize-none appearance-none rounded-3xl border border-grey bg-transparent p-4 text-black focus:border-black/60 focus:outline-none focus:ring-0"
+              placeholder="Share your thoughts here..."
+              name="reportDescription"
+              onChange={handleChange}
+              value={report.reportDescription}
+            />
+          </div>
+
+          <Buttons name="Share" handleCancel={toggleReportProperty} />
+        </form>
+      </div>
+    </DetailsContainer>
+  )
+}
+
+const ErrorContainer = ({ error }: { error: string }) => {
+  return (
+    <>
+      {error && (
+        <div className="mb-5 flex items-center gap-x-2 rounded-2xl border border-red-500 p-4 text-sm text-red-500 lg:mb-6">
+          <MdOutlineInfo className="h-4 w-4 flex-shrink-0" />
+          <span>{error}</span>
+        </div>
+      )}
+    </>
   )
 }
 

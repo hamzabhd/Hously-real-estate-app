@@ -132,3 +132,14 @@ export interface ReviewObj {
   review: string
   rating: string
 }
+
+export interface ReviewType {
+  reviewerType: string
+  reviewRange: string
+  reviewContent: string
+}
+
+export interface ReportType {
+  reportReason: string
+  reportDescription: string
+}

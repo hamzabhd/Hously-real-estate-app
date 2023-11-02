@@ -5,7 +5,6 @@ import CustomRadioButton from '@/components/custom/CustomRadioButton'
 import Container from '@/components/containers/Container'
 import { ArrType, ObjectKey } from '@/types/types'
 import { IconType } from 'react-icons'
-import { Key } from 'lucide-react'
 
 type ChoicesType = {
   id: string

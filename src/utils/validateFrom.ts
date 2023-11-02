@@ -1,11 +1,20 @@
-import { listingSchema, userSchema } from './validations/validations'
-import { UserDetails, ListingsDetails, InputErrors } from '@/types/types'
+import {
+  listingSchema,
+  userSchema,
+  reviewSchema,
+  reportSchema,
+} from './validations/validations'
+import { UserDetails, ListingsDetails, InputErrors, ReportType, ReviewType } from '@/types/types'
 
-type SchemaType = typeof listingSchema | typeof userSchema
+type SchemaType =
+  | typeof listingSchema
+  | typeof userSchema
+  | typeof reportSchema
+  | typeof reviewSchema
 
 export const validateForm = (
   schema: SchemaType,
-  obj: UserDetails | ListingsDetails,
+  obj: UserDetails | ListingsDetails | ReportType | ReviewType
 ) => {
   try {
     const result = schema.safeParse(obj)
