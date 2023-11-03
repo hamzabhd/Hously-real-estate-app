@@ -5,6 +5,7 @@ import {
   MdOutlineInfo,
   MdOutlineModeComment,
   MdPersonOutline,
+  MdWhatsapp,
 } from 'react-icons/md'
 import { TbResize } from 'react-icons/tb'
 import {
@@ -17,6 +18,8 @@ import {
   HiOutlineX,
   HiOutlineDotsHorizontal,
   HiBookmark,
+  HiOutlineLink,
+  HiOutlineCheck,
 } from 'react-icons/hi'
 import { BiBath } from 'react-icons/bi'
 import { LuBed, LuBedDouble, LuClock10 } from 'react-icons/lu'
@@ -258,50 +261,37 @@ const PropertyOptions = ({
   isSaved: boolean
 }) => {
   const [showMore, setShowMore] = useState(false)
+  const [share, setShare] = useState(false)
 
   return (
     <div className="border-b p-4 md:mt-4 md:border-none md:p-0">
-      <ul className="flex items-center gap-2">
-        <li className="cursor-pointer">
-          <UserImage imageUrl="/images/person.jpg" name="Jana Lorene" />
-        </li>
+      <div className="flex items-center gap-2">
+        <UserImage imageUrl="/images/person.jpg" name="Jana Lorene" />
 
-        <li>
-          <SaveButton propertyId={propertyId} isSaved={isSaved} />
-        </li>
+        <SavePropertyButton propertyId={propertyId} isSaved={isSaved} />
 
-        <li>
-          <SpecialButton name="Share">
-            <HiOutlineShare className="h-4 w-4 text-black/60 transition-colors group-hover:text-black" />
+        <SharePropertyButton propertyId={propertyId} />
+
+        {showMore ? (
+          <SpecialButton name="Close" onClick={() => setShowMore(!showMore)}>
+            <HiOutlineX className="h-4 w-4 text-black/60 transition-colors group-hover:text-black" />
           </SpecialButton>
-        </li>
-
-        <li onClick={() => setShowMore(!showMore)}>
-          {showMore ? (
-            <SpecialButton name="Close">
-              <HiOutlineX className="h-4 w-4 text-black/60 transition-colors group-hover:text-black" />
-            </SpecialButton>
-          ) : (
-            <SpecialButton name="More">
-              <HiOutlineDotsHorizontal className="h-4 w-4 text-black/60 transition-colors group-hover:text-black" />
-            </SpecialButton>
-          )}
-        </li>
+        ) : (
+          <SpecialButton name="More" onClick={() => setShowMore(!showMore)}>
+            <HiOutlineDotsHorizontal className="h-4 w-4 text-black/60 transition-colors group-hover:text-black" />
+          </SpecialButton>
+        )}
         {showMore && (
           <>
-            <li onClick={toggleAddReview}>
-              <SpecialButton name="Review">
-                <MdOutlineModeComment className="h-4 w-4 text-black/60 transition-colors group-hover:text-black" />
-              </SpecialButton>
-            </li>
-            <li onClick={toggleReportProperty}>
-              <SpecialButton name="Report">
-                <HiOutlineFlag className="h-4 w-4 text-black/60 transition-colors group-hover:text-black" />
-              </SpecialButton>
-            </li>
+            <SpecialButton name="Review" onClick={toggleAddReview}>
+              <MdOutlineModeComment className="h-4 w-4 text-black/60 transition-colors group-hover:text-black" />
+            </SpecialButton>
+            <SpecialButton name="Report" onClick={toggleReportProperty}>
+              <HiOutlineFlag className="h-4 w-4 text-black/60 transition-colors group-hover:text-black" />
+            </SpecialButton>
           </>
         )}
-      </ul>
+      </div>
     </div>
   )
 }
@@ -322,14 +312,20 @@ const SpecialButton = ({
       onClick={onClick}
     >
       {children}
-      <span className="absolute left-1/2 top-full mt-1 hidden -translate-x-1/2 select-none rounded-xl  border bg-white px-4 py-2 text-sm opacity-0 transition-opacity group-hover:block group-hover:opacity-100">
-        {name}
-      </span>
+      {
+        <span
+          className={`absolute left-1/2 top-full mt-1 hidden -translate-x-1/2 select-none rounded-xl border bg-white px-4 py-2 text-sm ${
+            name ? 'group-hover:block' : ''
+          }`}
+        >
+          {name}
+        </span>
+      }
     </button>
   )
 }
 
-const SaveButton = ({
+const SavePropertyButton = ({
   propertyId,
   isSaved,
 }: {
@@ -364,6 +360,63 @@ const SaveButton = ({
         ) : (
           <HiOutlineBookmark className="h-4 w-4 text-black/40 transition-colors group-hover:text-black" />
         )}
+      </SpecialButton>
+    </div>
+  )
+}
+
+const SharePropertyButton = ({ propertyId }: { propertyId: string }) => {
+  const [share, setShare] = useState(false)
+
+  const [copied, setCopied] = useState(false)
+  useEffect(() => {
+    setTimeout(() => {
+      setCopied(false)
+      setShare(false)
+    }, 1000)
+  }, [copied])
+
+  const copy = () => {
+    navigator.clipboard.writeText(
+      `http://localhost:3000/property/${propertyId}`,
+    )
+    setCopied(true)
+  }
+  return (
+    <div className="relative">
+      {share && (
+        <div className="absolute left-0 top-full z-50 mt-2 block w-max animate-popup rounded-3xl border border-grey bg-white p-2 duration-1000">
+          <a
+            href={`https://wa.me/send?text=${encodeURIComponent(
+              `http://localhost:3000/property/${propertyId}`,
+            )}`}
+            target="_blank"
+            className="group flex cursor-pointer items-center gap-x-2 rounded-2xl px-4 py-2 hover:bg-lightGrey"
+            onClick={() => setShare(false)}
+          >
+            <MdWhatsapp className="h-4 w-4 flex-shrink-0 text-black/60 transition-colors group-hover:text-green-600" />
+            <span className="block select-none text-sm text-black/60 transition-colors group-hover:text-black">
+              Share on WhatsApp
+            </span>
+          </a>
+
+          <div
+            className="group flex cursor-pointer items-center gap-x-2 rounded-2xl px-4 py-2 hover:bg-lightGrey"
+            onClick={copy}
+          >
+            {copied ? (
+              <HiOutlineCheck className="h-4 w-4 flex-shrink-0 text-green-600" />
+            ) : (
+              <HiOutlineLink className="h-4 w-4 flex-shrink-0 text-black/60 transition-colors group-hover:text-slate-600" />
+            )}
+            <span className="block select-none text-sm text-black/60 transition-colors group-hover:text-black">
+              {copied ? 'Link copied' : 'Copy link'}
+            </span>
+          </div>
+        </div>
+      )}
+      <SpecialButton onClick={() => setShare(!share)} name="">
+        <HiOutlineShare className="h-4 w-4 text-black/60 transition-colors group-hover:text-black" />
       </SpecialButton>
     </div>
   )
