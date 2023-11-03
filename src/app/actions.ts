@@ -46,7 +46,6 @@ export const addReview = async (prevState: any, formData: FormData) => {
     return { success: false, message: 'Something went wrong' }
   }
 }
-
 export const makeReport = async (prevState: any, formData: FormData) => {
   const propertyId = formData.get('propertyId')
   const reportReason = formData.get('reportReason')
@@ -89,8 +88,26 @@ export const saveProperty = async (propertyId: string) => {
       },
       { new: true },
     )
-
+    revalidatePath('/property/[id]', 'page')
     return { success: true, message: 'Property was saved successfully' }
+  } catch (e) {
+    return { success: false, message: 'Saving property failed' }
+  }
+}
+export const unSaveProperty = async (propertyId: string) => {
+  try {
+    const userId = await serverSession().then((res) => res?.user.id)
+    await connectToDb()
+
+    await User.findByIdAndUpdate(
+      userId,
+      {
+        $pull: { savedProperties: propertyId },
+      },
+      { new: true },
+    )
+    revalidatePath('/(main)/property/[id]', 'page')
+    return { success: true, message: 'Property was unsaved successfully' }
   } catch (e) {
     return { success: false, message: 'Saving property failed' }
   }

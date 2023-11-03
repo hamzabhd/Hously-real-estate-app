@@ -1,6 +1,6 @@
 'use client'
 
-import { ReactNode, useEffect, useState } from 'react'
+import { ReactNode, useEffect, useState, useTransition } from 'react'
 import {
   MdOutlineInfo,
   MdOutlineModeComment,
@@ -16,6 +16,7 @@ import {
   HiOutlineShare,
   HiOutlineX,
   HiOutlineDotsHorizontal,
+  HiBookmark,
 } from 'react-icons/hi'
 import { BiBath } from 'react-icons/bi'
 import { LuBed, LuBedDouble, LuClock10 } from 'react-icons/lu'
@@ -30,7 +31,12 @@ import Map from '../custom/Map'
 import CustomRadioButton from '../custom/CustomRadioButton'
 import { useRouter } from 'next/navigation'
 import DetailsContainer from '../containers/DetailsContainer'
-import { addReview, makeReport } from '@/app/actions'
+import {
+  addReview,
+  makeReport,
+  saveProperty,
+  unSaveProperty,
+} from '@/app/actions'
 // @ts-ignore
 import { experimental_useFormState as useFormState } from 'react-dom'
 // @ts-ignore
@@ -38,6 +44,8 @@ import { experimental_useFormStatus as useFormStatus } from 'react-dom'
 import Line from '../custom/Line'
 import { PropertyType } from '@/types/types'
 import { useSession } from 'next-auth/react'
+import { isAdded } from 'utils/isAdded'
+import SmallSpinner from '../loaders/SmallSpinner'
 
 const imagesArr = [
   '/images/1.webp',
@@ -46,7 +54,13 @@ const imagesArr = [
   '/images/person.jpg',
 ]
 
-const PropertyDetails = ({ property }: { property: PropertyType }) => {
+const PropertyDetails = ({
+  property,
+  savedProperties,
+}: {
+  property: PropertyType
+  savedProperties: string[]
+}) => {
   const isIntercepted = true
   const { data: session } = useSession()
   const router = useRouter()
@@ -60,13 +74,13 @@ const PropertyDetails = ({ property }: { property: PropertyType }) => {
     }
     setAddReview(!addReview)
   }
-
   const toggleReportProperty = () => {
     if (!session) {
       return router.push('/sign-up')
     }
     setReportProperty(!reportProperty)
   }
+  const isSaved = isAdded(property._id, savedProperties)
 
   return (
     // px-4 md:px-6
@@ -83,23 +97,21 @@ const PropertyDetails = ({ property }: { property: PropertyType }) => {
           propertyId={property._id}
         />
       )}
-      <MainDetails
-        toggleAddReview={toggleAddReview}
-        toggleReportProperty={toggleReportProperty}
-      />
+      <MainDetails>
+        <PropertyOptions
+          toggleAddReview={toggleAddReview}
+          toggleReportProperty={toggleReportProperty}
+          propertyId={property._id}
+          isSaved={isSaved}
+        />
+      </MainDetails>
       <PropertyReviews toggleAddReview={toggleAddReview} />
       <PropertyLocation address="1987 Linda Street, Portland, Pennsylvania 97205, USA" />
     </div>
   )
 }
 
-const MainDetails = ({
-  toggleAddReview,
-  toggleReportProperty,
-}: {
-  toggleAddReview: () => void
-  toggleReportProperty: () => void
-}) => {
+const MainDetails = ({ children }: { children: ReactNode }) => {
   const [selectedImage, setSelectedImage] = useState('')
   const [selected, setSelected] = useState('')
 
@@ -116,10 +128,7 @@ const MainDetails = ({
       />
 
       <div className="h-full">
-        <PropertyOptions
-          toggleAddReview={toggleAddReview}
-          toggleReportProperty={toggleReportProperty}
-        />
+        {children}
         {selected && (
           <ViewMore
             description="Lorem ipsum dolor sit amet consectetur, adipisicing elit. Maiores repellendus eligendi delectus ipsa totam quaerat error, in, sequi itaque illo enim assumenda fugit laudantium est sint accusamus numquam, ducimus corporis?"
@@ -240,11 +249,16 @@ const MainDetails = ({
 const PropertyOptions = ({
   toggleAddReview,
   toggleReportProperty,
+  propertyId,
+  isSaved,
 }: {
   toggleAddReview: () => void
   toggleReportProperty: () => void
+  propertyId: string
+  isSaved: boolean
 }) => {
   const [showMore, setShowMore] = useState(false)
+
   return (
     <div className="border-b p-4 md:mt-4 md:border-none md:p-0">
       <ul className="flex items-center gap-2">
@@ -253,39 +267,37 @@ const PropertyOptions = ({
         </li>
 
         <li>
-          <SpecialIcon name="save">
-            <HiOutlineBookmark className="h-4 w-4 text-black/40 transition-colors group-hover:text-black" />
-          </SpecialIcon>
+          <SaveButton propertyId={propertyId} isSaved={isSaved} />
         </li>
 
         <li>
-          <SpecialIcon name="Share">
+          <SpecialButton name="Share">
             <HiOutlineShare className="h-4 w-4 text-black/60 transition-colors group-hover:text-black" />
-          </SpecialIcon>
+          </SpecialButton>
         </li>
 
         <li onClick={() => setShowMore(!showMore)}>
           {showMore ? (
-            <SpecialIcon name="Close">
+            <SpecialButton name="Close">
               <HiOutlineX className="h-4 w-4 text-black/60 transition-colors group-hover:text-black" />
-            </SpecialIcon>
+            </SpecialButton>
           ) : (
-            <SpecialIcon name="More">
+            <SpecialButton name="More">
               <HiOutlineDotsHorizontal className="h-4 w-4 text-black/60 transition-colors group-hover:text-black" />
-            </SpecialIcon>
+            </SpecialButton>
           )}
         </li>
         {showMore && (
           <>
             <li onClick={toggleAddReview}>
-              <SpecialIcon name="Review">
+              <SpecialButton name="Review">
                 <MdOutlineModeComment className="h-4 w-4 text-black/60 transition-colors group-hover:text-black" />
-              </SpecialIcon>
+              </SpecialButton>
             </li>
             <li onClick={toggleReportProperty}>
-              <SpecialIcon name="Report">
+              <SpecialButton name="Report">
                 <HiOutlineFlag className="h-4 w-4 text-black/60 transition-colors group-hover:text-black" />
-              </SpecialIcon>
+              </SpecialButton>
             </li>
           </>
         )}
@@ -294,20 +306,66 @@ const PropertyOptions = ({
   )
 }
 
-const SpecialIcon = ({
+const SpecialButton = ({
   name,
   children,
+  onClick,
 }: {
   name: string
   children: ReactNode
+  onClick?: () => void
 }) => {
   return (
-    <span className="border-gray group relative block cursor-pointer rounded-full border p-3 transition-colors hover:border-black/60">
+    <button
+      type="button"
+      className="border-gray group relative block cursor-pointer rounded-full border p-3 transition-colors hover:border-black/60 focus:outline-none focus-visible:ring-4 focus-visible:ring-neutral-600"
+      onClick={onClick}
+    >
       {children}
-      <span className="absolute left-1/2 top-full mt-1 hidden -translate-x-1/2 rounded-xl  border bg-white px-4 py-2 text-sm opacity-0 transition-opacity group-hover:block group-hover:opacity-100">
+      <span className="absolute left-1/2 top-full mt-1 hidden -translate-x-1/2 select-none rounded-xl  border bg-white px-4 py-2 text-sm opacity-0 transition-opacity group-hover:block group-hover:opacity-100">
         {name}
       </span>
-    </span>
+    </button>
+  )
+}
+
+const SaveButton = ({
+  propertyId,
+  isSaved,
+}: {
+  propertyId: string
+  isSaved: boolean
+}) => {
+  const router = useRouter()
+  const { data: session } = useSession()
+  const [pending, startTransition] = useTransition()
+  const saveActionWithId = saveProperty.bind(null, propertyId)
+  const unSaveActionWithId = unSaveProperty.bind(null, propertyId)
+
+  const handleSave = () => {
+    if (!session) {
+      return router.push('/sign-up')
+    }
+    if (isSaved) {
+      return startTransition(async () => {
+        await unSaveActionWithId()
+      })
+    }
+    return startTransition(async () => {
+      await saveActionWithId()
+    })
+  }
+  return (
+    <div className="relative">
+      {pending && <SmallSpinner />}
+      <SpecialButton name={isSaved ? 'Saved' : 'Save'} onClick={handleSave}>
+        {isSaved ? (
+          <HiBookmark className="h-4 w-4 text-black/40 transition-colors group-hover:text-black" />
+        ) : (
+          <HiOutlineBookmark className="h-4 w-4 text-black/40 transition-colors group-hover:text-black" />
+        )}
+      </SpecialButton>
+    </div>
   )
 }
 
