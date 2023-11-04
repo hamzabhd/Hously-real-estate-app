@@ -1,3 +1,3 @@
-export const isAdded = (item: string, arr: string[]) => {
+export const isAdded = (item: string | number, arr: (string | number)[]) => {
   return arr.includes(item)
 }

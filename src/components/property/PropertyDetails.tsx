@@ -2,6 +2,7 @@
 
 import { ReactNode, useEffect, useState, useTransition } from 'react'
 import {
+  MdOutlineCalendarMonth,
   MdOutlineInfo,
   MdOutlineModeComment,
   MdPersonOutline,
@@ -240,7 +241,7 @@ const MainDetails = ({ children }: { children: ReactNode }) => {
               Reserve
             </button>
             <button className="flex w-1/4 items-center justify-center rounded-full border-2 border-grey px-6 py-3 transition-colors hover:border-black/60">
-              <HiOutlineDotsHorizontal />
+              <MdOutlineCalendarMonth />
             </button>
           </div>
         </div>

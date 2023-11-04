@@ -124,6 +124,10 @@
       width: 24px;
     }
   }
+
+  .calender-grid {
+    grid-template-columns: repeat(7, 54px);
+  }
 }
 
 .map-container {
