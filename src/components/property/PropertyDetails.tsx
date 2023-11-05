@@ -50,6 +50,8 @@ import { PropertyType } from '@/types/types'
 import { useSession } from 'next-auth/react'
 import { isAdded } from 'utils/isAdded'
 import SmallSpinner from '../loaders/SmallSpinner'
+import Calendar from '../Calendar'
+import { getReservationRange } from 'utils/isReserved'
 
 const imagesArr = [
   '/images/1.webp',
@@ -118,6 +120,92 @@ const PropertyDetails = ({
 const MainDetails = ({ children }: { children: ReactNode }) => {
   const [selectedImage, setSelectedImage] = useState('')
   const [selected, setSelected] = useState('')
+  const [availability, setAvailability] = useState(false)
+  const [reserve, setReserve] = useState(false)
+
+  const [selectedSlot, setSelectedSlot] = useState('check-in')
+  const [selectDate, setSelectDate] = useState({
+    from: '',
+    to: '',
+  })
+
+  const arrOfDates = [
+    {
+      from: new Date(2023, 10, 15),
+      to: new Date(2023, 10, 17),
+    },
+
+    {
+      from: new Date(2023, 10, 23),
+      to: new Date(2023, 10, 24),
+    },
+
+    {
+      from: new Date(2023, 11, 15),
+      to: new Date(2023, 11, 18),
+    },
+  ]
+
+  const getUserSelection = (day: number, month: number, year: number) => {
+    const newDate = new Date(year, month, day).toISOString()
+    const reservationsMade = getReservationRange(arrOfDates)
+    setSelectDate((prevState) => {
+      if (selectedSlot === 'check-in') {
+        setSelectedSlot('check-out')
+        if (prevState.to < newDate) {
+          console.log('1')
+          return {
+            from: newDate,
+            to: '',
+          }
+        } else {
+          return {
+            ...prevState,
+            from: newDate,
+          }
+        }
+      } else {
+        if (prevState.from > newDate) {
+          return prevState
+        } else {
+          return {
+            ...prevState,
+            to: newDate,
+          }
+        }
+      }
+    })
+
+    setSelectDate((prevState) => {
+      const userDate = [
+        {
+          from: new Date(prevState.from),
+          to: new Date(prevState.to),
+        },
+      ]
+      const userReservation = getReservationRange(userDate)
+      for (let i = 0; i < userReservation.length; i++) {
+        if (reservationsMade.includes(userReservation[i])) {
+          return {
+            from: newDate,
+            to: '',
+          }
+        }
+      }
+      return prevState
+    })
+  }
+  const reformDate = (date: string) => {
+    const newDate = new Date(date)
+
+    const reformed =
+      newDate.getDate() +
+      ' / ' +
+      (newDate.getMonth() + 1) +
+      ' / ' +
+      newDate.getFullYear()
+    return reformed
+  }
 
   return (
     <div className="items-start lg:grid lg:h-[736px] lg:grid-cols-2 lg:gap-x-8">
@@ -142,7 +230,7 @@ const MainDetails = ({ children }: { children: ReactNode }) => {
             setSelected={setSelected}
           />
         )}
-        <div className="px-4 md:p-0">
+        <div className="px-4">
           <div className="mb-8 mt-4 lg:mt-6">
             <h1 className="mb-1 text-3xl font-medium lg:text-4xl">
               Cozy Urban Apartment
@@ -199,7 +287,7 @@ const MainDetails = ({ children }: { children: ReactNode }) => {
           </div>
 
           <div className="mb-6 gap-x-4 sm:grid sm:grid-cols-2">
-            <div>
+            <div className="mb-4 sm:mb-0">
               <h2 className="mb-4 text-xl font-medium tracking-wide">
                 Property features
               </h2>
@@ -236,11 +324,121 @@ const MainDetails = ({ children }: { children: ReactNode }) => {
             </div>
           </div>
 
-          <div className="mb-4 flex gap-x-2">
-            <button className="flex-grow cursor-pointer items-center justify-center rounded-full bg-black px-8 py-3 font-medium text-white transition-colors hover:bg-neutral-800 focus:outline-none focus-visible:ring-4 focus-visible:ring-neutral-600">
+          <div className="relative mb-4 flex gap-x-2">
+            {availability && (
+              <div className="container-shadow absolute bottom-full right-0 mb-4 h-fit w-full animate-popup overflow-hidden rounded-3xl border bg-white duration-1000 sm:w-fit">
+                <div className="flex items-center justify-between gap-x-4 border-b border-grey p-4 lg:px-6">
+                  <span className="cursor-pointer font-medium text-black">
+                    Property availability
+                  </span>
+
+                  <div
+                    className="cursor-pointer rounded-full bg-light-100 p-2 transition-colors hover:bg-grey"
+                    onClick={() => setAvailability(false)}
+                  >
+                    <HiOutlineX className="h-4 w-4" />
+                  </div>
+                </div>
+                <Calendar select={false} arrOfDates={arrOfDates} />
+              </div>
+            )}
+            {reserve && (
+              <div className="container-shadow absolute bottom-full right-0 mb-4 h-fit w-full animate-popup overflow-hidden rounded-3xl border bg-white duration-1000 sm:w-fit md:w-full lg:w-fit">
+                <div className="flex items-center justify-between gap-x-4 border-b border-grey p-4 lg:px-6">
+                  <span className="cursor-pointer font-medium text-black">
+                    Property reservation
+                  </span>
+
+                  <div
+                    className="cursor-pointer rounded-full bg-light-100 p-2 transition-colors hover:bg-grey"
+                    onClick={() => setReserve(false)}
+                  >
+                    <HiOutlineX className="h-4 w-4" />
+                  </div>
+                </div>
+
+                <div className="max-h-[550px] overflow-auto md:flex lg:block">
+                  <Calendar
+                    select={true}
+                    arrOfDates={arrOfDates}
+                    getUserSelection={getUserSelection}
+                    selectDate={selectDate}
+                  />
+
+                  <div className="grid flex-shrink-0 gap-x-2 border-t border-grey p-4 sm:grid-cols-2 md:flex-grow md:border-hidden lg:border-solid ">
+                    <div>
+                      <span
+                        className={`mb-2 block ${
+                          selectedSlot === 'check-in'
+                            ? 'text-black'
+                            : 'text-black/60'
+                        }`}
+                      >
+                        Check-in
+                      </span>
+                      <div
+                        className={`flex cursor-pointer items-center justify-center rounded-3xl p-4 text-sm ${
+                          selectedSlot === 'check-in'
+                            ? 'border-2 border-black/60'
+                            : 'border-2 border-grey'
+                        }`}
+                        onClick={() => setSelectedSlot('check-in')}
+                      >
+                        {selectDate.from !== ''
+                          ? reformDate(selectDate.from)
+                          : 'Select a date'}
+                      </div>
+                    </div>
+
+                    <div>
+                      <span
+                        className={`mb-2 block ${
+                          selectedSlot === 'check-in'
+                            ? 'text-black'
+                            : 'text-black/60'
+                        }`}
+                      >
+                        Check-out
+                      </span>
+                      <div
+                        className={`flex cursor-pointer items-center justify-center rounded-3xl p-4 text-sm ${
+                          selectedSlot === 'check-out'
+                            ? 'border-2 border-black/60'
+                            : 'border-2 border-grey'
+                        }`}
+                        onClick={() => setSelectedSlot('check-out')}
+                      >
+                        {selectDate.to !== ''
+                          ? reformDate(selectDate.to)
+                          : 'Select a date'}
+                      </div>
+                    </div>
+                  </div>
+                  {/* rest of the info goes here */}
+                  {/* <div className="border-t border-grey p-4">
+                    <span>Number of guests</span>
+                  </div> */}
+                </div>
+              </div>
+            )}
+            <button
+              className="flex-grow cursor-pointer items-center justify-center rounded-full bg-black px-8 py-3 font-medium text-white transition-colors hover:bg-neutral-800 focus:outline-none focus-visible:ring-4 focus-visible:ring-neutral-600"
+              onClick={() => {
+                setReserve(!reserve)
+                setAvailability(false)
+              }}
+            >
               Reserve
             </button>
-            <button className="flex w-1/4 items-center justify-center rounded-full border-2 border-grey px-6 py-3 transition-colors hover:border-black/60">
+            <button
+              className={`flex w-1/4 items-center justify-center rounded-full border-2 px-6 py-3 transition-colors hover:border-black/60 ${
+                availability ? 'border-black/60' : 'border-grey'
+              }`}
+              onClick={() => {
+                setAvailability(!availability)
+                setReserve(false)
+              }}
+            >
               <MdOutlineCalendarMonth />
             </button>
           </div>

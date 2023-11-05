@@ -1,8 +1,22 @@
 'use client'
 import { useState, useEffect } from 'react'
 import { PiCaretLeftBold, PiCaretRightBold } from 'react-icons/pi'
+import { getReservationRange, isReserved } from 'utils/isReserved'
 
-function Calendar() {
+function Calendar({
+  select = false,
+  arrOfDates,
+  selectDate,
+  getUserSelection,
+}: {
+  select: boolean
+  arrOfDates: { from: Date; to: Date }[]
+  selectDate?: {
+    from: string
+    to: string
+  }
+  getUserSelection?: (day: number, month: number, year: number) => void
+}) {
   const DAYS = [31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31]
   const DAYS_LEAP = [31, 29, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31]
   const DAYS_OF_THE_WEEK = [
@@ -51,112 +65,7 @@ function Calendar() {
   function isLeapYear(year: number) {
     return (year % 4 === 0 && year % 100 !== 0) || year % 400 === 0
   }
-
   const days = isLeapYear(year) ? DAYS_LEAP : DAYS
-
-  const [selectedSlot, setSelectedSlot] = useState('check-in')
-  const [selectDate, setSelectDate] = useState({
-    from: '',
-    to: '',
-  })
-
-  const arrOfDates = [
-    {
-      from: new Date(2023, 10, 15),
-      to: new Date(2023, 10, 17),
-    },
-
-    {
-      from: new Date(2023, 10, 23),
-      to: new Date(2023, 10, 24),
-    },
-
-    {
-      from: new Date(2023, 11, 15),
-      to: new Date(2023, 11, 18),
-    },
-  ]
-
-  const getReservationRange = (
-    dateRanges: { from: Date; to: Date }[],
-  ): string[] => {
-    let reservationRange: string[] = []
-
-    dateRanges.forEach(({ from, to }) => {
-      let currentDate = new Date(from)
-      const endDate = new Date(to)
-
-      while (currentDate <= endDate) {
-        reservationRange.push(new Date(currentDate).toISOString())
-        currentDate.setDate(currentDate.getDate() + 1)
-      }
-    })
-
-    return reservationRange
-  }
-
-  const isReserved = (
-    dateRanges: { from: Date; to: Date }[],
-    calendarDay: number,
-    year: number,
-    month: number,
-  ) => {
-    const reservationRange = getReservationRange(dateRanges)
-    const calendarDate = new Date(year, month, calendarDay).toISOString()
-    const isReservedDate = reservationRange.includes(calendarDate)
-
-    return isReservedDate
-  }
-
-  const getUserSelection = (day: number) => {
-    const newDate = new Date(year, month, day).toISOString()
-    const reservationsMade = getReservationRange(arrOfDates)
-    setSelectDate((prevState) => {
-      if (selectedSlot === 'check-in') {
-        setSelectedSlot('check-out')
-        if (prevState.to < newDate) {
-          console.log('1')
-          return {
-            from: newDate,
-            to: '',
-          }
-        } else {
-          return {
-            ...prevState,
-            from: newDate,
-          }
-        }
-      } else {
-        if (prevState.from > newDate) {
-          return prevState
-        } else {
-          return {
-            ...prevState,
-            to: newDate,
-          }
-        }
-      }
-    })
-
-    setSelectDate((prevState) => {
-      const userDate = [
-        {
-          from: new Date(prevState.from),
-          to: new Date(prevState.to),
-        },
-      ]
-      const userReservation = getReservationRange(userDate)
-      for (let i = 0; i < userReservation.length; i++) {
-        if (reservationsMade.includes(userReservation[i])) {
-          return {
-            from: newDate,
-            to: '',
-          }
-        }
-      }
-      return prevState
-    })
-  }
 
   const calendarDays = Array(days[month] + (startDay - 1))
     .fill(null)
@@ -166,16 +75,15 @@ function Calendar() {
       const reservedDate = isReserved(arrOfDates, d, year, month)
       const first = isReserved(arrOfDates, d - 1, year, month)
       const last = isReserved(arrOfDates, d + 1, year, month)
-      const userDate = [
+      const userDate = selectDate && [
         {
           from: new Date(selectDate.from),
           to: new Date(selectDate.to),
         },
       ]
-      const isSelected =
-        selectDate.from && selectDate.to && isReserved(userDate, d, year, month)
-      const selectStart = isReserved(userDate, d - 1, year, month)
-      const selectEnd = isReserved(userDate, d + 1, year, month)
+      const isSelected = userDate && isReserved(userDate, d, year, month)
+      const selectStart = userDate && isReserved(userDate, d - 1, year, month)
+      const selectEnd = userDate && isReserved(userDate, d + 1, year, month)
 
       const selectionClassName = () => {
         if (!selectStart) {
@@ -190,27 +98,27 @@ function Calendar() {
           return ''
         }
       }
-      if (selectDate.from === newDate) {
+      if (selectDate?.from === newDate && select) {
         return (
           <span
             key={index}
             className={`flex aspect-square select-none items-center justify-center bg-neutral-800 text-sm font-medium text-white empty:invisible
         ${selectionClassName()}`}
             onClick={() => {
-              getUserSelection(d)
+              getUserSelection?.(d, month, year)
             }}
           >
             {d > 0 ? d : ''}
           </span>
         )
-      } else if (isSelected) {
+      } else if (isSelected && select) {
         return (
           <span
             key={index}
             className={`flex aspect-square select-none items-center justify-center bg-neutral-800 text-sm font-medium text-white empty:invisible
             ${selectionClassName()}`}
             onClick={() => {
-              getUserSelection(d)
+              getUserSelection?.(d, month, year)
             }}
           >
             {d > 0 ? d : ''}
@@ -242,7 +150,7 @@ function Calendar() {
           key={index}
           className={`flex aspect-square cursor-pointer select-none items-center justify-center rounded-full text-sm font-medium transition-colors empty:invisible hover:bg-black hover:text-white`}
           onClick={() => {
-            getUserSelection(d)
+            getUserSelection?.(d, month, year)
           }}
         >
           {d > 0 ? d : ''}
@@ -251,46 +159,26 @@ function Calendar() {
     })
 
   return (
-    <div className="rounded-3xl border border-grey sm:max-w-[400px]">
-      <div
-        className={`m-4 mb-0 mt-4 cursor-pointer rounded-3xl p-4 ${
-          selectedSlot === 'check-in' ? 'border-2 border-black/60' : 'border'
-        }`}
-        onClick={() => setSelectedSlot('check-in')}
-      >
-        {selectDate.from !== ''
-          ? new Date(selectDate.from).toDateString()
-          : 'Check in'}
-      </div>
-      <div
-        className={`m-4 mb-0 mt-4 cursor-pointer rounded-3xl p-4 ${
-          selectedSlot === 'check-out' ? 'border-2 border-black/60' : 'border'
-        }`}
-        onClick={() => setSelectedSlot('check-out')}
-      >
-        {selectDate.to !== ''
-          ? new Date(selectDate.to).toDateString()
-          : 'Check out'}
-      </div>
-
-      <div className="flex items-center justify-between border-b p-4 ">
+    <div className="max-w-400 w-full border-grey bg-white sm:w-[400px]">
+      <div className="flex items-center justify-between p-4 ">
         <button
           type="button"
-          className="group rounded-full bg-black/10 p-2 transition hover:bg-black/20"
+          className="disabled:bg- group rounded-full bg-light-500 p-2 transition hover:bg-light-900 disabled:cursor-default disabled:opacity-40 disabled:hover:bg-light-500"
           onClick={() => setDate(new Date(year, month - 1, day))}
+          disabled={month === new Date().getMonth()}
         >
-          <PiCaretLeftBold className="h-4 w-4 text-black/60 transition-colors group-hover:text-black" />
+          <PiCaretLeftBold className="h-4 w-4 text-black/60 transition-colors group-hover:text-black group-disabled:text-black/60" />
         </button>
         <div>
-          <span className="font-bold ">{MONTHS[month]}</span>
+          <span className="font-medium">{MONTHS[month]}</span>
           <span className="text-sm text-black/60"> - {year}</span>
         </div>
         <button
           type="button"
-          className="group rounded-full bg-black/10 p-2 transition hover:bg-black/20"
+          className="disabled:bg- group rounded-full bg-light-500 p-2 transition hover:bg-light-900 disabled:cursor-default disabled:opacity-40 disabled:hover:bg-light-500"
           onClick={() => setDate(new Date(year, month + 1, day))}
         >
-          <PiCaretRightBold className="h-4 w-4 text-black/60 transition-colors group-hover:text-black" />
+          <PiCaretRightBold className="h-4 w-4 text-black/60 transition-colors group-hover:text-black group-disabled:text-black/60" />
         </button>
       </div>
       <div className="flex flex-col p-4">
