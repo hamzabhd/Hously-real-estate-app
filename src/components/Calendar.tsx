@@ -1,7 +1,6 @@
 'use client'
 import { useState, useEffect } from 'react'
 import { PiCaretLeftBold, PiCaretRightBold } from 'react-icons/pi'
-import { isAdded } from 'utils/isAdded'
 
 function Calendar() {
   const DAYS = [31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31]
@@ -55,64 +54,196 @@ function Calendar() {
 
   const days = isLeapYear(year) ? DAYS_LEAP : DAYS
 
+  const [selectedSlot, setSelectedSlot] = useState('check-in')
   const [selectDate, setSelectDate] = useState({
-    checkIn: '',
-    checkOut: '',
+    from: '',
+    to: '',
   })
 
-  const getUserSelection = (day: string) => {
-    setSelectDate((prevState) => {
-      if (!selectDate.checkIn) {
-        return { ...prevState, checkIn: day }
+  const arrOfDates = [
+    {
+      from: new Date(2023, 10, 15),
+      to: new Date(2023, 10, 17),
+    },
+
+    {
+      from: new Date(2023, 10, 23),
+      to: new Date(2023, 10, 24),
+    },
+
+    {
+      from: new Date(2023, 11, 15),
+      to: new Date(2023, 11, 18),
+    },
+  ]
+
+  const getReservationRange = (
+    dateRanges: { from: Date; to: Date }[],
+  ): string[] => {
+    let reservationRange: string[] = []
+
+    dateRanges.forEach(({ from, to }) => {
+      let currentDate = new Date(from)
+      const endDate = new Date(to)
+
+      while (currentDate <= endDate) {
+        reservationRange.push(new Date(currentDate).toISOString())
+        currentDate.setDate(currentDate.getDate() + 1)
       }
-      return { ...prevState, checkOut: day }
+    })
+
+    return reservationRange
+  }
+
+  const isReserved = (
+    dateRanges: { from: Date; to: Date }[],
+    calendarDay: number,
+    year: number,
+    month: number,
+  ) => {
+    const reservationRange = getReservationRange(dateRanges)
+    const calendarDate = new Date(year, month, calendarDay).toISOString()
+    const isReservedDate = reservationRange.includes(calendarDate)
+
+    return isReservedDate
+  }
+
+  const getUserSelection = (day: number) => {
+    const newDate = new Date(year, month, day).toISOString()
+    const reservationsMade = getReservationRange(arrOfDates)
+    setSelectDate((prevState) => {
+      if (selectedSlot === 'check-in') {
+        setSelectedSlot('check-out')
+        if (prevState.to < newDate) {
+          console.log('1')
+          return {
+            from: newDate,
+            to: '',
+          }
+        } else {
+          return {
+            ...prevState,
+            from: newDate,
+          }
+        }
+      } else {
+        if (prevState.from > newDate) {
+          return prevState
+        } else {
+          return {
+            ...prevState,
+            to: newDate,
+          }
+        }
+      }
+    })
+
+    setSelectDate((prevState) => {
+      const userDate = [
+        {
+          from: new Date(prevState.from),
+          to: new Date(prevState.to),
+        },
+      ]
+      const userReservation = getReservationRange(userDate)
+      for (let i = 0; i < userReservation.length; i++) {
+        if (reservationsMade.includes(userReservation[i])) {
+          return {
+            from: newDate,
+            to: '',
+          }
+        }
+      }
+      return prevState
     })
   }
 
-  const checkIn = new Date(2023, 10, 10)
-  const checkOut = new Date(2023, 10, 20)
-
-  const getRange = (start: number, end: number) => {
-    let range: number[] = []
-
-    for (let i = start; i <= end; i++) {
-      range.push(i)
-    }
-
-    return range
-  }
   const calendarDays = Array(days[month] + (startDay - 1))
     .fill(null)
     .map((_, index) => {
       const d = index - (startDay - 2)
-      const range = getRange(checkIn.getDate(), checkOut.getDate())
-      const isReserved = isAdded(d, range)
-      const first = range[0] === d
-      const last = range[range.length - 1] === d
+      const newDate = new Date(year, month, d).toISOString()
+      const reservedDate = isReserved(arrOfDates, d, year, month)
+      const first = isReserved(arrOfDates, d - 1, year, month)
+      const last = isReserved(arrOfDates, d + 1, year, month)
+      const userDate = [
+        {
+          from: new Date(selectDate.from),
+          to: new Date(selectDate.to),
+        },
+      ]
+      const isSelected =
+        selectDate.from && selectDate.to && isReserved(userDate, d, year, month)
+      const selectStart = isReserved(userDate, d - 1, year, month)
+      const selectEnd = isReserved(userDate, d + 1, year, month)
+
+      const selectionClassName = () => {
+        if (!selectStart) {
+          if (!selectEnd) {
+            return 'rounded-full bg-black text-white'
+          }
+          return 'rounded-l-full bg-black text-white'
+        }
+        if (!selectEnd) {
+          return 'rounded-r-full bg-black text-white'
+        } else {
+          return ''
+        }
+      }
+      if (selectDate.from === newDate) {
+        return (
+          <span
+            key={index}
+            className={`flex aspect-square select-none items-center justify-center bg-neutral-800 text-sm font-medium text-white empty:invisible
+        ${selectionClassName()}`}
+            onClick={() => {
+              getUserSelection(d)
+            }}
+          >
+            {d > 0 ? d : ''}
+          </span>
+        )
+      } else if (isSelected) {
+        return (
+          <span
+            key={index}
+            className={`flex aspect-square select-none items-center justify-center bg-neutral-800 text-sm font-medium text-white empty:invisible
+            ${selectionClassName()}`}
+            onClick={() => {
+              getUserSelection(d)
+            }}
+          >
+            {d > 0 ? d : ''}
+          </span>
+        )
+      }
 
       const getClassName = () => {
-        if (isReserved) {
-          if (first) {
-            return 'rounded-l-full bg-light-500 text-black/40'
-          }
-
-          if (last) {
-            return 'rounded-r-full bg-light-500 text-black/40'
-          }
-
-          return 'bg-light-500 text-black/40'
-        } else {
-          return 'rounded-full hover:bg-black hover:text-white transition-colors cursor-pointer'
+        if (!first) {
+          return 'rounded-l-full bg-light-500 text-black/40'
         }
+        if (!last) {
+          return 'rounded-r-full bg-light-500 text-black/40'
+        }
+      }
+      if (reservedDate) {
+        return (
+          <span
+            key={index}
+            className={`flex aspect-square select-none items-center justify-center bg-light-500 text-sm font-medium text-black/40 empty:invisible
+        ${getClassName()}`}
+          >
+            {d > 0 ? d : ''}
+          </span>
+        )
       }
       return (
         <span
           key={index}
-          //   isToday={d === today.getDate()}
-          //   isSelected={d === day}
-          className={`flex aspect-square select-none items-center justify-center text-sm font-medium empty:invisible
-          ${getClassName()}`}
-          onClick={() => {setDate(new Date(year, month, d)); getUserSelection(d.toString()) }}
+          className={`flex aspect-square cursor-pointer select-none items-center justify-center rounded-full text-sm font-medium transition-colors empty:invisible hover:bg-black hover:text-white`}
+          onClick={() => {
+            getUserSelection(d)
+          }}
         >
           {d > 0 ? d : ''}
         </span>
@@ -121,8 +252,26 @@ function Calendar() {
 
   return (
     <div className="rounded-3xl border border-grey sm:max-w-[400px]">
-      <div>{selectDate.checkIn}</div>
-      <div>{selectDate.checkOut}</div>
+      <div
+        className={`m-4 mb-0 mt-4 cursor-pointer rounded-3xl p-4 ${
+          selectedSlot === 'check-in' ? 'border-2 border-black/60' : 'border'
+        }`}
+        onClick={() => setSelectedSlot('check-in')}
+      >
+        {selectDate.from !== ''
+          ? new Date(selectDate.from).toDateString()
+          : 'Check in'}
+      </div>
+      <div
+        className={`m-4 mb-0 mt-4 cursor-pointer rounded-3xl p-4 ${
+          selectedSlot === 'check-out' ? 'border-2 border-black/60' : 'border'
+        }`}
+        onClick={() => setSelectedSlot('check-out')}
+      >
+        {selectDate.to !== ''
+          ? new Date(selectDate.to).toDateString()
+          : 'Check out'}
+      </div>
 
       <div className="flex items-center justify-between border-b p-4 ">
         <button
