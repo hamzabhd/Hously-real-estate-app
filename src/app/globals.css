@@ -32,6 +32,11 @@
   input[type='range'] {
     @apply flex-grow cursor-pointer  bg-transparent accent-black focus:outline-none;
   }
+
+  button,
+  a {
+    @apply focus:outline-none focus-visible:border-neutral-600/60 focus-visible:ring-4 focus-visible:ring-neutral-600;
+  }
 }
 
 @layer components {

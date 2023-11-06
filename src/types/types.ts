@@ -147,3 +147,8 @@ export interface ReportType {
   reportReason: string
   reportDescription: string
 }
+
+export interface ReservationType {
+  arrOfDates: { from: Date; to: Date }[]
+  guestsLimit: number
+}
