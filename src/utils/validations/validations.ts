@@ -94,6 +94,11 @@ export const listingSchema = z.object({
   securityFee: z.string().optional(),
 })
 
+export const reservationSchema = z.object({
+  from: z.string().min(1),
+  to: z.string().min(1),
+})
+
 export const reviewSchema = z.object({
   reviewerType: z.string().min(1, { message: 'Please provide your role' }),
   reviewRange: z.string().optional(),

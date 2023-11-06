@@ -34,6 +34,7 @@ const propertySchema = new Schema({
   securityFee: { type: String },
   images: { type: [String], default: [] },
   reviews: [{ type: Schema.Types.ObjectId, ref: 'Review' }],
+  reservations: [{ type: Schema.Types.ObjectId, ref: 'Reservation' }],
 })
 
 const Property = models.Property || model('Property', propertySchema)

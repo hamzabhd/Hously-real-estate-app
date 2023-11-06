@@ -1,6 +1,7 @@
 import { ChangeEvent } from 'react'
 
 export type UserObj = {
+  _id: string
   username: string
   fullName: string
   email: string
@@ -155,8 +156,17 @@ export interface ReservationsType {
   to: Date
 }
 
+export interface UserReservation {
+  reserver: string
+  guests: number
+  from: string
+  to: string
+}
+
 export interface ReservationType {
   guestsLimit: number
+  propertyId: string
+  propertyReservations: UserReservation[]
   arrOfDates?: ReservationsType[]
 }
 export interface PropertyLocationType {

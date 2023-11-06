@@ -2,6 +2,7 @@ import { ReactNode } from 'react'
 import { IoIosStar, IoIosStarOutline } from 'react-icons/io'
 import UserImage from './UserImage'
 import { ReviewObj } from '@/types/types'
+import { reformDate } from 'utils/reformDate'
 
 const ReviewCard = ({
   review,
@@ -61,8 +62,8 @@ const ReviewCard = ({
         />
         <div className="mr-auto flex flex-col">
           <span className="block font-bold">{review.reviewer.fullName}</span>
-          <span className="block text-slate-600">
-            {new Date(review.createdAt).getFullYear()}
+          <span className="block text-sm text-slate-600">
+            {reformDate(review.createdAt)}
           </span>
         </div>
         <div className="flex self-start">
@@ -73,11 +74,14 @@ const ReviewCard = ({
       <p
         className={`${
           showReview ? '' : 'mb-4'
-        } mt-6 font-normal leading-relaxed text-black/60`}
+        } mt-6 font-normal leading-relaxed ${
+          !review.reviewContent ? 'text-black/40' : 'text-black/60'
+        }`}
       >
         {showReview
           ? review.reviewContent
           : reformReviewText(review.reviewContent)}
+        {!review.reviewContent && 'No review content was provided'}
       </p>
 
       {isMore(review.reviewContent) && !showReview && (

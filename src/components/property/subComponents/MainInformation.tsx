@@ -113,6 +113,7 @@ const MainInformation = ({
           label="Title"
           className="relative mb-4 md:mb-5"
           error={detailsErrors.title}
+          max={20}
           letterCounter={20}
         />
         <CustomInput

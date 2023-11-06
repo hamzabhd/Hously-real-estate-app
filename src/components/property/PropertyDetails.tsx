@@ -5,10 +5,11 @@ import {
   MdOutlineCalendarMonth,
   MdOutlineInfo,
   MdOutlineModeComment,
+  MdPeopleOutline,
   MdPersonOutline,
   MdWhatsapp,
 } from 'react-icons/md'
-import { TbResize } from 'react-icons/tb'
+import { TbMoonStars, TbResize } from 'react-icons/tb'
 import {
   HiOutlineLocationMarker,
   HiOutlineOfficeBuilding,
@@ -23,9 +24,8 @@ import {
   HiOutlineCheck,
 } from 'react-icons/hi'
 import { BiBath } from 'react-icons/bi'
-import { LuBed, LuBedDouble, LuClock10 } from 'react-icons/lu'
+import { LuBed, LuBedDouble } from 'react-icons/lu'
 import { HiOutlineBookmark } from 'react-icons/hi'
-import { features, reviewsArr, rules } from 'utils/itemManagement/data/data'
 import UserImage from '../custom/UserImage'
 import ImageSlider from '../custom/ImageSlider'
 import ImagePreviewer from '../custom/ImagePreviewer'
@@ -38,6 +38,7 @@ import DetailsContainer from '../containers/DetailsContainer'
 import {
   addReview,
   makeReport,
+  makeReservation,
   saveProperty,
   unSaveProperty,
 } from '@/app/actions'
@@ -64,6 +65,9 @@ import { PiCaretUpBold } from 'react-icons/pi'
 import Link from 'next/link'
 import { ReservationType } from '@/types/types'
 import { useAddReview } from 'hooks/useAddReview'
+import { reformDate } from 'utils/reformDate'
+import { TbDoorEnter, TbDoorExit } from 'react-icons/tb'
+import { reservationSchema } from 'utils/validations/validations'
 
 const imagesArr = [
   '/images/spain.png',
@@ -107,23 +111,6 @@ const MainDetails = ({
   const [selectedImage, setSelectedImage] = useState('')
   const [selected, setSelected] = useState('')
 
-  const arrOfDates = [
-    {
-      from: new Date(2023, 10, 15),
-      to: new Date(2023, 10, 17),
-    },
-
-    {
-      from: new Date(2023, 10, 23),
-      to: new Date(2023, 10, 24),
-    },
-
-    {
-      from: new Date(2023, 11, 15),
-      to: new Date(2023, 11, 18),
-    },
-  ]
-
   const propertyReservation =
     property.reservations &&
     property.reservations.map((item) => ({
@@ -135,7 +122,7 @@ const MainDetails = ({
     <div className="items-start lg:grid lg:h-[736px] lg:grid-cols-2 lg:gap-x-8">
       {/* Image previewer */}
       <ImageSlider
-        imagesArr={property.images}
+        imagesArr={imagesArr}
         selectImage={(image: string) => setSelectedImage(image)}
       />
       <ImagePreviewer
@@ -144,12 +131,22 @@ const MainDetails = ({
       />
 
       <div className="h-full">
-        <PropertyOptions propertyId={property._id} isSaved={isSaved} />
+        <PropertyOptions
+          propertyId={property._id}
+          isSaved={isSaved}
+          propertyOwner={property.owner._id}
+          profileImage={property.owner.profilePicture}
+          userName={property.owner.fullName}
+        />
         {selected && (
           <ViewMore
             description={property.description}
             features={property.features}
             rules={property.rules}
+            guestsLimit={property.guestsLimit}
+            quietHours={property.quietHours}
+            checkIn={property.checkIn}
+            checkOut={property.checkOut}
             selected={selected}
             setSelected={setSelected}
           />
@@ -250,8 +247,10 @@ const MainDetails = ({
             </div>
           </div>
           <PropertyReservation
-            arrOfDates={propertyReservation}
             guestsLimit={Number(property.guestsLimit)}
+            propertyId={property._id}
+            arrOfDates={propertyReservation}
+            propertyReservations={property.reservations}
           />
         </div>
       </div>
@@ -259,29 +258,53 @@ const MainDetails = ({
   )
 }
 
-const PropertyReservation = ({ guestsLimit, arrOfDates }: ReservationType) => {
+const PropertyReservation = ({
+  guestsLimit,
+  propertyId,
+  propertyReservations,
+  arrOfDates,
+}: ReservationType) => {
+  const router = useRouter()
   const { data: session } = useSession()
   const [availability, setAvailability] = useState(false)
   const [reserve, setReserve] = useState(false)
   const [numberOfGuests, setNumberOfGuests] = useState(1)
   const [readThis, setReadThis] = useState(false)
-
   const [selectedSlot, setSelectedSlot] = useState('check-in')
   const [selectDate, setSelectDate] = useState({
     from: '',
     to: '',
   })
+  const [error, setError] = useState('')
+  const [pending, startTransition] = useTransition()
 
-  const router = useRouter()
+  const alreadyReserved = propertyReservations.find(
+    (item) => item.reserver === session?.user.id,
+  )
+
+  const makeReservationAction = makeReservation.bind(null, propertyId)
+  const handleReservation = (from: string, to: string, guests: number) => {
+    const result = reservationSchema.safeParse({ from, to, guests })
+    if (!result.success) {
+      return setError('Please provide the necessary information')
+    }
+
+    startTransition(async () => {
+      const result = await makeReservationAction(from, to, guests)
+      if (result.success) {
+        setReserve(false)
+      }
+    })
+  }
 
   const getUserSelection = (day: number, month: number, year: number) => {
     const newDate = new Date(year, month, day).toISOString()
     const reservationsMade = arrOfDates && getReservationRange(arrOfDates)
+    setError('')
     setSelectDate((prevState) => {
       if (selectedSlot === 'check-in') {
         setSelectedSlot('check-out')
         if (prevState.to < newDate) {
-          console.log('1')
           return {
             from: newDate,
             to: '',
@@ -322,17 +345,6 @@ const PropertyReservation = ({ guestsLimit, arrOfDates }: ReservationType) => {
       }
       return prevState
     })
-  }
-  const reformDate = (date: string): string => {
-    const newDate = new Date(date)
-
-    const reformed =
-      newDate.getDate() +
-      ' / ' +
-      (newDate.getMonth() + 1) +
-      ' / ' +
-      newDate.getFullYear()
-    return reformed
   }
 
   const addGuests = () => {
@@ -411,7 +423,12 @@ const PropertyReservation = ({ guestsLimit, arrOfDates }: ReservationType) => {
 
             <div
               className="cursor-pointer rounded-full bg-light-100 p-2 transition-colors hover:bg-grey"
-              onClick={() => setReserve(false)}
+              onClick={() => {
+                setReserve(false)
+                setSelectDate({ from: '', to: '' })
+                setSelectedSlot('check-in')
+                setReadThis(false)
+              }}
             >
               <HiOutlineX className="h-4 w-4" />
             </div>
@@ -425,52 +442,60 @@ const PropertyReservation = ({ guestsLimit, arrOfDates }: ReservationType) => {
             />
 
             <div className="flex flex-shrink-0 flex-col border-t border-grey md:flex-grow md:border-hidden">
-              <div className="grid gap-2 p-4 sm:grid-cols-2">
-                <div>
-                  <span
-                    className={`mb-2 block ${
-                      selectedSlot === 'check-in'
-                        ? 'text-black'
-                        : 'text-black/60'
-                    }`}
-                  >
-                    Check-in
-                  </span>
-                  <div
-                    className={`flex cursor-pointer items-center justify-center rounded-full p-4 text-sm ${
-                      selectedSlot === 'check-in'
-                        ? 'border-2 border-black/60'
-                        : 'border-2 border-grey'
-                    }`}
-                    onClick={() => setSelectedSlot('check-in')}
-                  >
-                    {selectDate.from !== ''
-                      ? reformDate(selectDate.from)
-                      : 'Select a date'}
+              <div>
+                {error && (
+                  <div className="px-4">
+                    <ErrorContainer error={error} className="mt-4 lg:m-0" />
                   </div>
-                </div>
+                )}
 
-                <div>
-                  <span
-                    className={`mb-2 block ${
-                      selectedSlot === 'check-out'
-                        ? 'text-black'
-                        : 'text-black/60'
-                    }`}
-                  >
-                    Check-out
-                  </span>
-                  <div
-                    className={`flex cursor-pointer items-center justify-center rounded-full p-4 text-sm ${
-                      selectedSlot === 'check-out'
-                        ? 'border-2 border-black/60'
-                        : 'border-2 border-grey'
-                    }`}
-                    onClick={() => setSelectedSlot('check-out')}
-                  >
-                    {selectDate.to !== ''
-                      ? reformDate(selectDate.to)
-                      : 'Select a date'}
+                <div className="grid gap-2 p-4 sm:grid-cols-2">
+                  <div>
+                    <span
+                      className={`mb-2 block ${
+                        selectedSlot === 'check-in'
+                          ? 'text-black'
+                          : 'text-black/60'
+                      }`}
+                    >
+                      Check-in
+                    </span>
+                    <div
+                      className={`flex cursor-pointer items-center justify-center rounded-full p-4 text-sm ${
+                        selectedSlot === 'check-in'
+                          ? 'border-2 border-black/60'
+                          : 'border-2 border-grey'
+                      }`}
+                      onClick={() => setSelectedSlot('check-in')}
+                    >
+                      {selectDate.from !== ''
+                        ? reformDate(selectDate.from)
+                        : 'Select a date'}
+                    </div>
+                  </div>
+
+                  <div>
+                    <span
+                      className={`mb-2 block ${
+                        selectedSlot === 'check-out'
+                          ? 'text-black'
+                          : 'text-black/60'
+                      }`}
+                    >
+                      Check-out
+                    </span>
+                    <div
+                      className={`flex cursor-pointer items-center justify-center rounded-full p-4 text-sm ${
+                        selectedSlot === 'check-out'
+                          ? 'border-2 border-black/60'
+                          : 'border-2 border-grey'
+                      }`}
+                      onClick={() => setSelectedSlot('check-out')}
+                    >
+                      {selectDate.to !== ''
+                        ? reformDate(selectDate.to)
+                        : 'Select a date'}
+                    </div>
                   </div>
                 </div>
               </div>
@@ -538,18 +563,32 @@ const PropertyReservation = ({ guestsLimit, arrOfDates }: ReservationType) => {
         </div>
       )}
       {!reserve ? (
-        <button
-          className="flex-grow cursor-pointer items-center justify-center rounded-full bg-black px-8 py-3 font-medium text-white transition-colors hover:bg-neutral-800 focus:outline-none focus-visible:ring-4 focus-visible:ring-neutral-600"
-          onClick={toggleReserve}
-        >
-          Reserve
-        </button>
+        !alreadyReserved ? (
+          <button
+            className="flex-grow cursor-pointer items-center justify-center rounded-full bg-black px-8 py-3 font-medium text-white transition-colors hover:bg-neutral-800 focus:outline-none focus-visible:ring-4 focus-visible:ring-neutral-600"
+            onClick={toggleReserve}
+          >
+            Reserve
+          </button>
+        ) : (
+          <button
+            className="flex-grow cursor-pointer items-center justify-center rounded-full border-2 border-grey bg-light-900 px-8 py-3"
+            disabled={true}
+          >
+            <HiOutlineCheck className="text-black-60 h-4 w-4" />
+            <span className="text-black-60 font-medium">
+              Reserved on {reformDate(alreadyReserved.from)}
+            </span>
+          </button>
+        )
       ) : (
         <button
           className="flex-grow cursor-pointer items-center justify-center rounded-full bg-black px-8 py-3 font-medium text-white transition-colors hover:bg-neutral-800 focus:outline-none focus-visible:ring-4 focus-visible:ring-neutral-600"
-          onClick={() => {}}
+          onClick={() =>
+            handleReservation(selectDate.from, selectDate.to, numberOfGuests)
+          }
         >
-          Confirm reservation
+          Confirm{pending && 'ing'}
         </button>
       )}
       <button
@@ -568,9 +607,15 @@ const PropertyReservation = ({ guestsLimit, arrOfDates }: ReservationType) => {
 }
 
 const PropertyOptions = ({
+  userName,
+  profileImage,
+  propertyOwner,
   propertyId,
   isSaved,
 }: {
+  userName: string
+  profileImage: string
+  propertyOwner: string
   propertyId: string
   isSaved: boolean
 }) => {
@@ -600,23 +645,24 @@ const PropertyOptions = ({
       <div className="border-b p-4 md:mt-4 md:border-none md:p-0">
         <div className="flex items-center gap-2">
           <Link href={`/user/${'some id goes here'}`} className="rounded-full">
-            <UserImage imageUrl="/images/person.jpg" name="Jana Lorene" />
+            <UserImage imageUrl={profileImage} name={userName} />
           </Link>
 
           <SavePropertyButton propertyId={propertyId} isSaved={isSaved} />
 
           <SharePropertyButton propertyId={propertyId} />
 
-          {showMore ? (
+          {showMore && session?.user.id !== propertyOwner && (
             <SpecialButton name="Close" onClick={() => setShowMore(!showMore)}>
               <HiOutlineX className="h-4 w-4 text-black/60 transition-colors group-hover:text-black" />
             </SpecialButton>
-          ) : (
+          )}
+          {!showMore && session?.user.id !== propertyOwner && (
             <SpecialButton name="More" onClick={() => setShowMore(!showMore)}>
               <HiOutlineDotsHorizontal className="h-4 w-4 text-black/60 transition-colors group-hover:text-black" />
             </SpecialButton>
           )}
-          {showMore && (
+          {showMore && session?.user.id !== propertyOwner && (
             <>
               <SpecialButton name="Review" onClick={toggleAddReview}>
                 <MdOutlineModeComment className="h-4 w-4 text-black/60 transition-colors group-hover:text-black" />
@@ -762,12 +808,20 @@ const ViewMore = ({
   description,
   features,
   rules,
+  guestsLimit,
+  quietHours,
+  checkIn,
+  checkOut,
   selected,
   setSelected,
 }: {
   description: string
   features: string[]
   rules: string[]
+  guestsLimit: string
+  quietHours: string
+  checkIn: string
+  checkOut: string
   selected: string
   setSelected: (selected: string) => void
 }) => {
@@ -850,17 +904,33 @@ const ViewMore = ({
             <div className="mb-6">
               <div className="flex items-center justify-between border-b border-b-grey py-4 text-sm text-black">
                 <div className="flex items-center gap-x-4">
-                  <LuClock10 className="h-4 w-4 text-black/60" />
+                  <TbMoonStars className="h-4 w-4 text-black/60" />
                   <span>Quiet hours</span>
                 </div>
-                <span className="font-medium">10:00 PM - 08:00 AM</span>
+                <span className="font-medium">{quietHours}</span>
               </div>
               <div className="flex items-center justify-between border-b border-b-grey py-4 text-sm text-black">
                 <div className="flex items-center gap-x-4">
-                  <MdPersonOutline className="h-4 w-4 text-black/60" />
+                  <MdPeopleOutline className="h-4 w-4 text-black/60" />
                   <span>Guest Limit</span>
                 </div>
-                <span className="font-medium">10 People</span>
+                <span className="font-medium">
+                  {guestsLimit} {guestsLimit === '1' ? 'Person' : 'People'}
+                </span>
+              </div>
+              <div className="flex items-center justify-between border-b border-b-grey py-4 text-sm text-black">
+                <div className="flex items-center gap-x-4">
+                  <TbDoorEnter className="h-4 w-4 text-black/60" />
+                  <span>Check-in</span>
+                </div>
+                <span className="font-medium">{checkIn}</span>
+              </div>
+              <div className="flex items-center justify-between border-b border-b-grey py-4 text-sm text-black">
+                <div className="flex items-center gap-x-4">
+                  <TbDoorExit className="h-4 w-4 text-black/60" />
+                  <span>Check-out</span>
+                </div>
+                <span className="font-medium">{checkOut}</span>
               </div>
             </div>
 
@@ -894,7 +964,7 @@ const PropertyReviews = ({
 
   const handleReviews = () => {
     setReviewsToSee((prevState) => {
-      if (reviewsArr.length <= prevState) {
+      if (propertyReviews.length <= prevState) {
         return 3
       }
       return prevState + 3
@@ -922,7 +992,7 @@ const PropertyReviews = ({
         {propertyReviews.length > 3 && (
           <SeeMoreBtn
             label={
-              reviewsArr.length <= reviewsToSee
+              propertyReviews.length <= reviewsToSee
                 ? 'Hide all reviews'
                 : 'View more reviews'
             }
@@ -997,7 +1067,7 @@ const PropertyLocation = ({
           </ul>
         </div>
         <div className="relative h-[600px] w-full overflow-hidden rounded-3xl">
-          <Map address={address} />
+          {/* <Map address={address} /> */}
         </div>
       </div>
     </div>
@@ -1249,11 +1319,19 @@ const ReportProperty = ({
   )
 }
 
-const ErrorContainer = ({ error }: { error: string }) => {
+const ErrorContainer = ({
+  error,
+  className,
+}: {
+  error: string
+  className?: string
+}) => {
   return (
     <>
       {error && (
-        <div className="mb-5 flex items-center gap-x-2 rounded-2xl border border-red-500 p-4 text-sm text-red-500 lg:mb-6">
+        <div
+          className={`mb-5 flex items-center gap-x-2 rounded-2xl border border-red-500 p-4 text-sm text-red-500 lg:mb-6 ${className}`}
+        >
           <MdOutlineInfo className="h-4 w-4 flex-shrink-0" />
           <span>{error}</span>
         </div>
