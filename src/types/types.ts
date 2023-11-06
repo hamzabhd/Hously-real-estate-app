@@ -66,8 +66,9 @@ export interface ListingsObj extends DetailsState {
   _id: string
 }
 export interface PropertyType extends ListingsObj {
-  reviews: string[]
   owner: UserObj
+  reviews: ReviewObj[]
+  reservations: { reserver: string; guests: number; from: string; to: string }[]
 }
 
 export interface DetailsStateErrors
@@ -129,12 +130,13 @@ export interface RulesPropType extends LocationPropType {
 export interface PricingPropType extends LocationPropType {}
 
 export interface ReviewObj {
-  id: string
-  username: string
-  userImage: string
-  reviewDate: string
-  review: string
-  rating: string
+  _id: string
+  reviewer: UserObj
+  reviewerType: string
+  reviewRange: string
+  reviewContent: string
+  createdAt: string
+  updatedAt: string
 }
 
 export interface ReviewType {
@@ -148,7 +150,19 @@ export interface ReportType {
   reportDescription: string
 }
 
+export interface ReservationsType {
+  from: Date
+  to: Date
+}
+
 export interface ReservationType {
-  arrOfDates: { from: Date; to: Date }[]
   guestsLimit: number
+  arrOfDates?: ReservationsType[]
+}
+export interface PropertyLocationType {
+  address: string
+  country: string
+  city: string
+  state: string
+  postalCode: string
 }

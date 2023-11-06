@@ -46,7 +46,12 @@ import { experimental_useFormState as useFormState } from 'react-dom'
 // @ts-ignore
 import { experimental_useFormStatus as useFormStatus } from 'react-dom'
 import Line from '../custom/Line'
-import { PropertyType } from '@/types/types'
+import {
+  PropertyLocationType,
+  PropertyType,
+  ReservationsType,
+  ReviewObj,
+} from '@/types/types'
 import { useSession } from 'next-auth/react'
 import { isAdded } from 'utils/isAdded'
 import SmallSpinner from '../loaders/SmallSpinner'
@@ -80,20 +85,23 @@ const PropertyDetails = ({
     // px-4 md:px-6
     <div className="lg:mt-4">
       <MainDetails
-        propertyId={property._id}
+        property={property}
         isSaved={isAdded(property._id, savedProperties)}
       />
-      <PropertyReviews propertyId={property._id} />
-      <PropertyLocation address="1987 Linda Street, Portland, Pennsylvania 97205, USA" />
+      <PropertyReviews
+        propertyId={property._id}
+        propertyReviews={property.reviews}
+      />
+      <PropertyLocation {...property} />
     </div>
   )
 }
 
 const MainDetails = ({
-  propertyId,
+  property,
   isSaved,
 }: {
-  propertyId: string
+  property: PropertyType
   isSaved: boolean
 }) => {
   const [selectedImage, setSelectedImage] = useState('')
@@ -116,11 +124,18 @@ const MainDetails = ({
     },
   ]
 
+  const propertyReservation =
+    property.reservations &&
+    property.reservations.map((item) => ({
+      from: new Date(item.from),
+      to: new Date(item.to),
+    }))
+
   return (
     <div className="items-start lg:grid lg:h-[736px] lg:grid-cols-2 lg:gap-x-8">
       {/* Image previewer */}
       <ImageSlider
-        imagesArr={imagesArr}
+        imagesArr={property.images}
         selectImage={(image: string) => setSelectedImage(image)}
       />
       <ImagePreviewer
@@ -129,12 +144,12 @@ const MainDetails = ({
       />
 
       <div className="h-full">
-        <PropertyOptions propertyId={propertyId} isSaved={isSaved} />
+        <PropertyOptions propertyId={property._id} isSaved={isSaved} />
         {selected && (
           <ViewMore
-            description="Lorem ipsum dolor sit amet consectetur, adipisicing elit. Maiores repellendus eligendi delectus ipsa totam quaerat error, in, sequi itaque illo enim assumenda fugit laudantium est sint accusamus numquam, ducimus corporis?"
-            features={features}
-            rules={rules}
+            description={property.description}
+            features={property.features}
+            rules={property.rules}
             selected={selected}
             setSelected={setSelected}
           />
@@ -142,19 +157,17 @@ const MainDetails = ({
         <div className="px-4">
           <div className="mb-8 mt-4 lg:mt-6">
             <h1 className="mb-1 text-3xl font-medium lg:text-4xl">
-              Cozy Urban Apartment
+              {property.title}
             </h1>
             <div className="flex items-center gap-x-2">
               <HiOutlineLocationMarker className="h-4 w-4 text-black/40" />
-              <span className="text-sm text-black/60">
-                1621 Libby Street/Los angles, USA{' '}
-              </span>
+              <span className="text-sm text-black/60">{property.address}</span>
             </div>
           </div>
 
           <div className="mb-8 flex items-center gap-x-4">
             <span className="text-2xl font-bold">
-              $1,200{' '}
+              ${property.price}
               <span className="text-base font-normal text-black/60">/ </span>
               <span className="text-base font-normal text-black/60">night</span>
             </span>
@@ -164,16 +177,22 @@ const MainDetails = ({
             <div className="flex flex-wrap items-center justify-between sm:justify-normal sm:gap-x-6 lg:gap-x-10">
               <div className="flex flex-col items-start gap-y-1">
                 <LuBedDouble className="h-6 w-6" />
-                <span className="text-sm font-medium">3 bedrooms</span>
+                <span className="text-sm font-medium">
+                  {property.bedrooms.length} bedrooms
+                </span>
               </div>
               <div className="flex flex-col gap-y-1">
                 <BiBath className="h-6 w-6" />
-                <span className="text-sm font-medium">2 bathrooms</span>
+                <span className="text-sm font-medium">
+                  {property.bathrooms.length} bathrooms
+                </span>
               </div>
 
               <div className="flex flex-col gap-y-1">
                 <LuBed className="h-6 w-6" />
-                <span className="text-sm font-medium">5 beds</span>
+                <span className="text-sm font-medium">
+                  {property.beds.length} beds
+                </span>
               </div>
 
               <div className="flex flex-col gap-y-1">
@@ -185,9 +204,7 @@ const MainDetails = ({
 
           <div className="mb-6">
             <p className="mb-4 leading-relaxed text-black/60">
-              This modern urban apartment offers a comfortable and convenient
-              city living experience. Enjoy breathtaking views of the city
-              skyline from the large windows...{' '}
+              {property.description.slice(0, 156)}...
             </p>
             <SeeMoreBtn
               label="Read more"
@@ -201,7 +218,7 @@ const MainDetails = ({
                 Property features
               </h2>
               <ul className="list-style mb-4 list-image-[url(/images/check.png)] px-6">
-                {features.slice(0, 3).map((item, i) => (
+                {property.features.slice(0, 3).map((item, i) => (
                   <li key={i}>
                     <span className="ml-2 text-sm text-black/60">{item}</span>
                   </li>
@@ -219,7 +236,7 @@ const MainDetails = ({
                 Property rules
               </h2>
               <ul className="list-style mb-4 list-image-[url(/images/check.png)] px-6">
-                {rules.slice(0, 3).map((item, i) => (
+                {property.rules.slice(0, 3).map((item, i) => (
                   <li key={i}>
                     <span className="ml-2 text-sm text-black/60">{item}</span>
                   </li>
@@ -232,14 +249,17 @@ const MainDetails = ({
               />
             </div>
           </div>
-          <PropertyReservation arrOfDates={arrOfDates} guestsLimit={10} />
+          <PropertyReservation
+            arrOfDates={propertyReservation}
+            guestsLimit={Number(property.guestsLimit)}
+          />
         </div>
       </div>
     </div>
   )
 }
 
-const PropertyReservation = ({ arrOfDates, guestsLimit }: ReservationType) => {
+const PropertyReservation = ({ guestsLimit, arrOfDates }: ReservationType) => {
   const { data: session } = useSession()
   const [availability, setAvailability] = useState(false)
   const [reserve, setReserve] = useState(false)
@@ -256,7 +276,7 @@ const PropertyReservation = ({ arrOfDates, guestsLimit }: ReservationType) => {
 
   const getUserSelection = (day: number, month: number, year: number) => {
     const newDate = new Date(year, month, day).toISOString()
-    const reservationsMade = getReservationRange(arrOfDates)
+    const reservationsMade = arrOfDates && getReservationRange(arrOfDates)
     setSelectDate((prevState) => {
       if (selectedSlot === 'check-in') {
         setSelectedSlot('check-out')
@@ -293,7 +313,7 @@ const PropertyReservation = ({ arrOfDates, guestsLimit }: ReservationType) => {
       ]
       const userReservation = getReservationRange(userDate)
       for (let i = 0; i < userReservation.length; i++) {
-        if (reservationsMade.includes(userReservation[i])) {
+        if (reservationsMade?.includes(userReservation[i])) {
           return {
             from: newDate,
             to: '',
@@ -862,7 +882,13 @@ const ViewMore = ({
   )
 }
 
-const PropertyReviews = ({ propertyId }: { propertyId: string }) => {
+const PropertyReviews = ({
+  propertyId,
+  propertyReviews,
+}: {
+  propertyId: string
+  propertyReviews: ReviewObj[]
+}) => {
   const [reviewsToSee, setReviewsToSee] = useState(3)
   const { addReview, toggleAddReview } = useAddReview()
 
@@ -885,13 +911,15 @@ const PropertyReviews = ({ propertyId }: { propertyId: string }) => {
           What people say about this property
         </h2>
 
-        <Reviews
-          reviewsArr={reviewsArr}
-          reviewsToShow={reviewsToSee}
-          toggleAddReview={toggleAddReview}
-        />
+        {
+          <Reviews
+            reviewsArr={propertyReviews}
+            reviewsToShow={reviewsToSee}
+            toggleAddReview={toggleAddReview}
+          />
+        }
 
-        {reviewsArr.length > 3 && (
+        {propertyReviews.length > 3 && (
           <SeeMoreBtn
             label={
               reviewsArr.length <= reviewsToSee
@@ -907,7 +935,13 @@ const PropertyReviews = ({ propertyId }: { propertyId: string }) => {
   )
 }
 
-const PropertyLocation = ({ address }: { address: string }) => {
+const PropertyLocation = ({
+  address,
+  country,
+  city,
+  state,
+  postalCode,
+}: PropertyLocationType) => {
   return (
     <div className="mt-6 px-4 md:p-0 lg:mt-8">
       <h2 className="text-xl font-medium md:ml-0 lg:text-2xl">
@@ -929,44 +963,41 @@ const PropertyLocation = ({ address }: { address: string }) => {
               <span className="mb-1 block font-medium">Address</span>
               <div className="flex items-center gap-x-2">
                 <HiOutlineLocationMarker className="h-4 w-4 text-black/40" />
-                <span className="text-sm text-black/60">
-                  1987 Linda Street, Portland, Pennsylvania 97205, USA
-                </span>
+                <span className="text-sm text-black/60">{address}</span>
               </div>
             </li>
             <li className="mb-6 lg:mb-8">
               <span className="mb-1 block font-medium">Country</span>
               <div className="flex items-center gap-x-2">
                 <HiOutlineFlag className="h-4 w-4 text-black/40" />
-                <span className="text-sm text-black/60">United State</span>
+                <span className="text-sm text-black/60">{country}</span>
               </div>
             </li>
             <li className="mb-6 lg:mb-8">
               <span className="mb-1 block font-medium">City</span>
               <div className="flex items-center gap-x-2">
                 <HiOutlineOfficeBuilding className="h-4 w-4 text-black/40" />
-                <span className="text-sm text-black/60">Portland</span>
+                <span className="text-sm text-black/60">{city}</span>
               </div>
             </li>
             <li className="mb-6 lg:mb-8">
               <span className="mb-1 block font-medium">Provenance</span>
               <div className="flex items-center gap-x-2">
                 <HiOutlineTag className="h-4 w-4 text-black/40" />
-                <span className="text-sm text-black/60">Pennsylvania</span>
+                <span className="text-sm text-black/60">{state}</span>
               </div>
             </li>
             <li className="mb-6 lg:mb-0">
               <span className="mb-1 block font-medium">ZIP/Postal Code</span>
               <div className="flex items-center gap-x-2">
                 <HiOutlineMail className="h-4 w-4 text-black/40" />
-                <span className="text-sm text-black/60">97205</span>
+                <span className="text-sm text-black/60">{postalCode}</span>
               </div>
             </li>
           </ul>
         </div>
         <div className="relative h-[600px] w-full overflow-hidden rounded-3xl">
-          {/* <Map address={address} /> */}
-          Map goes here
+          <Map address={address} />
         </div>
       </div>
     </div>

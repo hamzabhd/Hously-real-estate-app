@@ -10,7 +10,7 @@ function Calendar({
   getUserSelection,
 }: {
   select: boolean
-  arrOfDates: { from: Date; to: Date }[]
+  arrOfDates?: { from: Date; to: Date }[]
   selectDate?: {
     from: string
     to: string
@@ -72,9 +72,9 @@ function Calendar({
     .map((_, index) => {
       const d = index - (startDay - 2)
       const newDate = new Date(year, month, d).toISOString()
-      const reservedDate = isReserved(arrOfDates, d, year, month)
-      const first = isReserved(arrOfDates, d - 1, year, month)
-      const last = isReserved(arrOfDates, d + 1, year, month)
+      const reservedDate = arrOfDates && isReserved(arrOfDates, d, year, month)
+      const first = arrOfDates && isReserved(arrOfDates, d - 1, year, month)
+      const last = arrOfDates && isReserved(arrOfDates, d + 1, year, month)
       const userDate = selectDate && [
         {
           from: new Date(selectDate.from),

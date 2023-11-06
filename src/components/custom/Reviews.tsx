@@ -19,10 +19,12 @@ const Reviews = ({
   const pathname = usePathname()
 
   const [reviewToShow, setReviewToShow] = useState<string>('')
-  const reviewFound = reviewsArr.find((review) => review.id === reviewToShow)
+  const reviewFound = reviewsArr.find((review) => review._id === reviewToShow)
   const reviewsRate =
-    reviewsArr.reduce((acc, currentVal) => acc + Number(currentVal.rating), 0) /
-    reviewsArr.length
+    reviewsArr.reduce(
+      (acc, currentVal) => acc + Number(currentVal.reviewRange),
+      0,
+    ) / reviewsArr.length
 
   return (
     <>
@@ -58,7 +60,7 @@ const Reviews = ({
           {reviewsArr.slice(0, reviewsToShow).map((review) => (
             <ReviewCard
               review={review}
-              key={review.id}
+              key={review._id}
               setReviewToShow={setReviewToShow}
             />
           ))}

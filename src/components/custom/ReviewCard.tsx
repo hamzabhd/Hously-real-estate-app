@@ -1,20 +1,14 @@
 import { ReactNode } from 'react'
 import { IoIosStar, IoIosStarOutline } from 'react-icons/io'
 import UserImage from './UserImage'
+import { ReviewObj } from '@/types/types'
 
 const ReviewCard = ({
   review,
   showReview,
   setReviewToShow,
 }: {
-  review: {
-    id: string
-    username: string
-    userImage: string
-    reviewDate: string
-    review: string
-    rating: string
-  }
+  review: ReviewObj
   setReviewToShow: (review: string) => void
   showReview?: true
 }) => {
@@ -36,11 +30,11 @@ const ReviewCard = ({
     return false
   }
 
-  const getRating = (rating: string) => {
+  const getRating = (rating: number) => {
     let stars: ReactNode[] = []
 
     for (let i = 0; i < 5; i++) {
-      if (i >= Number(rating)) {
+      if (i >= rating) {
         stars.push(
           <IoIosStarOutline key={i} className="h-4 w-4 text-yellow-500" />,
         )
@@ -61,12 +55,19 @@ const ReviewCard = ({
         <span className="group-first mb-6 block h-px bg-grey sm:hidden"></span>
       )}
       <div className="flex items-center justify-between gap-x-2">
-        <UserImage name={review.username} imageUrl={review.userImage} />
+        <UserImage
+          name={review.reviewer.fullName}
+          imageUrl={review.reviewer.profilePicture}
+        />
         <div className="mr-auto flex flex-col">
-          <span className="block font-bold">{review.username}</span>
-          <span className="block text-slate-600">{review.reviewDate}</span>
+          <span className="block font-bold">{review.reviewer.fullName}</span>
+          <span className="block text-slate-600">
+            {new Date(review.createdAt).getFullYear()}
+          </span>
         </div>
-        <div className="flex self-start">{getRating(review.rating)}</div>
+        <div className="flex self-start">
+          {getRating(Number(review.reviewRange))}
+        </div>
       </div>
 
       <p
@@ -74,13 +75,15 @@ const ReviewCard = ({
           showReview ? '' : 'mb-4'
         } mt-6 font-normal leading-relaxed text-black/60`}
       >
-        {showReview ? review.review : reformReviewText(review.review)}
+        {showReview
+          ? review.reviewContent
+          : reformReviewText(review.reviewContent)}
       </p>
 
-      {isMore(review.review) && !showReview && (
+      {isMore(review.reviewContent) && !showReview && (
         <span
           className="cursor-pointer text-sm font-medium hover:underline"
-          onClick={() => setReviewToShow(review.id)}
+          onClick={() => setReviewToShow(review._id)}
         >
           Read more
         </span>
