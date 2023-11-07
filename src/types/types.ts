@@ -165,6 +165,9 @@ export interface UserReservation {
 
 export interface ReservationType {
   guestsLimit: number
+  pricePerNight: string
+  securityFee: string
+  cleaningFee: string
   propertyId: string
   propertyReservations: UserReservation[]
   arrOfDates?: ReservationsType[]

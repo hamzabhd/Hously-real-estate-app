@@ -160,6 +160,13 @@ export const makeReservation = async (
   }
   try {
     await connectToDb()
+    const user = await User.findById(userId)
+    if (user.reservations.includes(propertyId)) {
+      return {
+        success: false,
+        message: 'You already reserver this property',
+      }
+    }
     const reservation = await Reservation.create({
       reserver: userId,
       from,

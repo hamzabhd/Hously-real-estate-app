@@ -248,6 +248,9 @@ const MainDetails = ({
           </div>
           <PropertyReservation
             guestsLimit={Number(property.guestsLimit)}
+            pricePerNight={property.price}
+            cleaningFee={property.cleaningFee}
+            securityFee={property.securityFee}
             propertyId={property._id}
             arrOfDates={propertyReservation}
             propertyReservations={property.reservations}
@@ -260,6 +263,9 @@ const MainDetails = ({
 
 const PropertyReservation = ({
   guestsLimit,
+  pricePerNight,
+  securityFee,
+  cleaningFee,
   propertyId,
   propertyReservations,
   arrOfDates,
@@ -278,6 +284,13 @@ const PropertyReservation = ({
   const [error, setError] = useState('')
   const [pending, startTransition] = useTransition()
 
+  const clearReservation = () => {
+    setReserve(false)
+    setSelectDate({ from: '', to: '' })
+    setSelectedSlot('check-in')
+    setReadThis(false)
+    setNumberOfGuests(1)
+  }
   const alreadyReserved = propertyReservations.find(
     (item) => item.reserver === session?.user.id,
   )
@@ -292,9 +305,21 @@ const PropertyReservation = ({
     startTransition(async () => {
       const result = await makeReservationAction(from, to, guests)
       if (result.success) {
-        setReserve(false)
+        clearReservation()
       }
     })
+  }
+
+  const getNightsRange = (from: string, to: string) => {
+    const userDate = [
+      {
+        from: new Date(from),
+        to: new Date(to),
+      },
+    ]
+    const userReservation = getReservationRange(userDate)
+
+    return userReservation
   }
 
   const getUserSelection = (day: number, month: number, year: number) => {
@@ -328,13 +353,7 @@ const PropertyReservation = ({
     })
 
     setSelectDate((prevState) => {
-      const userDate = [
-        {
-          from: new Date(prevState.from),
-          to: new Date(prevState.to),
-        },
-      ]
-      const userReservation = getReservationRange(userDate)
+      const userReservation = getNightsRange(prevState.from, prevState.to)
       for (let i = 0; i < userReservation.length; i++) {
         if (reservationsMade?.includes(userReservation[i])) {
           return {
@@ -368,8 +387,12 @@ const PropertyReservation = ({
     setReserve(true)
     setAvailability(false)
   }
+  const nights = getNightsRange(selectDate.from, selectDate.to).length || 0
+  const reservationTotal =
+    Number(pricePerNight) * nights + Number(pricePerNight) * nights * 0.05
+
   return (
-    <div className="relative mb-4 flex gap-x-2">
+    <div className="z-100 relative mb-4 flex gap-x-2">
       {availability && (
         <div className="container-shadow absolute bottom-full right-0 mb-4 h-fit w-full animate-popup overflow-hidden rounded-3xl border bg-white duration-1000 sm:w-fit">
           <div className="flex items-center justify-between gap-x-4 border-b border-grey p-4 lg:px-6">
@@ -423,12 +446,7 @@ const PropertyReservation = ({
 
             <div
               className="cursor-pointer rounded-full bg-light-100 p-2 transition-colors hover:bg-grey"
-              onClick={() => {
-                setReserve(false)
-                setSelectDate({ from: '', to: '' })
-                setSelectedSlot('check-in')
-                setReadThis(false)
-              }}
+              onClick={clearReservation}
             >
               <HiOutlineX className="h-4 w-4" />
             </div>
@@ -515,19 +533,9 @@ const PropertyReservation = ({
                     Price per night
                   </span>
                   <div className="flex items-center gap-x-4">
-                    <span>1200$</span>
+                    <span>{pricePerNight}$</span>
                     <span>x</span>
-                    <span>2</span>
-                  </div>
-                </div>
-                <div className="mb-4 flex items-center justify-between">
-                  <span className="text-sm text-black/60 underline">
-                    Security fees
-                  </span>
-                  <div className="flex items-center gap-x-4">
-                    <span>0$</span>
-                    <span>x</span>
-                    <span>1</span>
+                    <span>{nights}</span>
                   </div>
                 </div>
                 <div className="mb-4 flex items-center justify-between ">
@@ -535,7 +543,17 @@ const PropertyReservation = ({
                     Cleaning fees
                   </span>
                   <div className="flex items-center gap-x-4">
-                    <span>0$</span>
+                    <span>{cleaningFee || 0}$</span>
+                    <span>x</span>
+                    <span>1</span>
+                  </div>
+                </div>
+                <div className="mb-4 flex items-center justify-between">
+                  <span className="text-sm text-black/60 underline">
+                    Security fees
+                  </span>
+                  <div className="flex items-center gap-x-4">
+                    <span>{securityFee || 0}$</span>
                     <span>x</span>
                     <span>1</span>
                   </div>
@@ -545,9 +563,9 @@ const PropertyReservation = ({
                     Hously fees
                   </span>
                   <div className="flex items-center gap-x-4">
-                    <span>1200$ x 3%</span>
+                    <span>{pricePerNight}$ x 5%</span>
                     <span>x</span>
-                    <span>2</span>
+                    <span>{nights}</span>
                   </div>
                 </div>
               </div>
@@ -555,7 +573,7 @@ const PropertyReservation = ({
                 <span className="absolute top-0 mx-auto hidden h-px w-[calc(100%-2rem)] bg-grey md:block"></span>
                 <span className="text-lg font-bold">Reservation total</span>
                 <span className="flex items-center gap-x-4 text-lg font-bold">
-                  2400$
+                  {reservationTotal}$
                 </span>
               </div>
             </div>
@@ -571,15 +589,12 @@ const PropertyReservation = ({
             Reserve
           </button>
         ) : (
-          <button
-            className="flex-grow cursor-pointer items-center justify-center rounded-full border-2 border-grey bg-light-900 px-8 py-3"
-            disabled={true}
-          >
-            <HiOutlineCheck className="text-black-60 h-4 w-4" />
-            <span className="text-black-60 font-medium">
+          <div className="flex flex-grow items-center justify-center gap-x-2 rounded-full border-2 border-grey py-3 sm:gap-x-2">
+            <HiOutlineCheck className="h-4 w-4 flex-shrink-0 text-green-600" />
+            <span className=" text-black/60 sm:text-base">
               Reserved on {reformDate(alreadyReserved.from)}
             </span>
-          </button>
+          </div>
         )
       ) : (
         <button
@@ -588,7 +603,7 @@ const PropertyReservation = ({
             handleReservation(selectDate.from, selectDate.to, numberOfGuests)
           }
         >
-          Confirm{pending && 'ing'}
+          Confirm{pending && 'ing...'}
         </button>
       )}
       <button
