@@ -45,6 +45,9 @@ export const listingSchema = z.object({
   city: z.string().min(1, { message: 'This field is required' }),
   state: z.string().min(1, { message: 'This field is required' }),
   postalCode: z.string().min(1, { message: 'This field is required' }),
+  propertySpace: z.string().refine((item) => Number(item) && item.length >= 1, {
+    message: 'This field accepts only numbers',
+  }),
   bedrooms: z
     .object({
       bedroom: z.number(),
@@ -75,18 +78,11 @@ export const listingSchema = z.object({
     .refine((item) => item.length >= 3, {
       message: 'You should select 3 features at least',
     }),
-  rules: z
-    .string()
-    .array()
-    .refine((item) => item.length >= 3, {
-      message: 'You should select 3 rules at least',
-    }),
-  guestsLimit: z
-    .string()
-    .refine((val) => Number(val), { message: 'Please enter a number' }),
-  quietHours: z.string().min(1, { message: 'This field is required' }),
-  checkIn: z.string().min(1, { message: 'This field is required' }),
-  checkOut: z.string().min(1, { message: 'This field is required' }),
+  rules: z.string().array().optional(),
+  guestsLimit: z.string().optional(),
+  quietHours: z.string().optional(),
+  checkIn: z.string().optional(),
+  checkOut: z.string().optional(),
   price: z.string().refine((val) => Number(val), {
     message: 'Please enter a number',
   }),

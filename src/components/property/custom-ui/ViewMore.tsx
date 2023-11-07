@@ -57,21 +57,23 @@ const ViewMore = ({
             } h-1.5 w-[calc(100%-8px)] translate-x-1 rounded-t-lg bg-black`}
           ></span>
         </li>
-        <li className="relative py-5">
-          <span
-            className={`cursor-pointer font-medium ${
-              selected === 'rules' ? 'text-black/100' : 'text-black/60'
-            } transition-colors hover:text-black`}
-            onClick={() => setSelected('rules')}
-          >
-            Rules
-          </span>
-          <span
-            className={`absolute bottom-0 ${
-              selected === 'rules' ? 'block' : 'hidden'
-            } h-1.5 w-[calc(100%-8px)] translate-x-1 rounded-t-lg bg-black`}
-          ></span>
-        </li>
+        {rules.length !== 0 && (
+          <li className="relative py-5">
+            <span
+              className={`cursor-pointer font-medium ${
+                selected === 'rules' ? 'text-black/100' : 'text-black/60'
+              } transition-colors hover:text-black`}
+              onClick={() => setSelected('rules')}
+            >
+              Rules
+            </span>
+            <span
+              className={`absolute bottom-0 ${
+                selected === 'rules' ? 'block' : 'hidden'
+              } h-1.5 w-[calc(100%-8px)] translate-x-1 rounded-t-lg bg-black`}
+            ></span>
+          </li>
+        )}
         <li
           className="cursor-pointer rounded-full bg-light-100 p-2 transition-colors hover:bg-grey"
           onClick={() => setSelected('')}
@@ -101,36 +103,44 @@ const ViewMore = ({
           <>
             <h2 className="mt-4 text-lg font-medium lg:mt-6">Specific rules</h2>
             <div className="mb-6">
-              <div className="flex items-center justify-between border-b border-b-grey py-4 text-sm text-black">
-                <div className="flex items-center gap-x-4">
-                  <TbMoonStars className="h-4 w-4 text-black/60" />
-                  <span>Quiet hours</span>
+              {quietHours && (
+                <div className="flex items-center justify-between border-b border-b-grey py-4 text-sm text-black">
+                  <div className="flex items-center gap-x-4">
+                    <TbMoonStars className="h-4 w-4 text-black/60" />
+                    <span>Quiet hours</span>
+                  </div>
+                  <span className="font-medium">{quietHours}</span>
                 </div>
-                <span className="font-medium">{quietHours}</span>
-              </div>
-              <div className="flex items-center justify-between border-b border-b-grey py-4 text-sm text-black">
-                <div className="flex items-center gap-x-4">
-                  <MdPeopleOutline className="h-4 w-4 text-black/60" />
-                  <span>Guest Limit</span>
+              )}
+              {guestsLimit && (
+                <div className="flex items-center justify-between border-b border-b-grey py-4 text-sm text-black">
+                  <div className="flex items-center gap-x-4">
+                    <MdPeopleOutline className="h-4 w-4 text-black/60" />
+                    <span>Guest Limit</span>
+                  </div>
+                  <span className="font-medium">
+                    {guestsLimit} {guestsLimit === '1' ? 'Person' : 'People'}
+                  </span>
                 </div>
-                <span className="font-medium">
-                  {guestsLimit} {guestsLimit === '1' ? 'Person' : 'People'}
-                </span>
-              </div>
-              <div className="flex items-center justify-between border-b border-b-grey py-4 text-sm text-black">
-                <div className="flex items-center gap-x-4">
-                  <TbDoorEnter className="h-4 w-4 text-black/60" />
-                  <span>Check-in</span>
+              )}
+              {checkIn && (
+                <div className="flex items-center justify-between border-b border-b-grey py-4 text-sm text-black">
+                  <div className="flex items-center gap-x-4">
+                    <TbDoorEnter className="h-4 w-4 text-black/60" />
+                    <span>Check-in</span>
+                  </div>
+                  <span className="font-medium">{checkIn}</span>
                 </div>
-                <span className="font-medium">{checkIn}</span>
-              </div>
-              <div className="flex items-center justify-between border-b border-b-grey py-4 text-sm text-black">
-                <div className="flex items-center gap-x-4">
-                  <TbDoorExit className="h-4 w-4 text-black/60" />
-                  <span>Check-out</span>
+              )}
+              {checkOut && (
+                <div className="flex items-center justify-between border-b border-b-grey py-4 text-sm text-black">
+                  <div className="flex items-center gap-x-4">
+                    <TbDoorExit className="h-4 w-4 text-black/60" />
+                    <span>Check-out</span>
+                  </div>
+                  <span className="font-medium">{checkOut}</span>
                 </div>
-                <span className="font-medium">{checkOut}</span>
-              </div>
+              )}
             </div>
 
             <h2 className="text-lg font-medium">General rules</h2>

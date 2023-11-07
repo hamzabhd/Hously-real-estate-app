@@ -8,6 +8,7 @@ import { BsQuestionLg } from 'react-icons/bs'
 import { UserObj } from '@/types/types'
 import { reviewsArr } from 'utils/itemManagement/data/data'
 import Reviews from '../custom/Reviews'
+import ContactCard from '../custom/ContactCard'
 
 const ProfileDetails = ({ user }: { user: UserObj }) => {
   const [link, setLink] = useState('reviews')
@@ -169,71 +170,13 @@ const ProfileDetails = ({ user }: { user: UserObj }) => {
             )}
           </div>
 
-          <ul className="container-shadow rounded-3xl bg-white px-4 py-6 lg:col-start-3 lg:col-end-4 lg:h-fit lg:p-6">
-            <li>
-              <span className="mb-2 block font-medium text-black/60">
-                Location
-              </span>
-              <div className="flex items-center gap-x-4">
-                <span className="relative h-8 w-8 overflow-hidden rounded-full">
-                  <Image
-                    src="/images/spain.png"
-                    alt="spain flag"
-                    width={48}
-                    height={48}
-                    className="absolute left-0 top-0 object-cover "
-                  />
-                </span>
-                {user.country ? (
-                  <span className="text-sm font-medium text-black/60">
-                    {user.country}, {user.city}
-                  </span>
-                ) : (
-                  <span className="font-medium text-black/60">
-                    No location specified
-                  </span>
-                )}
-              </div>
-            </li>
-            <li>
-              <span className="mb-2 mt-6 block font-medium text-black/60">
-                Phone number
-              </span>
-              <div className="flex items-center gap-x-4">
-                <span className="group inline-block cursor-pointer rounded-full border border-grey p-2 transition-colors hover:border-black/60">
-                  <MdOutlineLocalPhone className="h-4 w-4 text-base text-black/60 transition-colors group-hover:text-black" />
-                </span>
-                {user.phoneNumber ? (
-                  <span className="text-sm font-medium text-black/60">
-                    +{user.phoneNumber}
-                  </span>
-                ) : (
-                  <span className="font-medium text-black/60">
-                    No phone number specified
-                  </span>
-                )}
-              </div>
-            </li>
-            <li>
-              <span className="mb-2 mt-6 block font-medium text-black/60">
-                Email address
-              </span>
-              <div className="flex items-center gap-x-4">
-                <span className="group inline-block cursor-pointer rounded-full border border-grey p-2 transition-colors hover:border-black/60">
-                  <MdOutlineEmail className="h-4 w-4 text-base text-black/60 transition-colors group-hover:text-black" />
-                </span>
-                <span className="text-sm font-medium text-black/60">
-                  janasmith@example.com
-                </span>
-              </div>
-            </li>
-          </ul>
+          <ContactCard user={user} />
         </div>
       )}
 
-      {link === 'reviews' && (
+      {/* {link === 'reviews' && (
         <Reviews reviewsArr={reviewsArr} reviewsToShow={6} />
-      )}
+      )} */}
     </div>
   )
 }

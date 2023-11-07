@@ -83,17 +83,6 @@ const MainInformation = ({
       >
         <CustomRadioButton
           handleChange={handleChange}
-          value="Sell"
-          name="listingType"
-          id="sell"
-          selected={details.listingType === 'Sell'}
-        >
-          <MdOutlineSell className="h-6 w-6" />
-          <span className="font-medium">Sell</span>
-        </CustomRadioButton>
-
-        <CustomRadioButton
-          handleChange={handleChange}
           value="Rent"
           name="listingType"
           id="rent"
@@ -101,6 +90,16 @@ const MainInformation = ({
         >
           <MdAccessTime className="h-6 w-6" />
           <span className="font-medium">Rent</span>
+        </CustomRadioButton>
+        <CustomRadioButton
+          handleChange={handleChange}
+          value="Sell"
+          name="listingType"
+          id="sell"
+          selected={details.listingType === 'Sell'}
+        >
+          <MdOutlineSell className="h-6 w-6" />
+          <span className="font-medium">Sell</span>
         </CustomRadioButton>
       </Container>
       {/* #General information */}

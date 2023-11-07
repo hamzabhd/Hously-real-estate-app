@@ -1,12 +1,12 @@
 import { ReactNode } from 'react'
 
 const SpecialButton = ({
-  name,
   children,
+  name,
   onClick,
 }: {
-  name: string
   children: ReactNode
+  name?: string
   onClick?: () => void
 }) => {
   return (
@@ -16,7 +16,7 @@ const SpecialButton = ({
       onClick={onClick}
     >
       {children}
-      {
+      { name &&
         <span
           className={`absolute left-1/2 top-full mt-1 hidden -translate-x-1/2 select-none rounded-xl border bg-white px-4 py-2 text-sm ${
             name ? 'group-hover:block' : ''

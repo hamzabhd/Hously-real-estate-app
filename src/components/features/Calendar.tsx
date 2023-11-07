@@ -175,7 +175,7 @@ function Calendar({
 
   return (
     <div className="max-w-400 w-full border-grey bg-white sm:w-[400px]">
-      <div className="flex items-center justify-between p-4 ">
+      <div className="flex items-center justify-between p-4 lg:px-6">
         <button
           type="button"
           className="disabled:bg- group rounded-full bg-light-500 p-2 transition hover:bg-light-900 disabled:cursor-default disabled:opacity-40 disabled:hover:bg-light-500"
@@ -196,7 +196,7 @@ function Calendar({
           <PiCaretRightBold className="h-4 w-4 text-black/60 transition-colors group-hover:text-black group-disabled:text-black/60" />
         </button>
       </div>
-      <div className="flex flex-col p-4">
+      <div className="flex flex-col p-4 lg:px-6">
         <div className="mb-2 grid grid-cols-7">
           {DAYS_OF_THE_WEEK.map((d, i) => {
             const isWeekend = i === 6 || i === 5

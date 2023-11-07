@@ -11,6 +11,7 @@ const propertySchema = new Schema({
   city: { type: String },
   state: { type: String },
   postalCode: { type: String },
+  propertySpace: { type: String },
   bedrooms: {
     type: [{ bedroom: { type: Number }, bedroomType: { type: String } }],
     default: [],

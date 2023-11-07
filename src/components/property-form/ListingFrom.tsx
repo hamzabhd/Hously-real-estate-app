@@ -31,6 +31,7 @@ import { listingSchema } from 'utils/validations/validations'
 import Buttons from '../custom/Buttons'
 import { useRouter } from 'next/navigation'
 import Spinner from '../loaders/Spinner'
+import CustomInput from '../custom/CustomInput'
 
 const ListingFrom = ({
   isEdit,
@@ -50,6 +51,7 @@ const ListingFrom = ({
     city: listing?.city || '',
     state: listing?.state || '',
     postalCode: listing?.postalCode || '',
+    propertySpace: listing?.propertySpace || '',
     bedrooms: listing?.bedrooms || [{ bedroom: 1, bedroomType: '' }],
     bathrooms: listing?.bathrooms || [{ bathroom: 1, bathroomType: '' }],
     beds: listing?.beds || [{ bed: 1, bedType: '' }],
@@ -73,6 +75,7 @@ const ListingFrom = ({
     city: '',
     state: '',
     postalCode: '',
+    propertySpace: '',
     bedrooms: '',
     bathrooms: '',
     beds: '',
@@ -425,6 +428,26 @@ const ListingFrom = ({
             Icon={LuBed}
             error={detailsErrors.beds}
           />
+
+          <Container title="Property spacing" type="normal">
+            <CustomInput
+              max={5}
+              label="Space"
+              type="text"
+              className="relative"
+              handleChange={handleChange}
+              name="propertySpace"
+              value={details.propertySpace}
+              error={detailsErrors.propertySpace}
+            >
+              {!detailsErrors.propertySpace && (
+                <span className="absolute right-4 top-1/2 -translate-y-1/2 text-sm font-medium">
+                  m²
+                </span>
+              )}
+            </CustomInput>
+          </Container>
+
           <Container
             title="Property features"
             type="normal"

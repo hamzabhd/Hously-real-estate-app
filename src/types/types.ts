@@ -44,6 +44,7 @@ export type DetailsState = {
   city: string
   state: string
   postalCode: string
+  propertySpace: string
   bedrooms: { bedroom: number; bedroomType: string }[]
   bathrooms: { bathroom: number; bathroomType: string }[]
   beds: { bed: number; bedType: string }[]

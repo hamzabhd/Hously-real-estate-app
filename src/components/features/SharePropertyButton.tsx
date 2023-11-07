@@ -53,7 +53,7 @@ const SharePropertyButton = ({ propertyId }: { propertyId: string }) => {
           </div>
         </div>
       )}
-      <SpecialButton onClick={() => setShare(!share)} name="">
+      <SpecialButton onClick={() => setShare(!share)} name="Share">
         <HiOutlineShare className="h-4 w-4 text-black/60 transition-colors group-hover:text-black" />
       </SpecialButton>
     </div>

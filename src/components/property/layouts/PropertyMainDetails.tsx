@@ -10,6 +10,7 @@ import PropertyOptions from '../custom-ui/PropertyOptions'
 import ViewMore from '../custom-ui/ViewMore'
 import SeeMoreBtn from '../../custom/SeeMoreBtn'
 import PropertyReservation from '../containers/PropertyReservation'
+import OwnerContact from '../custom-ui/OwnerContact'
 
 const imagesArr = [
   '/images/spain.png',
@@ -36,7 +37,7 @@ const PropertyMainDetails = ({
     }))
 
   return (
-    <div className="items-start lg:grid lg:h-[736px] lg:grid-cols-2 lg:gap-x-8">
+    <div className="items-start lg:grid lg:max-h-[736px] lg:grid-cols-2 lg:gap-x-8">
       {/* Image previewer */}
       <ImageSlider
         imagesArr={imagesArr}
@@ -111,7 +112,9 @@ const PropertyMainDetails = ({
 
               <div className="flex flex-col gap-y-1">
                 <TbResize className="h-6 w-6" />
-                <span className="text-sm font-medium">1,200 Ft²</span>
+                <span className="text-sm font-medium">
+                  {property.propertySpace} m²
+                </span>
               </div>
             </div>
           </div>
@@ -145,28 +148,34 @@ const PropertyMainDetails = ({
               />
             </div>
 
-            <div>
-              <h2 className="mb-4 text-xl font-medium tracking-wide">
-                Property rules
-              </h2>
-              <ul className="list-style mb-4 list-image-[url(/images/check.png)] px-6">
-                {property.rules.slice(0, 3).map((item, i) => (
-                  <li key={i}>
-                    <span className="ml-2 text-sm text-black/60">{item}</span>
-                  </li>
-                ))}
-              </ul>
-              <SeeMoreBtn
-                label="View more"
-                className="justify-self-start"
-                onClick={() => setSelected('rules')}
-              />
-            </div>
+            {property.rules.length !== 0 && (
+              <div>
+                <h2 className="mb-4 text-xl font-medium tracking-wide">
+                  Property rules
+                </h2>
+                <ul className="list-style mb-4 list-image-[url(/images/check.png)] px-6">
+                  {property.rules.slice(0, 3).map((item, i) => (
+                    <li key={i}>
+                      <span className="ml-2 text-sm text-black/60">{item}</span>
+                    </li>
+                  ))}
+                </ul>
+                <SeeMoreBtn
+                  label="View more"
+                  className="justify-self-start"
+                  onClick={() => setSelected('rules')}
+                />
+              </div>
+            )}
           </div>
-          <PropertyReservation
-            property={property}
-            arrOfDates={propertyReservation}
-          />
+          {property.listingType === 'Rent' ? (
+            <PropertyReservation
+              property={property}
+              arrOfDates={propertyReservation}
+            />
+          ) : (
+            <OwnerContact user={property.owner} />
+          )}
         </div>
       </div>
     </div>
