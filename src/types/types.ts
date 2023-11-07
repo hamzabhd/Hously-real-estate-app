@@ -1,4 +1,4 @@
-import { ChangeEvent } from 'react'
+import { ChangeEvent, Dispatch, ReactNode, SetStateAction } from 'react'
 
 export type UserObj = {
   _id: string
@@ -178,4 +178,42 @@ export interface PropertyLocationType {
   city: string
   state: string
   postalCode: string
+}
+
+export interface ReservationButtonsType {
+  reserve: boolean
+  availability: boolean
+  pending: boolean
+  alreadyReserved: UserReservation | undefined
+  toggleReserve: () => void
+  handleReservation: () => void
+  toggleAvailability: () => void
+}
+
+export interface ReservationDetailsType {
+  price: string
+  nights: number
+  cleaningFee: string
+  securityFee: string
+  reservationTotal: number
+}
+
+export interface ReserveDateSelectionType {
+  selectedSlot: string
+  setSelectedSlot: (slot: string) => void
+  selectDate: Pick<UserReservation, 'from' | 'to'>
+  error: string
+}
+
+export interface ReservationGuestsType {
+  numberOfGuests: number
+  reduceGuests: () => void
+  addGuests: () => void
+}
+
+export interface ReservationContainerType {
+  readThis: boolean
+  setReadThis: Dispatch<SetStateAction<boolean>>
+  clearReservation: () => void
+  children: ReactNode
 }

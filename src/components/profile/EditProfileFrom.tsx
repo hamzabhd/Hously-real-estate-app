@@ -1,7 +1,7 @@
 'use client'
 import { ChangeEvent, FormEvent, useState } from 'react'
 import { UserDetails, UserObj } from '@/types/types'
-import MainContainer from '../containers/MainContainer'
+import MainContainer from '../layouts/MainContainer'
 import PersonalInfo from './subComponents/PersonalInfo'
 import AdditionalInfo from './subComponents/AdditionalInfo'
 import ContactInfo from './subComponents/ContactInfo'
@@ -166,7 +166,7 @@ const EditProfileForm = ({ user }: { user: UserObj }) => {
           />
         </MainContainer>
 
-        <Buttons name="Save" handleCancel={handleCancel}/>
+        <Buttons name="Save" handleCancel={handleCancel} />
       </form>
     </>
   )

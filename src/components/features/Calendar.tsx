@@ -1,7 +1,7 @@
 'use client'
 import { useState, useEffect } from 'react'
 import { PiCaretLeftBold, PiCaretRightBold } from 'react-icons/pi'
-import { getReservationRange, isReserved } from 'utils/isReserved'
+import { isReserved } from 'utils/isReserved'
 
 function Calendar({
   select = false,
@@ -85,6 +85,9 @@ function Calendar({
       const selectStart = userDate && isReserved(userDate, d - 1, year, month)
       const selectEnd = userDate && isReserved(userDate, d + 1, year, month)
 
+      const oldDate =
+        new Date().toISOString() > newDate && new Date().getDate() > d
+
       const selectionClassName = () => {
         if (!selectStart) {
           if (!selectEnd) {
@@ -98,7 +101,16 @@ function Calendar({
           return ''
         }
       }
-      if (selectDate?.from === newDate && select) {
+      if (oldDate) {
+        return (
+          <span
+            key={index}
+            className="relative flex aspect-square select-none items-center justify-center rounded-full text-sm font-medium text-black/40 empty:invisible hover:bg-white"
+          >
+            {d > 0 ? d : ''}
+          </span>
+        )
+      } else if (selectDate?.from === newDate && select) {
         return (
           <span
             key={index}
@@ -127,6 +139,9 @@ function Calendar({
       }
 
       const getClassName = () => {
+        if (!first && !last) {
+          return 'rounded-full bg-light-500 text-black/40'
+        }
         if (!first) {
           return 'rounded-l-full bg-light-500 text-black/40'
         }

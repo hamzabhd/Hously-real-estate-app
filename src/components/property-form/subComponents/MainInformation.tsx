@@ -2,7 +2,7 @@
 
 import { Fragment } from 'react'
 import Image from 'next/image'
-import Container from '@/components/containers/Container'
+import Container from '@/components/layouts/Container'
 import CustomRadioButton from '@/components/custom/CustomRadioButton'
 import CustomInput from '@/components/custom/CustomInput'
 import {

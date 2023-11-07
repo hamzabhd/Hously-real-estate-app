@@ -2,7 +2,7 @@
 import { Dispatch, SetStateAction, ChangeEvent, Fragment } from 'react'
 import { BiMinus } from 'react-icons/bi'
 import CustomRadioButton from '@/components/custom/CustomRadioButton'
-import Container from '@/components/containers/Container'
+import Container from '@/components/layouts/Container'
 import { ArrType, ObjectKey } from '@/types/types'
 import { IconType } from 'react-icons'
 

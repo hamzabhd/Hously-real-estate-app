@@ -2,7 +2,7 @@ import React from 'react'
 import { IoClose } from 'react-icons/io5'
 import ReviewCard from './ReviewCard'
 import { ReviewObj } from '@/types/types'
-import DetailsContainer from '../containers/DetailsContainer'
+import DetailsContainer from '../layouts/DetailsContainer'
 import { HiOutlineX } from 'react-icons/hi'
 
 const ReviewFound = ({

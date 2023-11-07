@@ -1,4 +1,4 @@
-import ListingFrom from '@/components/property/ListingFrom'
+import ListingFrom from '@/components/property-form/ListingFrom'
 import { getProperty } from 'utils/getProperties'
 
 const EditProperty = async ({ params }: { params: { id: string } }) => {

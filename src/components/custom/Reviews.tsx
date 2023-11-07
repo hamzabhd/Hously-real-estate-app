@@ -1,7 +1,7 @@
 import { useState } from 'react'
 import { ReviewObj } from '@/types/types'
 import { IoIosStar } from 'react-icons/io'
-import ReviewContainer from '../containers/ReviewContainer'
+import ReviewContainer from '../layouts/ReviewContainer'
 import ReviewFound from './ReviewFound'
 import ReviewCard from './ReviewCard'
 import SeeMoreBtn from './SeeMoreBtn'

@@ -1,4 +1,4 @@
-import Container from '@/components/containers/Container'
+import Container from '@/components/layouts/Container'
 import CustomInput from '@/components/custom/CustomInput'
 import { LocationPropType } from '@/types/types'
 const Location = ({
