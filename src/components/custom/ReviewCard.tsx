@@ -40,9 +40,7 @@ const ReviewCard = ({
   return (
     <div
       className={` group relative overflow-hidden border-t border-grey py-4 last:border-b md:rounded-3xl md:border-none md:py-6 lg:px-5 ${
-        showReview
-          ? 'border-none px-4 pb-6 pt-0 sm:pt-0'
-          : 'md:container-shadow md:px-4'
+        showReview ? 'px-4 py-6 lg:px-6' : 'md:container-shadow md:px-4'
       }`}
     >
       <div className="flex items-center justify-between gap-x-2">

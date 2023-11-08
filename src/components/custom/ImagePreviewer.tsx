@@ -15,16 +15,19 @@ const ImagePreviewer = ({
         !image ? 'hidden' : 'lg:flex'
       }`}
     >
-      <div className="relative aspect-square h-full overflow-hidden  rounded-3xl shadow-md lg:w-3/4 xl:w-1/2">
+      <div className="relative flex overflow-hidden rounded-3xl shadow-md lg:w-3/4 xl:w-1/2">
         {image && (
           <Image
             src={image}
             alt="property image"
+            height={500}
+            width={500}
+            placeholder="blur"
+            blurDataURL="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR42mP88R8AAvUB+VkkrXoAAAAASUVORK5CYII="
             style={{
               objectFit: 'cover',
+              width: '100%',
             }}
-            sizes="(max-width: 1530px) 75vw"
-            fill
           />
         )}
       </div>

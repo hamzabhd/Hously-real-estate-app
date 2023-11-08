@@ -1,4 +1,5 @@
 import { ChangeEvent, Dispatch, ReactNode, SetStateAction } from 'react'
+import { IconType } from 'react-icons'
 
 export type UserObj = {
   _id: string
@@ -217,4 +218,24 @@ export interface ReservationContainerType {
   setReadThis: Dispatch<SetStateAction<boolean>>
   clearReservation: () => void
   children: ReactNode
+}
+export type ChoicesType = {
+  id: string
+  choice: string
+  desc: string
+}[]
+
+export type DetailsSelectionProps = {
+  title: string
+  listItems: ArrType
+  selectedItem: number
+  item: ObjectKey
+  itemType: ObjectKey
+  choices: ChoicesType
+  setSelectedItem: Dispatch<SetStateAction<number>>
+  addItem: () => void
+  removeItem: () => void
+  handleChange: (e: ChangeEvent<HTMLInputElement>) => void
+  Icon: IconType
+  error?: string
 }

@@ -14,7 +14,7 @@ const ReviewFound = ({
 }) => {
   return (
     <DetailsContainer>
-      <div className="mb-4 flex items-center justify-between gap-x-4 border-b border-grey p-4 lg:px-6">
+      <div className="flex items-center justify-between gap-x-4 border-b border-grey p-4 lg:px-6">
         <span className="cursor-pointer font-medium text-black">
           User review
         </span>

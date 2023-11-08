@@ -23,7 +23,9 @@ const PropertyLocation = ({
 
       <div className="my-4 gap-x-8 lg:my-6 lg:grid lg:grid-cols-2">
         <div className="pt-2 lg:pt-4">
-          <h2 className="mb-4 text-xl font-medium">Property location</h2>
+          <h2 className="mb-4 text-lg font-medium tracking-wide lg:text-xl">
+            Property location
+          </h2>
 
           <p className="mb-6 leading-relaxed text-black/60 lg:mb-8">
             The details supplied are specific to the property's exact location.

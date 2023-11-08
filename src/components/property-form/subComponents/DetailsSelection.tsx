@@ -1,31 +1,9 @@
 'use client'
-import { Dispatch, SetStateAction, ChangeEvent, Fragment } from 'react'
+import { Fragment } from 'react'
 import { BiMinus } from 'react-icons/bi'
 import CustomRadioButton from '@/components/custom/CustomRadioButton'
 import Container from '@/components/layouts/Container'
-import { ArrType, ObjectKey } from '@/types/types'
-import { IconType } from 'react-icons'
-
-type ChoicesType = {
-  id: string
-  choice: string
-  desc: string
-}[]
-
-type DetailsSelectionProps = {
-  title: string
-  listItems: ArrType
-  selectedItem: number
-  item: ObjectKey
-  itemType: ObjectKey
-  choices: ChoicesType
-  setSelectedItem: Dispatch<SetStateAction<number>>
-  addItem: () => void
-  removeItem: () => void
-  handleChange: (e: ChangeEvent<HTMLInputElement>) => void
-  Icon: IconType
-  error?: string
-}
+import { DetailsSelectionProps } from '@/types/types'
 
 const DetailsSelection = ({
   title,

@@ -3,7 +3,6 @@ import { useState } from 'react'
 import { HiMenuAlt1 } from 'react-icons/hi'
 import { MdKeyboardArrowRight } from 'react-icons/md'
 import { FiSearch } from 'react-icons/fi'
-import { montserrat } from '@/app/fonts'
 import UserImage from '../custom/UserImage'
 import Link from 'next/link'
 import { signOut } from 'next-auth/react'
@@ -20,15 +19,15 @@ const Navbar = ({ user, session }: NavbarPropsType) => {
 
   return (
     <nav
-      className={`top-0 z-20 flex w-full items-center justify-between gap-x-2 px-4 backdrop-blur-lg lg:relative lg:bg-white/20 
-      ${session ? 'py-4' : 'py-3'}
+      className={`top-0 z-20 flex w-full items-center justify-between gap-x-2 border-b px-4 backdrop-blur-lg lg:relative lg:bg-white/20 
+      ${session ? 'py-3' : 'py-2'}
       ${isOpen ? 'fixed bg-white' : 'relative bg-white/20'}`}
     >
       <Link
         href="/"
         className="w-fit cursor-pointer select-none rounded-lg py-2 transition-colors"
       >
-        <span className="font-bold lg:text-xl">Hously.</span>
+        <span className="font-bold tracking-wide lg:text-lg">Hously.</span>
       </Link>
 
       <ul className="m-auto hidden gap-x-10 lg:flex">

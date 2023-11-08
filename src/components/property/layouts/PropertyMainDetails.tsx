@@ -11,6 +11,7 @@ import ViewMore from '../custom-ui/ViewMore'
 import SeeMoreBtn from '../../custom/SeeMoreBtn'
 import PropertyReservation from '../containers/PropertyReservation'
 import OwnerContact from '../custom-ui/OwnerContact'
+import { useDisableClick } from 'hooks/useDisableClick'
 
 const imagesArr = [
   '/images/spain.png',
@@ -26,8 +27,13 @@ const PropertyMainDetails = ({
   property: PropertyType
   isSaved: boolean
 }) => {
+  const { disableClick } = useDisableClick()
   const [selectedImage, setSelectedImage] = useState('')
   const [selected, setSelected] = useState('')
+  const selectImage = (image: string) => {
+    if (!disableClick) return
+    return setSelectedImage(image)
+  }
 
   const propertyReservation =
     property.reservations &&
@@ -39,11 +45,10 @@ const PropertyMainDetails = ({
   return (
     <div className="items-start lg:grid lg:h-[752px] lg:grid-cols-2 lg:gap-x-6 lg:px-6">
       {/* Image previewer */}
-
-      <ImageSlider
-        imagesArr={imagesArr}
-        selectImage={(image: string) => setSelectedImage(image)}
-      />
+      <div className="group relative flex w-full overflow-hidden lg:row-span-2 lg:h-full lg:rounded-3xl">
+        <ImageSlider imagesArr={property.images} selectImage={selectImage} />
+      </div>
+      {/* this only available for larger screens */}
       <ImagePreviewer
         image={selectedImage}
         clearImage={() => setSelectedImage('')}
@@ -132,7 +137,7 @@ const PropertyMainDetails = ({
 
           <div className="mb-8 gap-x-4 sm:grid sm:grid-cols-2">
             <div className="mb-6 sm:mb-0">
-              <h2 className="mb-4 text-xl font-medium tracking-wide">
+              <h2 className="mb-4 text-lg font-medium tracking-wide lg:text-xl">
                 Property features
               </h2>
               <ul className="list-style mb-4 list-image-[url(/images/check.png)] px-6">
@@ -151,7 +156,7 @@ const PropertyMainDetails = ({
 
             {property.rules.length !== 0 && (
               <div>
-                <h2 className="mb-4 text-xl font-medium tracking-wide">
+                <h2 className="mb-4 text-lg font-medium tracking-wide lg:text-xl">
                   Property rules
                 </h2>
                 <ul className="list-style mb-4 list-image-[url(/images/check.png)] px-6">
