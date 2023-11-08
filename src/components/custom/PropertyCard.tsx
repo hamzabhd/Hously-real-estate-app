@@ -1,22 +1,28 @@
-import Image from 'next/image'
+'use client'
 import React from 'react'
+import ImageSlider from './ImageSlider'
+
+const imagesArr = [
+  '/images/person.jpg',
+  '/images/spain.png',
+  '/images/spain.png',
+  '/images/spain.png',
+]
+
 const PropertyCard = () => {
   return (
-    <div>
-      <div className="">
-        <Image
-          src="https://res.cloudinary.com/hmzbhd/image/upload/v1698339301/hously_app/properties/tep2lnormjdsieztf8b7.jpg"
-          alt="property image"
-          height={500}
-          width={500}
-          placeholder="blur"
-          blurDataURL="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR42mP88R8AAvUB+VkkrXoAAAAASUVORK5CYII="
-          style={{
-            objectFit: 'cover',
-            width: 'auto',
-            height: 'auto',
-          }}
-        />
+    <div className="mx-auto grid gap-4 sm:grid-cols-2 md:grid-cols-3 lg:max-w-[1400px] lg:grid-cols-4">
+      <div className="group relative flex w-full overflow-hidden sm:rounded-3xl lg:h-full">
+        <ImageSlider imagesArr={imagesArr} isCard />
+      </div>
+      <div className="group relative flex w-full overflow-hidden sm:rounded-3xl lg:h-full">
+        <ImageSlider imagesArr={imagesArr} isCard />
+      </div>
+      <div className="group relative flex w-full overflow-hidden sm:rounded-3xl lg:h-full">
+        <ImageSlider imagesArr={imagesArr} isCard />
+      </div>
+      <div className="group relative flex w-full overflow-hidden sm:rounded-3xl lg:h-full">
+        <ImageSlider imagesArr={imagesArr} isCard />
       </div>
     </div>
   )

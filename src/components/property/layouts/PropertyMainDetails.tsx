@@ -13,13 +13,6 @@ import PropertyReservation from '../containers/PropertyReservation'
 import OwnerContact from '../custom-ui/OwnerContact'
 import { useDisableClick } from 'hooks/useDisableClick'
 
-const imagesArr = [
-  '/images/spain.png',
-  '/images/spain.png',
-  '/images/spain.png',
-  '/images/spain.png',
-]
-
 const PropertyMainDetails = ({
   property,
   isSaved,
@@ -46,7 +39,11 @@ const PropertyMainDetails = ({
     <div className="items-start lg:grid lg:h-[752px] lg:grid-cols-2 lg:gap-x-6 lg:px-6">
       {/* Image previewer */}
       <div className="group relative flex w-full overflow-hidden lg:row-span-2 lg:h-full lg:rounded-3xl">
-        <ImageSlider imagesArr={property.images} selectImage={selectImage} />
+        <ImageSlider
+          imagesArr={property.images}
+          selectImage={selectImage}
+          isCard={false}
+        />
       </div>
       {/* this only available for larger screens */}
       <ImagePreviewer

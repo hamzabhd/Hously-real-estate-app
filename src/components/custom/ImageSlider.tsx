@@ -4,9 +4,11 @@ import { PiCaretLeftBold, PiCaretRightBold } from 'react-icons/pi'
 
 const ImageSlider = ({
   imagesArr,
+  isCard,
   selectImage,
 }: {
   imagesArr: string[]
+  isCard: boolean
   selectImage?: (image: string) => void
 }) => {
   const [imageCount, setImageCount] = useState(0)
@@ -42,7 +44,9 @@ const ImageSlider = ({
         <div
           key={i}
           style={{ translate: `${-100 * imageCount}%` }}
-          className="flex aspect-video w-full flex-shrink-0 transition-all ease-in md:col-span-2 md:h-full lg:cursor-pointer"
+          className={`flex w-full flex-shrink-0 transition-all ease-in md:col-span-2 md:h-full lg:cursor-pointer ${
+            !isCard ? 'aspect-video' : 'aspect-square'
+          }`}
           onClick={() => selectImage?.(image)}
         >
           <Image
