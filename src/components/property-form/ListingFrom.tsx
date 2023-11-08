@@ -32,6 +32,7 @@ import Buttons from '../custom/Buttons'
 import { useRouter } from 'next/navigation'
 import Spinner from '../loaders/Spinner'
 import CustomInput from '../custom/CustomInput'
+import { checkAddressValidity } from 'utils/validations/checkAddressValidity'
 
 const ListingFrom = ({
   isEdit,
@@ -292,17 +293,25 @@ const ListingFrom = ({
   const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault()
 
-    try {
-      const result = validateForm(listingSchema, { ...details, images })
+    const result = validateForm(listingSchema, { ...details, images })
+    const addressResult = await checkAddressValidity(details.address)
 
-      if (!result.success) {
-        return setDetailsErrors((prevState) => ({
-          ...prevState,
-          ...result.errors,
-        }))
-      }
-    } catch (err) {
-      console.log(err)
+    if (!addressResult.success) {
+      const message =
+        details.address === ''
+          ? 'This field is required'
+          : 'The property address is not valid'
+      setDetailsErrors((prevState) => ({
+        ...prevState,
+        address: message,
+      }))
+    }
+
+    if (!result.success) {
+      return setDetailsErrors((prevState) => ({
+        ...prevState,
+        ...result.errors,
+      }))
     }
 
     setIsLoading(true)

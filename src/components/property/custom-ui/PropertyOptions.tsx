@@ -52,7 +52,7 @@ const PropertyOptions = ({
           propertyId={propertyId}
         />
       )}
-      <div className="border-b p-4 md:mt-4 md:border-none md:p-0">
+      <div className="border-b p-4 md:px-6 lg:border-none lg:p-0">
         <div className="flex items-center gap-2">
           <Link href={`/user/${propertyOwner}`} className="rounded-full">
             <UserImage imageUrl={profileImage} name={userName} />

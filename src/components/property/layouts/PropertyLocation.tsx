@@ -1,10 +1,10 @@
 import { PropertyLocationType } from '@/types/types'
 import {
-  HiOutlineFlag,
-  HiOutlineLocationMarker,
-  HiOutlineMail,
-  HiOutlineOfficeBuilding,
-  HiOutlineTag,
+  HiFlag,
+  HiLocationMarker,
+  HiMail,
+  HiOfficeBuilding,
+  HiTag,
 } from 'react-icons/hi'
 import Map from '../../custom/Map'
 
@@ -16,7 +16,7 @@ const PropertyLocation = ({
   postalCode,
 }: PropertyLocationType) => {
   return (
-    <div className="mt-6 px-4 md:p-0 lg:mt-8">
+    <div className="mt-6 px-4 md:px-6 lg:mt-8">
       <h2 className="text-xl font-medium md:ml-0 lg:text-2xl">
         Where is this property located
       </h2>
@@ -35,35 +35,35 @@ const PropertyLocation = ({
             <li className="mb-6 lg:mb-8">
               <span className="mb-1 block font-medium">Address</span>
               <div className="flex items-center gap-x-2">
-                <HiOutlineLocationMarker className="h-4 w-4 text-black/40" />
+                <HiLocationMarker className="h-4 w-4 text-grey" />
                 <span className="text-sm text-black/60">{address}</span>
               </div>
             </li>
             <li className="mb-6 lg:mb-8">
               <span className="mb-1 block font-medium">Country</span>
               <div className="flex items-center gap-x-2">
-                <HiOutlineFlag className="h-4 w-4 text-black/40" />
+                <HiFlag className="h-4 w-4 text-grey" />
                 <span className="text-sm text-black/60">{country}</span>
               </div>
             </li>
             <li className="mb-6 lg:mb-8">
               <span className="mb-1 block font-medium">City</span>
               <div className="flex items-center gap-x-2">
-                <HiOutlineOfficeBuilding className="h-4 w-4 text-black/40" />
+                <HiOfficeBuilding className="h-4 w-4 text-grey" />
                 <span className="text-sm text-black/60">{city}</span>
               </div>
             </li>
             <li className="mb-6 lg:mb-8">
               <span className="mb-1 block font-medium">Provenance</span>
               <div className="flex items-center gap-x-2">
-                <HiOutlineTag className="h-4 w-4 text-black/40" />
+                <HiTag className="h-4 w-4 text-grey" />
                 <span className="text-sm text-black/60">{state}</span>
               </div>
             </li>
             <li className="mb-6 lg:mb-0">
               <span className="mb-1 block font-medium">ZIP/Postal Code</span>
               <div className="flex items-center gap-x-2">
-                <HiOutlineMail className="h-4 w-4 text-black/40" />
+                <HiMail className="h-4 w-4 text-grey" />
                 <span className="text-sm text-black/60">{postalCode}</span>
               </div>
             </li>

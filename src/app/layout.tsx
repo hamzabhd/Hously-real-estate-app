@@ -9,9 +9,8 @@ export const metadata: Metadata = {
 }
 
 export const poppins = Poppins({
-  weight: ['100', '300', '400', '500', '700', '900'],
-  style: ['normal', 'italic'],
-  subsets: ['latin'],
+  weight: ['100', '200', '300', '400', '500', '600', '700', '800', '900'],
+  subsets: ['devanagari'],
   display: 'swap',
 })
 
@@ -21,8 +20,8 @@ export default function RootLayout({
   children: React.ReactNode
 }) {
   return (
-    <html lang="en">
-      <body className={`${poppins.className} relative box-border`}>
+    <html lang="en" className={poppins.className}>
+      <body className="relative box-border">
         <AuthProvider>{children}</AuthProvider>
       </body>
     </html>

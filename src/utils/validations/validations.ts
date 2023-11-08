@@ -40,7 +40,7 @@ export const listingSchema = z.object({
     .string()
     .array()
     .nonempty({ message: 'You should provide one image at least' }),
-  address: z.string().min(1, { message: 'This field is required' }),
+  address: z.string().optional(),
   country: z.string().min(1, { message: 'This field is required' }),
   city: z.string().min(1, { message: 'This field is required' }),
   state: z.string().min(1, { message: 'This field is required' }),

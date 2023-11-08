@@ -160,7 +160,7 @@ const PropertyReservation = ({
   }
 
   return (
-    <div className="z-100 relative mb-4 flex gap-x-2">
+    <div className="z-100 relative mt-auto flex gap-x-2">
       {availability && (
         <PropertyAvailability
           arrOfDates={arrOfDates}

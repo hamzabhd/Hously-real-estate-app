@@ -6,8 +6,7 @@ import ErrorDisplay from '@/components/custom/ErrorDisplay'
 import SubmitButton from '../ui/SubmitButton'
 import DetailsContainer from '@/components/layouts/DetailsContainer'
 import CustomRadioButton from '@/components/custom/CustomRadioButton'
-// @ts-ignore
-import { experimental_useFormState as useFormState } from 'react-dom'
+import { useFormState } from 'react-dom'
 
 const AddReview = ({
   toggleAddReview,

@@ -1,5 +1,5 @@
 import { ReactNode } from 'react'
-import { IoIosStar, IoIosStarOutline } from 'react-icons/io'
+import { IoIosStar, IoIosStarOutline, IoIosStarHalf } from 'react-icons/io'
 import UserImage from './UserImage'
 import { ReviewObj } from '@/types/types'
 import { reformDate } from 'utils/reformDate'
@@ -11,25 +11,12 @@ const ReviewCard = ({
 }: {
   review: ReviewObj
   setReviewToShow: (review: string) => void
-  showReview?: true
+  showReview?: boolean
 }) => {
-  const reformReviewText = (text: string): string => {
-    const textArr = text.split(' ')
-
-    if (textArr.length > 15) {
-      return textArr.slice(0, 15).join(' ') + '...'
-    }
-    return text
-  }
-
-  const isMore = (text: string): boolean => {
-    const textArr = text.split(' ')
-
-    if (textArr.length > 15) {
-      return true
-    }
-    return false
-  }
+  const isMore = review.reviewContent.length >= 70
+  const reformedReviewText = isMore
+    ? review.reviewContent.slice(0, 70) + '...'
+    : review.reviewContent
 
   const getRating = (rating: number) => {
     let stars: ReactNode[] = []
@@ -38,6 +25,10 @@ const ReviewCard = ({
       if (i >= rating) {
         stars.push(
           <IoIosStarOutline key={i} className="h-4 w-4 text-yellow-500" />,
+        )
+      } else if (i < rating && i + 1 > rating) {
+        stars.push(
+          <IoIosStarHalf key={i} className="h-4 w-4 text-yellow-500" />,
         )
       } else {
         stars.push(<IoIosStar key={i} className="h-4 w-4 text-yellow-500" />)
@@ -48,13 +39,12 @@ const ReviewCard = ({
 
   return (
     <div
-      className={`group relative overflow-hidden px-4 pt-6 last:mb-0 sm:rounded-3xl sm:py-6 sm:first:pt-6 lg:px-5 ${
-        showReview ? 'pb-6 pt-2 sm:pt-2' : 'sm:container-shadow first:pt-0 '
+      className={` group relative overflow-hidden border-t border-grey py-4 last:border-b md:rounded-3xl md:border-none md:py-6 lg:px-5 ${
+        showReview
+          ? 'border-none px-4 pb-6 pt-0 sm:pt-0'
+          : 'md:container-shadow md:px-4'
       }`}
     >
-      {!showReview && (
-        <span className="group-first mb-6 block h-px bg-grey sm:hidden"></span>
-      )}
       <div className="flex items-center justify-between gap-x-2">
         <UserImage
           name={review.reviewer.fullName}
@@ -78,13 +68,11 @@ const ReviewCard = ({
           !review.reviewContent ? 'text-black/40' : 'text-black/60'
         }`}
       >
-        {showReview
-          ? review.reviewContent
-          : reformReviewText(review.reviewContent)}
+        {showReview ? review.reviewContent : reformedReviewText}
         {!review.reviewContent && 'No review content was provided'}
       </p>
 
-      {isMore(review.reviewContent) && !showReview && (
+      {isMore && !showReview && (
         <span
           className="cursor-pointer text-sm font-medium hover:underline"
           onClick={() => setReviewToShow(review._id)}

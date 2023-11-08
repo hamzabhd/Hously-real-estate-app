@@ -1,6 +1,9 @@
 'use client'
 import { useLoadScript, GoogleMap, Marker } from '@react-google-maps/api'
 import { useEffect, useState } from 'react'
+import { checkAddressValidity } from 'utils/validations/checkAddressValidity'
+import Spinner from '../loaders/Spinner'
+import SmallSpinner from '../loaders/SmallSpinner'
 
 interface MapPropsType {
   address: string
@@ -18,22 +21,20 @@ const Map = ({ address }: MapPropsType) => {
 
   useEffect(() => {
     if (!isLoaded) return
-    console.log('I am running now!')
-    const geocoder = new google.maps.Geocoder()
-    geocoder.geocode({ address: address }, function (results, status) {
-      if (status == 'OK' && results) {
-        setCoordinates({
-          lat: results[0].geometry.location.lat(),
-          lng: results[0].geometry.location.lng(),
-        })
-      } else {
-        alert('Geocode was not successful for the following reason: ' + status)
-      }
+    checkAddressValidity(address).then((res) => {
+      setCoordinates({
+        lat: res.coordinates?.lat,
+        lng: res.coordinates?.lng,
+      })
     })
   }, [isLoaded, address])
 
   if (!isLoaded) {
-    return <span>Loading...</span>
+    return (
+      <div className="flex h-full w-full items-center justify-center">
+        <SmallSpinner />
+      </div>
+    )
   }
   return (
     <>

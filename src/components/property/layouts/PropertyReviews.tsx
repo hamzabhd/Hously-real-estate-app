@@ -29,8 +29,8 @@ const PropertyReviews = ({
       {addReview && (
         <AddReview toggleAddReview={toggleAddReview} propertyId={propertyId} />
       )}
-      <div className="mt-6 lg:mt-8">
-        <h2 className="ml-4 text-xl font-medium md:ml-0 lg:text-2xl">
+      <div className="mt-6 px-4 md:px-6 lg:mt-8">
+        <h2 className="text-xl font-medium md:ml-0 lg:text-2xl">
           What people say about this property
         </h2>
 
@@ -50,7 +50,7 @@ const PropertyReviews = ({
                 : 'View more reviews'
             }
             onClick={handleReviews}
-            className="ml-4 md:ml-0"
+            className="md:ml-0"
           />
         )}
       </div>

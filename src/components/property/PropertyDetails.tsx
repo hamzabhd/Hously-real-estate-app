@@ -15,7 +15,6 @@ const PropertyPage = ({
   const isIntercepted = true
 
   return (
-    // px-4 md:px-6
     <div className="lg:mt-4">
       <PropertyMainDetails
         property={property}

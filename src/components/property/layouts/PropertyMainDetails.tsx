@@ -1,7 +1,7 @@
 import { PropertyType } from '@/types/types'
 import { useState } from 'react'
 import { BiBath } from 'react-icons/bi'
-import { HiOutlineLocationMarker } from 'react-icons/hi'
+import { HiLocationMarker } from 'react-icons/hi'
 import { LuBed, LuBedDouble } from 'react-icons/lu'
 import { TbResize } from 'react-icons/tb'
 import ImageSlider from '../../custom/ImageSlider'
@@ -37,8 +37,9 @@ const PropertyMainDetails = ({
     }))
 
   return (
-    <div className="items-start lg:grid lg:max-h-[736px] lg:grid-cols-2 lg:gap-x-8">
+    <div className="items-start lg:grid lg:h-[752px] lg:grid-cols-2 lg:gap-x-6 lg:px-6">
       {/* Image previewer */}
+
       <ImageSlider
         imagesArr={imagesArr}
         selectImage={(image: string) => setSelectedImage(image)}
@@ -48,7 +49,7 @@ const PropertyMainDetails = ({
         clearImage={() => setSelectedImage('')}
       />
 
-      <div className="h-full">
+      <div className="flex flex-col lg:h-[752px] lg:py-4">
         <PropertyOptions
           propertyId={property._id}
           isSaved={isSaved}
@@ -69,19 +70,19 @@ const PropertyMainDetails = ({
             setSelected={setSelected}
           />
         )}
-        <div className="px-4">
+        <div className="flex h-full flex-col px-4 md:px-6 lg:px-0">
           <div className="mb-8 mt-4 lg:mt-6">
             <h1 className="mb-1 text-3xl font-medium lg:text-4xl">
               {property.title}
             </h1>
             <div className="flex items-center gap-x-2">
-              <HiOutlineLocationMarker className="h-4 w-4 text-black/40" />
+              <HiLocationMarker className="h-4 w-4 text-grey" />
               <span className="text-sm text-black/60">{property.address}</span>
             </div>
           </div>
 
           <div className="mb-8 flex items-center gap-x-4">
-            <span className="text-2xl font-bold">
+            <span className="flex items-center gap-x-1 text-2xl font-bold">
               ${property.price}
               <span className="text-base font-normal text-black/60">/ </span>
               <span className="text-base font-normal text-black/60">night</span>
@@ -129,8 +130,8 @@ const PropertyMainDetails = ({
             />
           </div>
 
-          <div className="mb-6 gap-x-4 sm:grid sm:grid-cols-2">
-            <div className="mb-4 sm:mb-0">
+          <div className="mb-8 gap-x-4 sm:grid sm:grid-cols-2">
+            <div className="mb-6 sm:mb-0">
               <h2 className="mb-4 text-xl font-medium tracking-wide">
                 Property features
               </h2>
