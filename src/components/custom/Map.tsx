@@ -1,8 +1,7 @@
 'use client'
-import { useLoadScript, GoogleMap, Marker } from '@react-google-maps/api'
+import { useLoadScript, GoogleMap, MarkerF } from '@react-google-maps/api'
 import { useEffect, useState } from 'react'
 import { checkAddressValidity } from 'utils/validations/checkAddressValidity'
-import Spinner from '../loaders/Spinner'
 import SmallSpinner from '../loaders/SmallSpinner'
 
 interface MapPropsType {
@@ -31,11 +30,12 @@ const Map = ({ address }: MapPropsType) => {
 
   if (!isLoaded) {
     return (
-      <div className="flex h-full w-full items-center justify-center">
+      <div className="flex h-full w-full items-center justify-center bg-light-500">
         <SmallSpinner />
       </div>
     )
   }
+
   return (
     <>
       <GoogleMap
@@ -43,9 +43,9 @@ const Map = ({ address }: MapPropsType) => {
         zoom={10}
         center={coordinates}
         mapContainerClassName="map-container"
-        options={{ mapId: process.env.NEXT_PUBLIC_MAP }}
+        options={{ mapId: process.env.NEXT_PUBLIC_MAP_ID }}
       >
-        <Marker position={coordinates} icon="/images/icon.png" />
+        <MarkerF position={coordinates} icon="/images/icon.png" />
       </GoogleMap>
     </>
   )

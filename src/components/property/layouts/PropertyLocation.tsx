@@ -22,7 +22,7 @@ const PropertyLocation = ({
       </h2>
 
       <div className="my-4 gap-x-8 lg:my-6 lg:grid lg:grid-cols-2">
-        <div className="pt-2">
+        <div className="pt-2 lg:pt-4">
           <h2 className="mb-4 text-xl font-medium">Property location</h2>
 
           <p className="mb-6 leading-relaxed text-black/60 lg:mb-8">
@@ -69,7 +69,7 @@ const PropertyLocation = ({
             </li>
           </ul>
         </div>
-        <div className="relative h-[600px] w-full overflow-hidden rounded-3xl">
+        <div className="relative h-[500px] w-full overflow-hidden rounded-3xl border-2 lg:h-[550px] ">
           <Map address={address} />
         </div>
       </div>
