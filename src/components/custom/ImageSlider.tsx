@@ -6,14 +6,19 @@ const ImageSlider = ({
   imagesArr,
   isCard,
   selectImage,
+  redirectClick,
 }: {
   imagesArr: string[]
   isCard: boolean
   selectImage?: (image: string) => void
+  redirectClick?: () => void
 }) => {
   const [imageCount, setImageCount] = useState(0)
+  const singleImage = imagesArr.length === 1
+  const style = singleImage ? 'hidden' : 'lg:group-hover:opacity-100'
 
   const nextImage = () => {
+    if (singleImage) return
     return setImageCount((prevState) => {
       if (imageCount >= imagesArr.length - 1) {
         return 0
@@ -30,11 +35,16 @@ const ImageSlider = ({
       return prevState - 1
     })
   }
+  const handleClick = (image: string) => {
+    if (!isCard && selectImage) return selectImage(image)
+    return redirectClick?.()
+  }
+
   return (
     <>
       <button
         type="button"
-        className="absolute left-2 top-1/2 z-30 -translate-y-1/2 rounded-full bg-white/60 p-2 transition hover:bg-white md:left-4 lg:opacity-0 lg:group-hover:opacity-100"
+        className={`absolute left-2 top-1/2 z-30 -translate-y-1/2 rounded-full bg-white/60 p-1 transition hover:bg-white md:left-4 md:p-2 lg:opacity-0 ${style}`}
         onClick={prevImage}
       >
         <PiCaretLeftBold className="h-4 w-4" />
@@ -45,9 +55,9 @@ const ImageSlider = ({
           key={i}
           style={{ translate: `${-100 * imageCount}%` }}
           className={`flex w-full flex-shrink-0 transition-all ease-in md:col-span-2 md:h-full lg:cursor-pointer ${
-            !isCard ? 'aspect-video' : 'aspect-square'
+            !isCard ? 'aspect-video' : 'aspect-[16/10]'
           }`}
-          onClick={() => selectImage?.(image)}
+          onClick={() => handleClick(image)}
         >
           <Image
             src={image}
@@ -79,7 +89,7 @@ const ImageSlider = ({
 
       <button
         type="button"
-        className="absolute right-2 top-1/2 z-30 -translate-y-1/2 rounded-full bg-white/60 p-2 transition hover:bg-white md:right-4 lg:opacity-0 lg:group-hover:opacity-100"
+        className={`absolute right-2 top-1/2 z-30 -translate-y-1/2 rounded-full bg-white/60 p-1 transition hover:bg-white md:right-4 md:p-2 lg:opacity-0 ${style}`}
         onClick={nextImage}
       >
         <PiCaretRightBold className="h-4 w-4" />

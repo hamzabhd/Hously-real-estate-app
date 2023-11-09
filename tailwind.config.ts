@@ -11,6 +11,7 @@ const config: Config = {
       colors: {
         beige: '#F5F5DC',
         grey: '#CCCCCC',
+        darkGrey: '#333333',
         lightGrey: '#ECECEC',
         whiteHover: '#F6F6F6',
         light: {

@@ -8,9 +8,9 @@ export const metadata: Metadata = {
   description: 'Hously | Everyone deserves a nicer house',
 }
 
-export const poppins = Poppins({
+const poppins = Poppins({
   weight: ['100', '200', '300', '400', '500', '600', '700', '800', '900'],
-  subsets: ['devanagari'],
+  subsets: ['latin'],
   display: 'swap',
 })
 
