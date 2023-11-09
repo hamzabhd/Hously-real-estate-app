@@ -113,18 +113,17 @@ export type ObjectKey = keyof (bedroomObj | BathroomObj | BedObj)
 export interface MainInformationPropType {
   details: DetailsState
   handleChange: (e: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => void
-  handleImage: (e: ChangeEvent<HTMLInputElement>) => void
-  removeImages: (index: number) => void
-  images: string[]
   detailsErrors: DetailsStateErrors
-  isEdit: boolean
 }
 
-export interface LocationPropType
-  extends Omit<
-    MainInformationPropType,
-    'handleImage' | 'removeImages' | 'images' | 'isEdit'
-  > {}
+export interface ImagesUploaderType {
+  error: string
+  isEdit: boolean
+  images: string[]
+  setImages: Dispatch<SetStateAction<string[]>>
+}
+
+export interface LocationPropType extends MainInformationPropType {}
 
 export interface RulesPropType extends LocationPropType {
   handleRules: (rule: string) => void
@@ -228,14 +227,7 @@ export type ChoicesType = {
 export type DetailsSelectionProps = {
   title: string
   listItems: ArrType
-  selectedItem: number
-  item: ObjectKey
-  itemType: ObjectKey
-  choices: ChoicesType
-  setSelectedItem: Dispatch<SetStateAction<number>>
-  addItem: () => void
-  removeItem: () => void
-  handleChange: (e: ChangeEvent<HTMLInputElement>) => void
-  Icon: IconType
+  setDetails: Dispatch<SetStateAction<DetailsState>>
+  setDetailsErrors: Dispatch<SetStateAction<DetailsStateErrors>>
   error?: string
 }

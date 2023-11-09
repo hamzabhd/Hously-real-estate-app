@@ -37,6 +37,10 @@
   a {
     @apply focus:outline-none focus-visible:border-neutral-600/60 focus-visible:ring-4 focus-visible:ring-neutral-600;
   }
+
+  .small-btn {
+    @apply rounded-full border border-white bg-white/60 p-1 hover:bg-white;
+  }
 }
 
 @layer components {

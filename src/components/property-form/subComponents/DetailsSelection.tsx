@@ -1,29 +1,82 @@
 'use client'
-import { Fragment } from 'react'
+import { ChangeEvent, Fragment, useState } from 'react'
 import { BiMinus } from 'react-icons/bi'
 import CustomRadioButton from '@/components/custom/CustomRadioButton'
 import Container from '@/components/layouts/Container'
-import { DetailsSelectionProps } from '@/types/types'
+import { ChoicesType, DetailsSelectionProps, ObjectKey } from '@/types/types'
+import { choices } from 'utils/itemManagement/data/data'
+import { MdSingleBed } from 'react-icons/md'
+import { LuBed } from 'react-icons/lu'
+import { BiBath } from 'react-icons/bi'
+import { addItem, removeItem } from 'utils/itemManagement/itemManagement'
 
 const DetailsSelection = ({
   title,
   listItems,
-  selectedItem,
-  item,
-  itemType,
-  choices,
-  setSelectedItem,
-  addItem,
-  removeItem,
-  handleChange,
-  Icon,
+  setDetails,
+  setDetailsErrors,
   error,
 }: DetailsSelectionProps) => {
+  const alwaysLast = listItems.indexOf(listItems[listItems.length - 1]) + 1
+  const [selectedItem, setSelectedItem] = useState(alwaysLast || 1)
+  const item = title.toLocaleLowerCase()
+  const Icon =
+    item === 'bedroom' ? MdSingleBed : item === 'bathroom' ? BiBath : LuBed
+
+  const itemIndex = item as ObjectKey
+  const regEx = new RegExp(item + 'd*', 'g')
+
+  const handleChange = (e: ChangeEvent<HTMLInputElement>) => {
+    const { name, value } = e.target
+    console.log(selectedItem)
+    if (regEx.test(name)) {
+      const modifiedItem = listItems.map((currentItem) => {
+        if (currentItem[itemIndex] !== selectedItem) {
+          return currentItem
+        } else {
+          return {
+            ...currentItem,
+            [item + 'Type']: value,
+          }
+        }
+      })
+
+      setDetailsErrors((prevState) => ({
+        ...prevState,
+        [item + 's']: '',
+      }))
+      return setDetails((prevState) => ({
+        ...prevState,
+        [item + 's']: modifiedItem,
+      }))
+    }
+
+    return setDetails((prevState) => ({ ...prevState, [name]: value }))
+  }
+  const addCurrentItem = () =>
+    addItem(
+      listItems,
+      itemIndex,
+      (item + 'Type') as ObjectKey,
+      item + 's',
+      setSelectedItem,
+      setDetails,
+    )
+  const removeCurrentItem = () => {
+    return removeItem(
+      listItems,
+      item + 's',
+      selectedItem,
+      setSelectedItem,
+      setDetails,
+    )
+  }
+
   return (
     <>
       <Container title={title + 's'} type="grid" error={error}>
         <div
-          onClick={addItem}
+          onClick={addCurrentItem}
           className="group flex aspect-square h-full w-full cursor-pointer flex-col items-center justify-center gap-y-4 rounded-3xl border-2 border-dashed border-grey p-4 transition-colors hover:border-black/60"
         >
           <Icon className="h-12 w-12" />
@@ -37,25 +90,27 @@ const DetailsSelection = ({
               className={`group/remove absolute right-4 top-4 z-10 hidden cursor-pointer rounded-full border border-grey p-1 text-black/60 transition-colors hover:border-black/60 ${
                 selectedItem <= 1 ? 'hidden' : 'group-last:block'
               }`}
-              onClick={removeItem}
+              onClick={removeCurrentItem}
             >
               <BiMinus className="h-4 w-4 text-grey transition-colors group-hover/remove:text-black" />
             </span>
             <div
               className={`${
-                selectedItem === b[item] ? 'border-black/60' : 'border-grey'
+                selectedItem === b[itemIndex]
+                  ? 'border-black/60'
+                  : 'border-grey'
               } group relative flex aspect-square h-full w-full cursor-pointer flex-col items-center justify-center gap-y-4 rounded-3xl border-2 p-4 transition-colors hover:border-black/60`}
-              onClick={() => setSelectedItem(b[item])}
+              onClick={() => setSelectedItem(b[itemIndex])}
             >
               <Icon className="h-12 w-12" />
               <span
                 className={`text-center font-medium transition group-hover:text-black ${
-                  selectedItem === b[item] ? 'text-black' : 'text-black/60'
+                  selectedItem === b[itemIndex] ? 'text-black' : 'text-black/60'
                 }`}
               >
-                {title} {b[item]}
+                {title} {b[itemIndex]}
                 <span className=" block text-sm text-black/40">
-                  {b[itemType]}
+                  {b[(item + 'Type') as ObjectKey]}
                 </span>
               </span>
             </div>
@@ -64,10 +119,10 @@ const DetailsSelection = ({
       </Container>
       <Container type="normal">
         {listItems
-          .filter((b) => b[item] === selectedItem)
-          .map((current, i) => (
+          .filter((b) => b[itemIndex] === selectedItem)
+          .map((_, i) => (
             <div key={i} className="flex flex-col gap-4 sm:grid sm:grid-cols-2">
-              {choices.map((el) => (
+              {(choices[itemIndex] as ChoicesType).map((el) => (
                 <Fragment key={el.id}>
                   <CustomRadioButton
                     value={el.choice}
@@ -75,7 +130,9 @@ const DetailsSelection = ({
                     id={el.id}
                     handleChange={handleChange}
                     selected={
-                      listItems[selectedItem - 1][itemType] === el.choice
+                      listItems[selectedItem - 1][
+                        (item + 'Type') as ObjectKey
+                      ] === el.choice
                     }
                   >
                     <span className="block font-medium">{el.choice}</span>

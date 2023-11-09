@@ -10,21 +10,12 @@ import Rules from './subComponents/Rules'
 import Pricing from './subComponents/Pricing'
 import SelectionList from './subComponents/SelectionList'
 import { ListingsObj, ObjectKey } from '@/types/types'
-import {
-  features,
-  bedChoices,
-  bedroomChoices,
-  bathroomChoices,
-} from 'utils/itemManagement/data/data'
+import { features } from 'utils/itemManagement/data/data'
 import DetailsSelection from './subComponents/DetailsSelection'
 import { useState, ChangeEvent, FormEvent } from 'react'
 import { DetailsState, DetailsStateErrors } from '@/types/types'
 import { isAdded } from 'utils/isAdded'
-import {
-  addItem,
-  removeItem,
-  removeImage,
-} from 'utils/itemManagement/itemManagement'
+import { addItem, removeItem } from 'utils/itemManagement/itemManagement'
 import axios from 'axios'
 import { validateForm } from 'utils/validateFrom'
 import { listingSchema } from 'utils/validations/validations'
@@ -33,6 +24,7 @@ import { useRouter } from 'next/navigation'
 import Spinner from '../loaders/Spinner'
 import CustomInput from '../custom/CustomInput'
 import { checkAddressValidity } from 'utils/validations/checkAddressValidity'
+import ImagesUploader from './subComponents/ImagesUploader'
 
 const ListingFrom = ({
   isEdit,
@@ -92,106 +84,18 @@ const ListingFrom = ({
     images: '',
   })
   const [images, setImages] = useState<string[]>(listing?.images || [])
-  const [selectedBedroom, setSelectedBedroom] = useState(1)
-  const [selectedBathroom, setSelectedBathroom] = useState(1)
-  const [selectedBed, setSelectedBed] = useState(1)
   const [isLoading, setIsLoading] = useState(false)
 
   const handleChange = (
     e: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>,
   ) => {
     const { name, value } = e.target
-    if (/bedroom\d+/g.test(name)) {
-      const modifiedBedrooms = details.bedrooms.map((item) => {
-        if (item.bedroom !== selectedBedroom) {
-          return item
-        } else {
-          return {
-            ...item,
-            bedroomType: value,
-          }
-        }
-      })
-
-      setDetailsErrors((prevState) => ({
-        ...prevState,
-        bedrooms: '',
-      }))
-      return setDetails((prevState) => ({
-        ...prevState,
-        bedrooms: modifiedBedrooms,
-      }))
-    }
-    if (/bathroom\d+/g.test(name)) {
-      const modifiedBathrooms = details.bathrooms.map((item) => {
-        if (item.bathroom !== selectedBathroom) {
-          return item
-        } else {
-          return {
-            ...item,
-            bathroomType: value,
-          }
-        }
-      })
-
-      setDetailsErrors((prevState) => ({
-        ...prevState,
-        bathrooms: '',
-      }))
-      return setDetails((prevState) => ({
-        ...prevState,
-        bathrooms: modifiedBathrooms,
-      }))
-    }
-    if (/bed\d+/g.test(name)) {
-      const modifiedBeds = details.beds.map((item) => {
-        if (item.bed !== selectedBed) {
-          return item
-        } else {
-          return {
-            ...item,
-            bedType: value,
-          }
-        }
-      })
-
-      setDetailsErrors((prevState) => ({
-        ...prevState,
-        beds: '',
-      }))
-
-      return setDetails((prevState) => ({
-        ...prevState,
-        beds: modifiedBeds,
-      }))
-    }
     setDetailsErrors((prevState) => ({
       ...prevState,
       [name]: '',
     }))
 
     return setDetails((prevState) => ({ ...prevState, [name]: value }))
-  }
-  const handleImage = (e: ChangeEvent<HTMLInputElement>) => {
-    if (images.length >= 4) return
-    if (/\.(jpe?g|png)/.test(e.target.files?.[0].name as string)) {
-      const fileReader = new FileReader()
-      fileReader.onload = (e) => {
-        setImages((prevState) => {
-          if (prevState) return [...prevState, e.target?.result as string]
-          return [e.target?.result as string]
-        })
-      }
-      fileReader.readAsDataURL(e.target.files?.[0] as File)
-      return
-    }
-    alert('This is not a valid image file')
-  }
-  const removeImages = (index: number) => {
-    if (images.length === 0) return
-    const modifiedImages = removeImage(images, index)
-    if (!modifiedImages) return
-    return setImages(modifiedImages)
   }
   const handleFeatures = (feature: string) => {
     const alreadyExists = isAdded(feature, details.features)
@@ -232,64 +136,6 @@ const ListingFrom = ({
       rules: modifiedRules,
     }))
   }
-  const addBedroom = () => {
-    return addItem(
-      details.bedrooms,
-      'bedroom' as ObjectKey,
-      'bedroomType' as ObjectKey,
-      'bedrooms',
-      setSelectedBedroom,
-      setDetails,
-    )
-  }
-  const removeBedroom = () => {
-    return removeItem(
-      details.bedrooms,
-      'bedrooms',
-      selectedBedroom,
-      setSelectedBedroom,
-      setDetails,
-    )
-  }
-  const addBathroom = () => {
-    return addItem(
-      details.bathrooms,
-      'bathroom' as ObjectKey,
-      'bathroomType' as ObjectKey,
-      'bathrooms',
-      setSelectedBathroom,
-      setDetails,
-    )
-  }
-  const removeBathroom = () => {
-    return removeItem(
-      details.bathrooms,
-      'bathrooms',
-      selectedBathroom,
-      setSelectedBathroom,
-      setDetails,
-    )
-  }
-  const addBed = () => {
-    return addItem(
-      details.beds,
-      'bed' as ObjectKey,
-      'bedType' as ObjectKey,
-      'beds',
-      setSelectedBed,
-      setDetails,
-    )
-  }
-  const removeBed = () => {
-    return removeItem(
-      details.beds,
-      'beds',
-      selectedBed,
-      setSelectedBed,
-      setDetails,
-    )
-  }
-
   const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault()
 
@@ -345,10 +191,11 @@ const ListingFrom = ({
       }
     }
   }
-
   const handleCancel = () => {
     return router.back()
   }
+
+  console.log(details)
 
   return (
     <>
@@ -371,10 +218,12 @@ const ListingFrom = ({
             details={details}
             detailsErrors={detailsErrors}
             handleChange={handleChange}
-            handleImage={handleImage}
-            removeImages={removeImages}
+          />
+          <ImagesUploader
+            setImages={setImages}
             images={images}
             isEdit={isEdit}
+            error={detailsErrors.images}
           />
         </MainContainer>
 
@@ -398,44 +247,23 @@ const ListingFrom = ({
           <DetailsSelection
             title="Bedroom"
             listItems={details.bedrooms}
-            selectedItem={selectedBedroom}
-            item={'bedroom' as ObjectKey}
-            itemType={'bedroomType' as ObjectKey}
-            choices={bedroomChoices}
-            setSelectedItem={setSelectedBedroom}
-            addItem={addBedroom}
-            removeItem={removeBedroom}
-            handleChange={handleChange}
-            Icon={MdSingleBed}
             error={detailsErrors.bedrooms}
+            setDetails={setDetails}
+            setDetailsErrors={setDetailsErrors}
           />
           <DetailsSelection
             title="Bathroom"
             listItems={details.bathrooms}
-            selectedItem={selectedBathroom}
-            item={'bathroom' as ObjectKey}
-            itemType={'bathroomType' as ObjectKey}
-            choices={bathroomChoices}
-            setSelectedItem={setSelectedBathroom}
-            addItem={addBathroom}
-            removeItem={removeBathroom}
-            handleChange={handleChange}
-            Icon={BiBath}
             error={detailsErrors.bathrooms}
+            setDetails={setDetails}
+            setDetailsErrors={setDetailsErrors}
           />
           <DetailsSelection
             title="Bed"
             listItems={details.beds}
-            selectedItem={selectedBed}
-            item={'bed' as ObjectKey}
-            itemType={'bedType' as ObjectKey}
-            choices={bedChoices}
-            setSelectedItem={setSelectedBed}
-            addItem={addBed}
-            removeItem={removeBed}
-            handleChange={handleChange}
-            Icon={LuBed}
             error={detailsErrors.beds}
+            setDetails={setDetails}
+            setDetailsErrors={setDetailsErrors}
           />
 
           <Container title="Property spacing" type="normal">

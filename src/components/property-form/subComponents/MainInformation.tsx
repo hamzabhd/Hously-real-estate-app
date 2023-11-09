@@ -1,7 +1,4 @@
 'use client'
-
-import { Fragment } from 'react'
-import Image from 'next/image'
 import Container from '@/components/layouts/Container'
 import CustomRadioButton from '@/components/custom/CustomRadioButton'
 import CustomInput from '@/components/custom/CustomInput'
@@ -11,24 +8,17 @@ import {
   MdOutlineApartment,
   MdOutlineSell,
   MdAccessTime,
-  MdOutlineClose,
 } from 'react-icons/md'
-import { LuImagePlus } from 'react-icons/lu'
 import { HiOutlineHome } from 'react-icons/hi'
 import { MainInformationPropType } from '@/types/types'
 
 const MainInformation = ({
   details,
   handleChange,
-  handleImage,
-  removeImages,
-  images,
   detailsErrors,
-  isEdit,
 }: MainInformationPropType) => {
   return (
     <>
-      {/* Property type */}
       <Container
         title="Property type"
         type="grid"
@@ -75,7 +65,6 @@ const MainInformation = ({
           <span className="font-medium">Cabin</span>
         </CustomRadioButton>
       </Container>
-      {/* Listing Type */}
       <Container
         title="Listing type"
         type="grid"
@@ -102,7 +91,6 @@ const MainInformation = ({
           <span className="font-medium">Sell</span>
         </CustomRadioButton>
       </Container>
-      {/* #General information */}
       <Container title="General information" type="normal">
         <CustomInput
           name="title"
@@ -125,76 +113,7 @@ const MainInformation = ({
           letterCounter={160}
         />
       </Container>
-      {/* Images */}
-      {!isEdit ? (
-        <Container type="grid" title="Images" error={detailsErrors.images}>
-          {images!.length < 4 && (
-            <label className="group flex aspect-square h-full w-full cursor-pointer flex-col items-center justify-center gap-y-4 rounded-3xl border-2 border-dashed border-grey p-4 transition-colors hover:border-black/60">
-              <LuImagePlus className="h-8 w-8" />
-              <span className="text-center font-medium text-black/60 transition group-hover:text-black">
-                Click here to upload a new image
-              </span>
-              <input type="file" className="hidden" onChange={handleImage} />
-            </label>
-          )}
-
-          {images.map((image, i) => (
-            <Fragment key={i}>
-              <ImagePreviewer
-                imgUrl={image}
-                index={i}
-                isEdit={isEdit}
-                removeImage={removeImages}
-              />
-            </Fragment>
-          ))}
-        </Container>
-      ) : (
-        <Container type="grid" title="Images">
-          {images.map((image, i) => (
-            <Fragment key={i}>
-              <ImagePreviewer
-                imgUrl={image}
-                index={i}
-                isEdit={isEdit}
-                removeImage={removeImages}
-              />
-            </Fragment>
-          ))}
-        </Container>
-      )}
     </>
-  )
-}
-
-const ImagePreviewer = ({
-  imgUrl,
-  index,
-  isEdit,
-  removeImage,
-}: {
-  imgUrl: string
-  index: number
-  isEdit: boolean
-  removeImage: (id: number) => void
-}) => {
-  return (
-    <div
-      className={`group relative aspect-square h-full w-full overflow-hidden rounded-3xl ${
-        !isEdit ? 'cursor-pointer' : ''
-      }`}
-    >
-      <Image src={imgUrl} alt="property image" fill className="object-cover" />
-      {!isEdit && (
-        <button
-          type="button"
-          className="group/close absolute right-2 top-2 hidden rounded-full border border-white bg-white/60 p-1 transition-colors hover:bg-white group-hover:block"
-          onClick={() => removeImage(index)}
-        >
-          <MdOutlineClose className="h-4 w-4 text-black/40 transition-colors group-hover/close:text-black" />
-        </button>
-      )}
-    </div>
   )
 }
 
