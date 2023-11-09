@@ -54,9 +54,8 @@ const ImageSlider = ({
         <div
           key={i}
           style={{ translate: `${-100 * imageCount}%` }}
-          className={`flex w-full flex-shrink-0 transition-all ease-in md:col-span-2 md:h-full lg:cursor-pointer ${
-            !isCard ? 'aspect-video' : 'aspect-[16/10]'
-          }`}
+          className="${ flex aspect-[16/10] w-full flex-shrink-0 transition-all ease-in md:col-span-2 md:h-full
+             lg:cursor-pointer"
           onClick={() => handleClick(image)}
         >
           <Image

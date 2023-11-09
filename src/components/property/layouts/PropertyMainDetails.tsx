@@ -1,8 +1,8 @@
 import { PropertyType } from '@/types/types'
 import { useState } from 'react'
-import { BiBath } from 'react-icons/bi'
+import { PiCaretRightBold } from 'react-icons/pi'
 import { HiLocationMarker } from 'react-icons/hi'
-import { LuBed, LuBedDouble } from 'react-icons/lu'
+import { LuBath, LuBedDouble, LuBedSingle } from 'react-icons/lu'
 import { TbResize } from 'react-icons/tb'
 import ImageSlider from '../../custom/ImageSlider'
 import ImagePreviewer from '../../custom/ImagePreviewer'
@@ -12,6 +12,8 @@ import SeeMoreBtn from '../../custom/SeeMoreBtn'
 import PropertyReservation from '../containers/PropertyReservation'
 import OwnerContact from '../custom-ui/OwnerContact'
 import { useDisableClick } from 'hooks/useDisableClick'
+import { IoStar } from 'react-icons/io5'
+import { reviewsRate } from 'utils/reviewsRate'
 
 const PropertyMainDetails = ({
   property,
@@ -35,10 +37,16 @@ const PropertyMainDetails = ({
       to: new Date(item.to),
     }))
 
+  const rate = reviewsRate(property.reviews)
+
   return (
     <div className="items-start lg:grid lg:h-[752px] lg:grid-cols-2 lg:gap-x-6 lg:px-6">
       {/* Image previewer */}
       <div className="group relative flex w-full overflow-hidden lg:row-span-2 lg:h-full lg:rounded-3xl">
+        <div className="absolute left-2 top-2 z-50 flex items-center gap-x-2 rounded-full bg-white px-3 py-2 text-xs font-medium tracking-wide">
+          <IoStar />
+          <span>{rate}</span>
+        </div>
         <ImageSlider
           imagesArr={property.images}
           selectImage={selectImage}
@@ -61,15 +69,9 @@ const PropertyMainDetails = ({
         />
         {selected && (
           <ViewMore
-            description={property.description}
-            features={property.features}
-            rules={property.rules}
-            guestsLimit={property.guestsLimit}
-            quietHours={property.quietHours}
-            checkIn={property.checkIn}
-            checkOut={property.checkOut}
             selected={selected}
-            setSelected={setSelected}
+            property={property}
+            toggleContainer={() => setSelected('')}
           />
         )}
         <div className="flex h-full flex-col px-4 md:px-6 lg:px-0">
@@ -78,49 +80,59 @@ const PropertyMainDetails = ({
               {property.title}
             </h1>
             <div className="flex items-center gap-x-2">
-              <HiLocationMarker className="h-4 w-4 text-grey" />
-              <span className="text-sm text-black/60">{property.address}</span>
+              <HiLocationMarker className="text-neutral-800" />
+              <span className="text-xs font-medium tracking-wider text-black/40">
+                {property.address}
+              </span>
             </div>
           </div>
 
           <div className="mb-8 flex items-center gap-x-4">
-            <span className="flex items-center gap-x-1 text-2xl font-bold">
-              ${property.price}
-              <span className="text-base font-normal text-black/60">/ </span>
-              <span className="text-base font-normal text-black/60">night</span>
+            <span className="font-medium ">
+              {property.listingType === 'Rent' ? 'Rental ' : 'Purchase'}price
             </span>
-          </div>
-
-          <div className="mb-8">
-            <div className="flex flex-wrap items-center justify-between sm:justify-normal sm:gap-x-6 lg:gap-x-10">
-              <div className="flex flex-col items-start gap-y-1">
-                <LuBedDouble className="h-6 w-6" />
-                <span className="text-sm font-medium">
-                  {property.bedrooms.length} bedrooms
+            <div className="flex items-center gap-x-4">
+              <span className="flex items-center gap-x-1 text-2xl font-bold">
+                $120
+                <span className="text-base font-normal text-black/60">/ </span>
+                <span className="text-base font-normal text-black/60">
+                  night
                 </span>
-              </div>
-              <div className="flex flex-col gap-y-1">
-                <BiBath className="h-6 w-6" />
-                <span className="text-sm font-medium">
-                  {property.bathrooms.length} bathrooms
-                </span>
-              </div>
-
-              <div className="flex flex-col gap-y-1">
-                <LuBed className="h-6 w-6" />
-                <span className="text-sm font-medium">
-                  {property.beds.length} beds
-                </span>
-              </div>
-
-              <div className="flex flex-col gap-y-1">
-                <TbResize className="h-6 w-6" />
-                <span className="text-sm font-medium">
-                  {property.propertySpace} m²
-                </span>
-              </div>
+              </span>
             </div>
           </div>
+
+          <ul className="mb-8 flex flex-wrap items-center justify-between gap-4 rounded-2xl bg-light-200 p-4 sm:gap-x-6">
+            <li className="hidden items-center gap-x-2 sm:flex">
+              <LuBedDouble className="h-6 w-6 text-black/40" />
+              <span className="text-xs font-medium text-black/40">
+                {property.bedrooms.length} bedrooms
+              </span>
+            </li>
+
+            <li className="flex items-center gap-x-2">
+              <LuBedSingle className="h-6 w-6 text-black/40" />
+              <span className="text-xs font-medium text-black/40">
+                {property.beds.length} beds
+              </span>
+            </li>
+            <li className="flex items-center gap-x-2">
+              <LuBath className="h-6 w-6 text-black/40" />
+              <span className="text-xs font-medium text-black/40">
+                {property.bathrooms.length} baths
+              </span>
+            </li>
+            <li className="flex items-center gap-x-2">
+              <TbResize className="h-6 w-6 text-black/40" />
+              <span className="text-xs font-medium text-black/40">
+                {property.propertySpace} m²
+              </span>
+            </li>
+
+            <li className="ml-auto block cursor-pointer rounded-full p-1 text-black/40 transition-colors hover:bg-light-900 hover:text-black/60 md:p-2">
+              <PiCaretRightBold />
+            </li>
+          </ul>
 
           <div className="mb-6">
             <p className="mb-4 leading-relaxed text-black/60">

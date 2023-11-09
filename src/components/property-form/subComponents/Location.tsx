@@ -6,6 +6,7 @@ const Location = ({
   handleChange,
   detailsErrors,
 }: LocationPropType) => {
+  const { address, country, city, postalCode, state } = detailsErrors
   return (
     <Container title="Property address" type="normal">
       <div className="sm:grid sm:grid-cols-2 sm:gap-4 lg:gap-5">
@@ -15,8 +16,8 @@ const Location = ({
           handleChange={handleChange}
           type="text"
           label="Address"
-          className="relative mb-4 sm:col-span-2 sm:my-0"
-          error={detailsErrors.address}
+          className={`sm:col-span-2 sm:my-0 ${address ? 'mb-0' : 'mb-4'}`}
+          error={address}
         />
         <CustomInput
           name="country"
@@ -24,8 +25,8 @@ const Location = ({
           handleChange={handleChange}
           type="text"
           label="Country"
-          className="relative mb-4 sm:my-0"
-          error={detailsErrors.country}
+          className={`sm:my-0 ${country ? 'mb-0' : 'mb-4'}`}
+          error={country}
         />
 
         <CustomInput
@@ -34,8 +35,8 @@ const Location = ({
           handleChange={handleChange}
           type="text"
           label="City"
-          className="relative mb-4 sm:my-0"
-          error={detailsErrors.city}
+          className={`sm:my-0 ${city ? 'mb-0' : 'mb-4'}`}
+          error={city}
         />
 
         <CustomInput
@@ -44,8 +45,8 @@ const Location = ({
           handleChange={handleChange}
           type="text"
           label="ZIP/Postal code"
-          className="relative mb-4 sm:my-0"
-          error={detailsErrors.postalCode}
+          className={`sm:my-0 ${postalCode ? 'mb-0' : 'mb-4'}`}
+          error={postalCode}
         />
 
         <CustomInput
@@ -54,8 +55,8 @@ const Location = ({
           handleChange={handleChange}
           type="text"
           label="State/Provence"
-          className="relative mb-4 sm:my-0"
-          error={detailsErrors.state}
+          className={`sm:my-0 ${state ? 'mb-0' : 'mb-4'}`}
+          error={state}
         />
       </div>
     </Container>

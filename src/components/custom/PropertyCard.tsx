@@ -16,8 +16,8 @@ const imagesArr = [
   '/images/person.jpg',
   '/images/spain.png',
 ]
-
-const PropertyCard = ({ property }: { property: PropertyType }) => {
+// { property }: { property: PropertyType }
+const PropertyCard = () => {
   const router = useRouter()
   const redirectClick = () => {
     return router.push('/property/someId')

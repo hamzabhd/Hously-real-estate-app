@@ -32,41 +32,50 @@ const PropertyLocation = ({
             The address may be shown on the map as a precise position or as a
             close approximation.
           </p>
-
           <ul className="sm:grid sm:grid-cols-2 sm:gap-x-4 lg:block">
             <li className="mb-6 lg:mb-8">
               <span className="mb-1 block font-medium">Address</span>
               <div className="flex items-center gap-x-2">
-                <HiLocationMarker className="h-4 w-4 text-grey" />
-                <span className="text-sm text-black/60">{address}</span>
+                <HiLocationMarker className="text-neutral-800" />
+                <span className="text-sm font-medium tracking-wider text-black/40">
+                  {address}
+                </span>
               </div>
             </li>
             <li className="mb-6 lg:mb-8">
               <span className="mb-1 block font-medium">Country</span>
               <div className="flex items-center gap-x-2">
-                <HiFlag className="h-4 w-4 text-grey" />
-                <span className="text-sm text-black/60">{country}</span>
+                <HiFlag className="text-neutral-800" />
+                <span className="text-sm font-medium tracking-wider text-black/40">
+                  {country}
+                </span>
               </div>
             </li>
             <li className="mb-6 lg:mb-8">
               <span className="mb-1 block font-medium">City</span>
               <div className="flex items-center gap-x-2">
-                <HiOfficeBuilding className="h-4 w-4 text-grey" />
-                <span className="text-sm text-black/60">{city}</span>
+                <HiOfficeBuilding className="text-neutral-800" />
+                <span className="text-sm font-medium tracking-wider text-black/40">
+                  {city}
+                </span>
               </div>
             </li>
             <li className="mb-6 lg:mb-8">
               <span className="mb-1 block font-medium">Provenance</span>
               <div className="flex items-center gap-x-2">
-                <HiTag className="h-4 w-4 text-grey" />
-                <span className="text-sm text-black/60">{state}</span>
+                <HiTag className="text-neutral-800" />
+                <span className="text-sm font-medium tracking-wider text-black/40">
+                  {state}
+                </span>
               </div>
             </li>
             <li className="mb-6 lg:mb-0">
               <span className="mb-1 block font-medium">ZIP/Postal Code</span>
               <div className="flex items-center gap-x-2">
-                <HiMail className="h-4 w-4 text-grey" />
-                <span className="text-sm text-black/60">{postalCode}</span>
+                <HiMail className="text-neutral-800" />
+                <span className="text-sm font-medium tracking-wider text-black/40">
+                  {postalCode}
+                </span>
               </div>
             </li>
           </ul>

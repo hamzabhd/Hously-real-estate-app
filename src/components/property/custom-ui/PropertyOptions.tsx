@@ -5,16 +5,12 @@ import { useSession } from 'next-auth/react'
 import Link from 'next/link'
 import { useRouter } from 'next/navigation'
 import { useState } from 'react'
-import {
-  HiOutlineDotsHorizontal,
-  HiOutlineFlag,
-  HiOutlineX,
-} from 'react-icons/hi'
-import { MdOutlineModeComment } from 'react-icons/md'
+import { HiOutlineFlag } from 'react-icons/hi'
 import AddReview from '../features/AddReview'
 import ReportProperty from '../features/ReportProperty'
 import SavePropertyButton from '@/components/features/SavePropertyButton'
 import SharePropertyButton from '@/components/features/SharePropertyButton'
+import { TbMessageCircle } from 'react-icons/tb'
 
 const PropertyOptions = ({
   userName,
@@ -31,7 +27,6 @@ const PropertyOptions = ({
 }) => {
   const { data: session } = useSession()
   const router = useRouter()
-  const [showMore, setShowMore] = useState(false)
   const [reportProperty, setReportProperty] = useState(false)
   const { addReview, toggleAddReview } = useAddReview()
 
@@ -58,30 +53,19 @@ const PropertyOptions = ({
             <UserImage imageUrl={profileImage} name={userName} />
           </Link>
 
-          <SavePropertyButton propertyId={propertyId} isSaved={isSaved} />
-
-          <SharePropertyButton propertyId={propertyId} />
-
-          {showMore && session?.user.id !== propertyOwner && (
-            <SpecialButton name="Close" onClick={() => setShowMore(!showMore)}>
-              <HiOutlineX className="h-4 w-4 text-black/60 transition-colors group-hover:text-black" />
-            </SpecialButton>
-          )}
-          {!showMore && session?.user.id !== propertyOwner && (
-            <SpecialButton name="More" onClick={() => setShowMore(!showMore)}>
-              <HiOutlineDotsHorizontal className="h-4 w-4 text-black/60 transition-colors group-hover:text-black" />
-            </SpecialButton>
-          )}
-          {showMore && session?.user.id !== propertyOwner && (
+          {session?.user.id !== propertyOwner && (
             <>
+              <SavePropertyButton propertyId={propertyId} isSaved={isSaved} />
+
               <SpecialButton name="Review" onClick={toggleAddReview}>
-                <MdOutlineModeComment className="h-4 w-4 text-black/60 transition-colors group-hover:text-black" />
+                <TbMessageCircle className="h-4 w-4 text-black/40 transition-colors group-hover:text-black/60" />
               </SpecialButton>
               <SpecialButton name="Report" onClick={toggleReportProperty}>
-                <HiOutlineFlag className="h-4 w-4 text-black/60 transition-colors group-hover:text-black" />
+                <HiOutlineFlag className="h-4 w-4 text-black/40 transition-colors group-hover:text-black/60" />
               </SpecialButton>
             </>
           )}
+          <SharePropertyButton propertyId={propertyId} />
         </div>
       </div>
     </>

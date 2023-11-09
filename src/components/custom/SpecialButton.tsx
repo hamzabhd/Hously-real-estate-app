@@ -3,10 +3,12 @@ import { ReactNode } from 'react'
 const SpecialButton = ({
   children,
   name,
+  hide,
   onClick,
 }: {
   children: ReactNode
   name?: string
+  hide?: boolean
   onClick?: () => void
 }) => {
   return (
@@ -16,15 +18,15 @@ const SpecialButton = ({
       onClick={onClick}
     >
       {children}
-      { name &&
+      {name && (
         <span
           className={`absolute left-1/2 top-full mt-1 hidden -translate-x-1/2 select-none rounded-xl border bg-white px-4 py-2 text-sm ${
-            name ? 'group-hover:block' : ''
+            name && !hide ? 'group-hover:block' : ''
           }`}
         >
           {name}
         </span>
-      }
+      )}
     </button>
   )
 }

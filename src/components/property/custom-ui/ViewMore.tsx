@@ -1,86 +1,41 @@
 import DetailsContainer from '@/components/layouts/DetailsContainer'
+import { PropertyType } from '@/types/types'
 import { HiOutlineX } from 'react-icons/hi'
 import { MdPeopleOutline } from 'react-icons/md'
 import { TbDoorEnter, TbDoorExit, TbMoonStars } from 'react-icons/tb'
 
 const ViewMore = ({
-  description,
-  features,
-  rules,
-  guestsLimit,
-  quietHours,
-  checkIn,
-  checkOut,
   selected,
-  setSelected,
+  property,
+  toggleContainer,
 }: {
-  description: string
-  features: string[]
-  rules: string[]
-  guestsLimit: string
-  quietHours: string
-  checkIn: string
-  checkOut: string
   selected: string
-  setSelected: (selected: string) => void
+  property: PropertyType
+  toggleContainer: () => void
 }) => {
+  const {
+    description,
+    rules,
+    features,
+    quietHours,
+    checkIn,
+    checkOut,
+    guestsLimit,
+  } = property
   return (
     <DetailsContainer>
-      <ul className="flex items-center justify-between gap-x-4 border-b border-grey px-4 lg:px-6">
-        <li className="relative py-5">
-          <span
-            className={`cursor-pointer font-medium ${
-              selected === 'description' ? 'text-black' : 'text-black/60'
-            } transition-colors hover:text-black`}
-            onClick={() => setSelected('description')}
-          >
-            Description
-          </span>
-          <span
-            className={`absolute bottom-0 ${
-              selected === 'description' ? 'block' : 'hidden'
-            } h-1.5 w-[calc(100%-8px)] translate-x-1 rounded-t-lg bg-black`}
-          ></span>
-        </li>
-        <li className="relative py-5">
-          <span
-            className={`cursor-pointer font-medium ${
-              selected === 'features' ? 'text-black' : 'text-black/60'
-            } transition-colors hover:text-black`}
-            onClick={() => setSelected('features')}
-          >
-            Features
-          </span>
-          <span
-            className={`absolute bottom-0 ${
-              selected === 'features' ? 'block' : 'hidden'
-            } h-1.5 w-[calc(100%-8px)] translate-x-1 rounded-t-lg bg-black`}
-          ></span>
-        </li>
-        {rules.length !== 0 && (
-          <li className="relative py-5">
-            <span
-              className={`cursor-pointer font-medium ${
-                selected === 'rules' ? 'text-black/100' : 'text-black/60'
-              } transition-colors hover:text-black`}
-              onClick={() => setSelected('rules')}
-            >
-              Rules
-            </span>
-            <span
-              className={`absolute bottom-0 ${
-                selected === 'rules' ? 'block' : 'hidden'
-              } h-1.5 w-[calc(100%-8px)] translate-x-1 rounded-t-lg bg-black`}
-            ></span>
-          </li>
-        )}
-        <li
+      <div className="flex items-center justify-between gap-x-4 border-b border-grey p-4 lg:px-6">
+        <span className="cursor-pointer font-medium text-black">
+          Property {selected}
+        </span>
+
+        <div
           className="cursor-pointer rounded-full bg-light-100 p-2 transition-colors hover:bg-grey"
-          onClick={() => setSelected('')}
+          onClick={toggleContainer}
         >
           <HiOutlineX className="h-4 w-4" />
-        </li>
-      </ul>
+        </div>
+      </div>
       <div className="max-h-[500px] overflow-y-auto px-4 md:max-h-[700px] lg:px-6">
         {selected === 'description' && (
           <p className="py-6 leading-relaxed">{description}</p>

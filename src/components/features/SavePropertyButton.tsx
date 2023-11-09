@@ -37,9 +37,9 @@ const SavePropertyButton = ({
       {pending && <SmallSpinner />}
       <SpecialButton name={isSaved ? 'Saved' : 'Save'} onClick={handleSave}>
         {isSaved ? (
-          <HiBookmark className="h-4 w-4 text-black/40 transition-colors group-hover:text-black" />
+          <HiBookmark className="h-4 w-4 text-black/40 transition-colors group-hover:text-black/60" />
         ) : (
-          <HiOutlineBookmark className="h-4 w-4 text-black/40 transition-colors group-hover:text-black" />
+          <HiOutlineBookmark className="h-4 w-4 text-black/40 transition-colors group-hover:text-black/60" />
         )}
       </SpecialButton>
     </div>

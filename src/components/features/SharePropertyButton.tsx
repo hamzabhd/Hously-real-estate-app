@@ -20,6 +20,7 @@ const SharePropertyButton = ({ propertyId }: { propertyId: string }) => {
     )
     setCopied(true)
   }
+
   return (
     <div className="relative">
       {share && (
@@ -53,8 +54,8 @@ const SharePropertyButton = ({ propertyId }: { propertyId: string }) => {
           </div>
         </div>
       )}
-      <SpecialButton onClick={() => setShare(!share)} name="Share">
-        <HiOutlineShare className="h-4 w-4 text-black/60 transition-colors group-hover:text-black" />
+      <SpecialButton onClick={() => setShare(!share)} name="Share" hide={share}>
+        <HiOutlineShare className="h-4 w-4 text-black/40 transition-colors group-hover:text-black/60" />
       </SpecialButton>
     </div>
   )
