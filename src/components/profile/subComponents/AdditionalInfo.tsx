@@ -1,4 +1,5 @@
 import CustomInput from '@/components/custom/CustomInput'
+import CustomTextArea from '@/components/custom/CustomTextArea'
 import { UserDetails } from '@/types/types'
 import React, { ChangeEvent } from 'react'
 
@@ -10,7 +11,7 @@ type AdditionalInfoPropType = {
 const AdditionalInfo = ({ details, handleChange }: AdditionalInfoPropType) => {
   return (
     <div className="mb-6 md:col-start-2 md:col-end-4 lg:pt-7">
-      <CustomInput
+      <CustomTextArea
         name="bio"
         value={details.bio}
         handleChange={handleChange}
@@ -18,7 +19,7 @@ const AdditionalInfo = ({ details, handleChange }: AdditionalInfoPropType) => {
         className="relative mb-4 md:mb-5"
       />
 
-      <CustomInput
+      <CustomTextArea
         name="background"
         value={details.background}
         handleChange={handleChange}

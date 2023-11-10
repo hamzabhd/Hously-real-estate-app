@@ -269,7 +269,7 @@ const ListingFrom = ({
           <Container title="Property spacing" type="normal">
             <CustomInput
               max={5}
-              label="Space"
+              label="Area"
               type="text"
               className="relative"
               handleChange={handleChange}

@@ -1,7 +1,7 @@
+import { PricingPropType } from '@/types/types'
 import { MdOutlineAttachMoney } from 'react-icons/md'
 import Container from '@/components/layouts/Container'
 import CustomInput from '@/components/custom/CustomInput'
-import { PricingPropType } from '@/types/types'
 const Pricing = ({ handleChange, details, detailsErrors }: PricingPropType) => {
   return (
     <Container title="Pricing" type="normal">

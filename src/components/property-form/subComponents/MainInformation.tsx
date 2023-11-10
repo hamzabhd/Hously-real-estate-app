@@ -11,6 +11,7 @@ import {
 } from 'react-icons/md'
 import { HiOutlineHome } from 'react-icons/hi'
 import { MainInformationPropType } from '@/types/types'
+import CustomTextArea from '@/components/custom/CustomTextArea'
 
 const MainInformation = ({
   details,
@@ -19,6 +20,7 @@ const MainInformation = ({
 }: MainInformationPropType) => {
   return (
     <>
+      {/* Property type */}
       <Container
         title="Property type"
         type="grid"
@@ -65,6 +67,7 @@ const MainInformation = ({
           <span className="font-medium">Cabin</span>
         </CustomRadioButton>
       </Container>
+      {/* Listing type */}
       <Container
         title="Listing type"
         type="grid"
@@ -91,6 +94,7 @@ const MainInformation = ({
           <span className="font-medium">Sell</span>
         </CustomRadioButton>
       </Container>
+      {/* General Information */}
       <Container title="General information" type="normal">
         <CustomInput
           name="title"
@@ -103,7 +107,7 @@ const MainInformation = ({
           max={20}
           letterCounter={20}
         />
-        <CustomInput
+        <CustomTextArea
           name="description"
           value={details.description}
           handleChange={handleChange}

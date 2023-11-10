@@ -231,3 +231,21 @@ export type DetailsSelectionProps = {
   setDetailsErrors: Dispatch<SetStateAction<DetailsStateErrors>>
   error?: string
 }
+
+export interface InputPropsType {
+  name: string
+  value: string
+  className: string
+  handleChange: (e: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => void
+  max?: number
+  placeholder?: string
+  label?: string
+  type?: string
+  message?: string
+  error?: string
+  children?: ReactNode
+  letterCounter?: number
+}
+
+export interface TextAreaPropsType
+  extends Omit<InputPropsType, 'placeholder' | 'max' | 'children' | 'type'> {}
