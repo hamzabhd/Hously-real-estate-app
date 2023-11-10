@@ -15,6 +15,7 @@ const PropertyReviews = ({
   const [reviewsToSee, setReviewsToSee] = useState(3)
   const { addReview, toggleAddReview } = useAddReview()
 
+  // show show more reviews
   const handleReviews = () => {
     setReviewsToSee((prevState) => {
       if (propertyReviews.length <= prevState) {

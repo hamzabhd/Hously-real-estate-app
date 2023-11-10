@@ -23,9 +23,9 @@ const ReservationButtons = ({
             Reserve
           </button>
         ) : (
-          <div className="flex flex-grow items-center justify-center gap-x-2 rounded-full border-2 border-grey py-3 sm:gap-x-2">
+          <div className="flex flex-grow items-center justify-center gap-x-2 rounded-full border-2 py-3 sm:gap-x-2">
             <HiOutlineCheck className="h-4 w-4 flex-shrink-0 text-green-600" />
-            <span className=" text-black/60 sm:text-base">
+            <span className=" text-sm text-black sm:text-base">
               Reserved on {reformDate(alreadyReserved.from)}
             </span>
           </div>
@@ -40,7 +40,7 @@ const ReservationButtons = ({
       )}
       <button
         className={`flex w-1/4 items-center justify-center rounded-full border-2 px-6 py-3 transition-colors hover:border-black/60 ${
-          availability ? 'border-black/60' : 'border-grey'
+          availability ? 'border-black/60' : ''
         }`}
         onClick={toggleAvailability}
       >

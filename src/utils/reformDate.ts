@@ -1,11 +1,7 @@
 export const reformDate = (date: string): string => {
-  const newDate = new Date(date)
+  const newDate = new Date(date).toString()
 
-  const reformed =
-    newDate.getDate() +
-    ' / ' +
-    (newDate.getMonth() + 1) +
-    ' / ' +
-    newDate.getFullYear()
+  const regEx = /[a-z]+\s+\d+\s\d+/gi
+  const reformed = newDate.match(regEx)?.[0] as string
   return reformed
 }

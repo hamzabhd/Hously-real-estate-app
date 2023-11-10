@@ -93,15 +93,21 @@ const PropertyMainDetails = ({
 
           <div className="mb-8 flex items-center gap-x-4">
             <span className="font-medium ">
-              {property.listingType === 'Rent' ? 'Rental ' : 'Purchase'}price
+              {property.listingType === 'Rent' ? 'Rental ' : 'Purchase '}price
             </span>
             <div className="flex items-center gap-x-4">
               <span className="flex items-center gap-x-1 text-2xl font-bold">
-                $120
-                <span className="text-base font-normal text-black/60">/ </span>
-                <span className="text-base font-normal text-black/60">
-                  night
-                </span>
+                ${property.price}
+                {property.listingType === 'Rent' && (
+                  <>
+                    <span className="text-base font-normal text-black/60">
+                      /{' '}
+                    </span>
+                    <span className="text-base font-normal text-black/60">
+                      night
+                    </span>
+                  </>
+                )}
               </span>
             </div>
           </div>
