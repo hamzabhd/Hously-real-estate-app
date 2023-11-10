@@ -68,7 +68,7 @@ const ImageSlider = ({
             blurDataURL="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR42mP88R8AAvUB+VkkrXoAAAAASUVORK5CYII="
             style={{
               objectFit: 'cover',
-              width: '100%',
+              width: 'auto',
               height: 'auto',
             }}
           />

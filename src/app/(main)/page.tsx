@@ -1,13 +1,14 @@
-import PropertyCard from '@/components/custom/PropertyCard'
+import PropertiesPage from '@/components/custom/PropertiesPage'
+import { getProperties } from 'utils/getProperties'
 
-export default function Home() {
+const Home = async () => {
+  const properties = await getProperties()
+
   return (
-    <div className="mx-auto grid max-w-[1600px] gap-4 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 ">
-      <PropertyCard />
-      <PropertyCard />
-      <PropertyCard />
-      <PropertyCard />
-      <PropertyCard />
+    <div className="min-h-screen">
+      <PropertiesPage properties={properties} />
     </div>
   )
 }
+
+export default Home
