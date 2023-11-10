@@ -80,6 +80,7 @@ const PropertyLocation = ({
             </li>
           </ul>
         </div>
+        {/* render the map depending on the address provided */}
         <div className="relative h-[500px] w-full overflow-hidden rounded-3xl border-2 lg:h-[550px] ">
           <Map address={address} />
         </div>

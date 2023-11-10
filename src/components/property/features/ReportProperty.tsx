@@ -27,24 +27,15 @@ const ReportProperty = ({
   }, [state])
 
   return (
-    <DetailsContainer>
-      <div className="flex items-center justify-between gap-x-4 border-b border-grey p-4 lg:px-6">
-        <span className="cursor-pointer font-medium text-black">
-          Report Property
-        </span>
-
-        <div
-          className="cursor-pointer rounded-full bg-light-100 p-2 transition-colors hover:bg-grey"
-          onClick={toggleReportProperty}
-        >
-          <HiOutlineX className="h-4 w-4" />
-        </div>
-      </div>
+    <DetailsContainer
+      title="Report property"
+      toggleContainer={toggleReportProperty}
+    >
       <div className="max-h-[580px] overflow-y-scroll p-4 pb-0 lg:max-h-[760px] lg:overflow-auto lg:px-6">
         <form
-          action={async (formData) => {
+          action={(formData) => {
             formData.append('propertyId', propertyId)
-            await formAction(formData)
+            formAction(formData)
           }}
         >
           <span className="mb-4 block font-medium lg:mb-5">

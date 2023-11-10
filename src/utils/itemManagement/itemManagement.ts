@@ -1,5 +1,12 @@
-import { DetailsState, ArrType, ObjectKey } from '@/types/types'
+import {
+  DetailsState,
+  ArrType,
+  ObjectKey,
+  ChoicesType,
+  ChoiceType,
+} from '@/types/types'
 import { Dispatch, SetStateAction } from 'react'
+import { choices } from './data/data'
 
 export const addItem = (
   listItems: ArrType,
@@ -40,4 +47,11 @@ export const removeItem = (
 export const removeImage = (arr: string[], index: number) => {
   if (arr.length === 0) return
   return arr.filter((item, i) => i !== index)
+}
+
+export const getRightChoice = (type: string, choice: string) => {
+  const rightChoice = (choices[type as ObjectKey] as ChoicesType).filter(
+    (item) => item.choice.toLocaleLowerCase() === choice.toLocaleLowerCase(),
+  )[0]
+  return rightChoice
 }

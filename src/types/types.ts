@@ -218,11 +218,13 @@ export interface ReservationContainerType {
   clearReservation: () => void
   children: ReactNode
 }
-export type ChoicesType = {
+
+export type ChoiceType = {
   id: string
   choice: string
   desc: string
-}[]
+}
+export type ChoicesType = ChoiceType[]
 
 export type DetailsSelectionProps = {
   title: string
@@ -249,3 +251,5 @@ export interface InputPropsType {
 
 export interface TextAreaPropsType
   extends Omit<InputPropsType, 'placeholder' | 'max' | 'children' | 'type'> {}
+
+export type ChoiceKeys = 'bedrooms' | 'beds' | 'bathrooms'

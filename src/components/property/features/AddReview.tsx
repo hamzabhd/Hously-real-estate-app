@@ -28,19 +28,7 @@ const AddReview = ({
   }, [state])
 
   return (
-    <DetailsContainer>
-      <div className="flex items-center justify-between gap-x-4 border-b border-grey p-4 lg:px-6">
-        <span className="cursor-pointer font-medium text-black">
-          Add Review
-        </span>
-
-        <div
-          className="cursor-pointer rounded-full bg-light-100 p-2 transition-colors hover:bg-grey"
-          onClick={toggleAddReview}
-        >
-          <HiOutlineX className="h-4 w-4" />
-        </div>
-      </div>
+    <DetailsContainer title="Add review" toggleContainer={toggleAddReview}>
       <div className="max-h-[580px] overflow-y-scroll p-4 pb-0 lg:max-h-[760px] lg:overflow-auto lg:px-6">
         <h2 className="mb-4 text-xl font-medium">
           What do you think about this property?
@@ -51,9 +39,9 @@ const AddReview = ({
         </p>
 
         <form
-          action={async (formData) => {
+          action={(formData) => {
             formData.append('propertyId', propertyId)
-            await formAction(formData)
+            formAction(formData)
           }}
         >
           <span className="mb-4 block font-medium lg:mb-5">
@@ -100,7 +88,7 @@ const AddReview = ({
               What would you say about this property?
             </span>
             <textarea
-              className="block h-36 w-full resize-none appearance-none rounded-3xl border border-grey bg-transparent p-4 text-black focus:border-black/60 focus:outline-none focus:ring-0"
+              className="block h-36 w-full resize-none appearance-none rounded-3xl border border-grey bg-transparent p-4 text-sm text-black focus:border-black/60 focus:outline-none focus:ring-0"
               placeholder="Share your thoughts here..."
               name="reviewContent"
             />

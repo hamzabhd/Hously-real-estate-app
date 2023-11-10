@@ -1,6 +1,5 @@
 import DetailsContainer from '@/components/layouts/DetailsContainer'
 import { PropertyType } from '@/types/types'
-import { HiOutlineX } from 'react-icons/hi'
 import { MdPeopleOutline } from 'react-icons/md'
 import { TbDoorEnter, TbDoorExit, TbMoonStars } from 'react-icons/tb'
 
@@ -23,19 +22,10 @@ const ViewMore = ({
     guestsLimit,
   } = property
   return (
-    <DetailsContainer>
-      <div className="flex items-center justify-between gap-x-4 border-b border-grey p-4 lg:px-6">
-        <span className="cursor-pointer font-medium text-black">
-          Property {selected}
-        </span>
-
-        <div
-          className="cursor-pointer rounded-full bg-light-100 p-2 transition-colors hover:bg-grey"
-          onClick={toggleContainer}
-        >
-          <HiOutlineX className="h-4 w-4" />
-        </div>
-      </div>
+    <DetailsContainer
+      title={`Property ${selected}`}
+      toggleContainer={toggleContainer}
+    >
       <div className="max-h-[500px] overflow-y-auto px-4 md:max-h-[700px] lg:px-6">
         {selected === 'description' && (
           <p className="py-6 leading-relaxed">{description}</p>

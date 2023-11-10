@@ -14,6 +14,7 @@ import OwnerContact from '../custom-ui/OwnerContact'
 import { useDisableClick } from 'hooks/useDisableClick'
 import { IoStar } from 'react-icons/io5'
 import { reviewsRate } from 'utils/reviewsRate'
+import EssentialDetails from '../custom-ui/EssentialDetails'
 
 const PropertyMainDetails = ({
   property,
@@ -25,18 +26,20 @@ const PropertyMainDetails = ({
   const { disableClick } = useDisableClick()
   const [selectedImage, setSelectedImage] = useState('')
   const [selected, setSelected] = useState('')
+  const [moreDetails, setMoreDetails] = useState(false)
   const selectImage = (image: string) => {
+    // disable image previewer on small screens
     if (!disableClick) return
-    return setSelectedImage(image)
+    setSelectedImage(image)
   }
 
+  // mapping the reservations to only dates
   const propertyReservation =
     property.reservations &&
     property.reservations.map((item) => ({
       from: new Date(item.from),
       to: new Date(item.to),
     }))
-
   const rate = reviewsRate(property.reviews)
 
   return (
@@ -74,6 +77,7 @@ const PropertyMainDetails = ({
             toggleContainer={() => setSelected('')}
           />
         )}
+
         <div className="flex h-full flex-col px-4 md:px-6 lg:px-0">
           <div className="mb-8 mt-4 lg:mt-6">
             <h1 className="mb-1 text-3xl font-medium lg:text-4xl">
@@ -101,8 +105,14 @@ const PropertyMainDetails = ({
               </span>
             </div>
           </div>
-
-          <ul className="mb-8 flex flex-wrap items-center justify-between gap-4 rounded-2xl bg-light-200 p-4 sm:gap-x-6">
+          {/* display more details */}
+          {moreDetails && (
+            <EssentialDetails
+              toggleContainer={() => setMoreDetails(false)}
+              property={property}
+            />
+          )}
+          <ul className="mb-8 flex flex-wrap items-center justify-between gap-4 rounded-2xl bg-light-200 p-4 sm:gap-x-5">
             <li className="hidden items-center gap-x-2 sm:flex">
               <LuBedDouble className="h-6 w-6 text-black/40" />
               <span className="text-xs font-medium text-black/40">
@@ -129,8 +139,13 @@ const PropertyMainDetails = ({
               </span>
             </li>
 
-            <li className="ml-auto block cursor-pointer rounded-full p-1 text-black/40 transition-colors hover:bg-light-900 hover:text-black/60 md:p-2">
-              <PiCaretRightBold />
+            <li className="ml-auto block">
+              <button
+                className="cursor-pointer rounded-full bg-light-900 p-1 text-black/60 transition-colors md:p-2 lg:bg-transparent lg:text-black/40 lg:hover:bg-light-900 lg:hover:text-black/60"
+                onClick={() => setMoreDetails(true)}
+              >
+                <PiCaretRightBold />
+              </button>
             </li>
           </ul>
 

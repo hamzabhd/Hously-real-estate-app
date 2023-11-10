@@ -35,6 +35,7 @@ const ImageSlider = ({
       return prevState - 1
     })
   }
+  // decide wether to allow the click or not
   const handleClick = (image: string) => {
     if (!isCard && selectImage) return selectImage(image)
     return redirectClick?.()
