@@ -35,13 +35,6 @@ const PropertyMainDetails = ({
     if (!disableClick) return
     setSelectedImage(image)
   }
-  // mapping the reservations to only dates
-  const propertyReservation =
-    property.reservations &&
-    property.reservations.map((item) => ({
-      from: new Date(item.from),
-      to: new Date(item.to),
-    }))
   // getting the property reviews rate based on the reviews
   const rate = reviewsRate(property.reviews)
   return (
@@ -207,10 +200,7 @@ const PropertyMainDetails = ({
             )}
           </div>
           {property.listingType === 'Rent' ? (
-            <PropertyReservation
-              property={property}
-              arrOfDates={propertyReservation}
-            />
+            <PropertyReservation property={property} />
           ) : (
             <OwnerContact user={property.owner} />
           )}

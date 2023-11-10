@@ -13,13 +13,7 @@ import PropertyAvailability from '../custom-ui/PropertyAvailability'
 import ReserveDateSelection from '../custom-ui/ReserveDateSelection'
 import ReservationGuests from '../custom-ui/ReservationGuests'
 
-const PropertyReservation = ({
-  property,
-  arrOfDates,
-}: {
-  property: PropertyType
-  arrOfDates: ReservationsType[]
-}) => {
+const PropertyReservation = ({ property }: { property: PropertyType }) => {
   const router = useRouter()
   const { data: session } = useSession()
   const [availability, setAvailability] = useState(false)
@@ -146,6 +140,14 @@ const PropertyReservation = ({
     setAvailability(!availability)
     setReserve(false)
   }
+
+  // mapping the reservations to only dates
+  const arrOfDates =
+    property.reservations &&
+    property.reservations.map((item) => ({
+      from: new Date(item.from),
+      to: new Date(item.to),
+    }))
 
   const nights = getNightsRange(selectDate.from, selectDate.to).length || 0
   const reservationTotal =

@@ -101,6 +101,7 @@ function Calendar({
           return ''
         }
       }
+      // disallowing user from selecting the days that already passed
       if (oldDate) {
         return (
           <span
@@ -110,6 +111,7 @@ function Calendar({
             {d > 0 ? d : ''}
           </span>
         )
+        // the start day and the only selected day make it rounded
       } else if (selectDate?.from === newDate && select) {
         return (
           <span
@@ -123,6 +125,7 @@ function Calendar({
             {d > 0 ? d : ''}
           </span>
         )
+        // selected days
       } else if (isSelected && select) {
         return (
           <span
@@ -138,6 +141,7 @@ function Calendar({
         )
       }
 
+      // get class name based on the index of the date
       const getClassName = () => {
         if (!first && !last) {
           return 'rounded-full bg-light-500 text-black/40'
@@ -149,6 +153,7 @@ function Calendar({
           return 'rounded-r-full bg-light-500 text-black/40'
         }
       }
+      // already reserved dates
       if (reservedDate) {
         return (
           <span
