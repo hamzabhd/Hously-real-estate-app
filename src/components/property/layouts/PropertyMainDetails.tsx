@@ -15,24 +15,26 @@ import { useDisableClick } from 'hooks/useDisableClick'
 import { IoStar } from 'react-icons/io5'
 import { reviewsRate } from 'utils/reviewsRate'
 import EssentialDetails from '../custom-ui/EssentialDetails'
+import { isAdded } from 'utils/isAdded'
 
 const PropertyMainDetails = ({
   property,
-  isSaved,
+  savedProperties,
 }: {
   property: PropertyType
-  isSaved: boolean
+  savedProperties: string[]
 }) => {
   const { disableClick } = useDisableClick()
   const [selectedImage, setSelectedImage] = useState('')
   const [selected, setSelected] = useState('')
   const [moreDetails, setMoreDetails] = useState(false)
+  // check if the user already saved this property
+  const isSaved = isAdded(property._id, savedProperties)
   const selectImage = (image: string) => {
     // disable image previewer on small screens
     if (!disableClick) return
     setSelectedImage(image)
   }
-
   // mapping the reservations to only dates
   const propertyReservation =
     property.reservations &&
@@ -40,8 +42,8 @@ const PropertyMainDetails = ({
       from: new Date(item.from),
       to: new Date(item.to),
     }))
+  // getting the property reviews rate based on the reviews
   const rate = reviewsRate(property.reviews)
-
   return (
     <div className="items-start lg:grid lg:h-[752px] lg:grid-cols-2 lg:gap-x-6 lg:px-6">
       {/* Image previewer */}

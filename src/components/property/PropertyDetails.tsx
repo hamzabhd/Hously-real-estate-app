@@ -3,7 +3,6 @@ import PropertyMainDetails from './layouts/PropertyMainDetails'
 import PropertyReviews from './layouts/PropertyReviews'
 import PropertyLocation from './layouts/PropertyLocation'
 import { PropertyType } from '@/types/types'
-import { isAdded } from 'utils/isAdded'
 
 const PropertyPage = ({
   property,
@@ -13,12 +12,11 @@ const PropertyPage = ({
   savedProperties: string[]
 }) => {
   const isIntercepted = true
-
   return (
     <div className="lg:mt-4">
       <PropertyMainDetails
         property={property}
-        isSaved={isAdded(property._id, savedProperties) || false}
+        savedProperties={savedProperties}
       />
       <PropertyReviews
         propertyId={property._id}
