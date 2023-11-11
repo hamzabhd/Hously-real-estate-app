@@ -14,13 +14,14 @@ const SavePropertyButton = ({
   isSaved: boolean
 }) => {
   const router = useRouter()
-  const { data: session } = useSession()
+  const { status } = useSession()
   const [pending, startTransition] = useTransition()
   const saveActionWithId = saveProperty.bind(null, propertyId)
   const unSaveActionWithId = unSaveProperty.bind(null, propertyId)
 
   const handleSave = () => {
-    if (!session) {
+    if (status === 'loading') return
+    if (status === 'unauthenticated') {
       return router.push('/sign-up')
     }
     if (isSaved) {

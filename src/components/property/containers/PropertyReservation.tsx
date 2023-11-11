@@ -15,7 +15,7 @@ import ReservationGuests from '../custom-ui/ReservationGuests'
 
 const PropertyReservation = ({ property }: { property: PropertyType }) => {
   const router = useRouter()
-  const { data: session } = useSession()
+  const { data: session, status } = useSession()
   const [availability, setAvailability] = useState(false)
   const [reserve, setReserve] = useState(false)
   const [numberOfGuests, setNumberOfGuests] = useState(1)
@@ -117,9 +117,9 @@ const PropertyReservation = ({ property }: { property: PropertyType }) => {
     })
   }
   const addGuests = () => {
+    const guests = Number(property.guestsLimit) || 10
     setNumberOfGuests((prevState) => {
-      if (prevState >= Number(property.guestsLimit))
-        return Number(property.guestsLimit)
+      if (prevState >= guests) return guests
       return prevState + 1
     })
   }
@@ -130,7 +130,8 @@ const PropertyReservation = ({ property }: { property: PropertyType }) => {
     })
   }
   const toggleReserve = () => {
-    if (!session) {
+    if (status === 'loading') return
+    if (status === 'unauthenticated') {
       return router.push('/sign-up')
     }
     setReserve(true)
@@ -140,7 +141,6 @@ const PropertyReservation = ({ property }: { property: PropertyType }) => {
     setAvailability(!availability)
     setReserve(false)
   }
-
   // mapping the reservations to only dates
   const arrOfDates =
     property.reservations &&
@@ -151,12 +151,17 @@ const PropertyReservation = ({ property }: { property: PropertyType }) => {
 
   const nights = getNightsRange(selectDate.from, selectDate.to).length || 0
   const reservationTotal =
-    Number(property.price) * nights + Number(property.price) * nights * 0.05
+    nights === 0
+      ? 0
+      : Number(property.cleaningFee) +
+        Number(property.cleaningFee) +
+        Number(property.price) * nights +
+        Number(property.price) * nights * 0.05
 
   const reservationObj = {
     price: property.price,
     cleaningFee: property.cleaningFee,
-    securityFee: property.cleaningFee,
+    securityFee: property.securityFee,
     nights,
     reservationTotal,
   }

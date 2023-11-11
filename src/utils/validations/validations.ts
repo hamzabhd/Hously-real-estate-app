@@ -30,11 +30,9 @@ export const listingSchema = z.object({
   listingType: z
     .string()
     .min(1, { message: 'You should select one type at least' }),
-  title: z
-    .string()
-    .min(20, { message: 'Title should be at least 20 characters long' }),
-  description: z.string().min(160, {
-    message: 'Description should be at least 160 characters long',
+  title: z.string().min(1, { message: 'This field is required' }),
+  description: z.string().min(1, {
+    message: 'This field is required',
   }),
   images: z
     .string()

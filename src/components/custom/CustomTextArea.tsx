@@ -10,6 +10,7 @@ const CustomTextArea = ({
   message,
   error,
   letterCounter,
+  max,
 }: TextAreaPropsType) => {
   return (
     <div className={className}>
@@ -20,6 +21,7 @@ const CustomTextArea = ({
           value={value}
           onChange={handleChange}
           placeholder=" "
+          maxLength={max}
           className={`peer block h-36 w-full resize-none appearance-none rounded-3xl border border-grey bg-transparent p-4 text-sm text-black focus:border-black/60 focus:outline-none focus:ring-0
             ${error && 'border-red-500 pr-10 text-red-400'}
             `}

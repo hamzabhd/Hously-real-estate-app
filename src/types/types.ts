@@ -250,6 +250,6 @@ export interface InputPropsType {
 }
 
 export interface TextAreaPropsType
-  extends Omit<InputPropsType, 'placeholder' | 'max' | 'children' | 'type'> {}
+  extends Omit<InputPropsType, 'placeholder' | 'children' | 'type'> {}
 
 export type ChoiceKeys = 'bedrooms' | 'beds' | 'bathrooms'

@@ -1,14 +1,12 @@
 'use client'
 import { ChangeEvent, Fragment, useState } from 'react'
 import { BiMinus } from 'react-icons/bi'
-import CustomRadioButton from '@/components/custom/CustomRadioButton'
 import Container from '@/components/layouts/Container'
-import { ChoicesType, DetailsSelectionProps, ObjectKey } from '@/types/types'
 import { choices } from 'utils/itemManagement/data/data'
-import { MdSingleBed } from 'react-icons/md'
-import { LuBed } from 'react-icons/lu'
-import { BiBath } from 'react-icons/bi'
 import { addItem, removeItem } from 'utils/itemManagement/itemManagement'
+import { LuBedSingle, LuBedDouble, LuBath } from 'react-icons/lu'
+import CustomRadioButton from '@/components/custom/CustomRadioButton'
+import { ChoicesType, DetailsSelectionProps, ObjectKey } from '@/types/types'
 
 const DetailsSelection = ({
   title,
@@ -21,7 +19,11 @@ const DetailsSelection = ({
   const [selectedItem, setSelectedItem] = useState(alwaysLast || 1)
   const item = title.toLocaleLowerCase()
   const Icon =
-    item === 'bedroom' ? MdSingleBed : item === 'bathroom' ? BiBath : LuBed
+    item === 'bedroom'
+      ? LuBedDouble
+      : item === 'bathroom'
+      ? LuBath
+      : LuBedSingle
 
   const itemIndex = item as ObjectKey
   const regEx = new RegExp(item + 'd*', 'g')

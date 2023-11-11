@@ -151,7 +151,7 @@ const PropertyMainDetails = ({
           </ul>
 
           <div className="mb-6">
-            <p className="mb-4 leading-relaxed text-black/60">
+            <p className="mb-4 overflow-hidden leading-relaxed text-black/60">
               {property.description.slice(0, 156)}...
             </p>
             <SeeMoreBtn

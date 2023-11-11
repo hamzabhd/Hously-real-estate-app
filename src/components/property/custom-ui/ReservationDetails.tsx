@@ -5,6 +5,8 @@ const ReservationDetails = ({
 }: {
   reservation: ReservationDetailsType
 }) => {
+  const { securityFee, cleaningFee, nights, price, reservationTotal } =
+    reservation
   return (
     <>
       <span className="mx-auto hidden h-px w-[calc(100%-2rem)] bg-grey md:block"></span>
@@ -14,33 +16,33 @@ const ReservationDetails = ({
             Price per night
           </span>
           <div className="flex items-center gap-x-4">
-            <span>{reservation.price}$</span>
+            <span>{price}$</span>
             <span>x</span>
-            <span>{reservation.nights}</span>
+            <span>{nights}</span>
           </div>
         </div>
         <div className="mb-4 flex items-center justify-between ">
           <span className="text-sm text-black/60 underline">Cleaning fees</span>
           <div className="flex items-center gap-x-4">
-            <span>{reservation.cleaningFee || 0}$</span>
+            <span>{cleaningFee || 0}$</span>
             <span>x</span>
-            <span>1</span>
+            <span>{nights}</span>
           </div>
         </div>
         <div className="mb-4 flex items-center justify-between">
           <span className="text-sm text-black/60 underline">Security fees</span>
           <div className="flex items-center gap-x-4">
-            <span>{reservation.securityFee || 0}$</span>
+            <span>{securityFee || 0}$</span>
             <span>x</span>
-            <span>1</span>
+            <span>{nights}</span>
           </div>
         </div>
         <div className="flex items-center justify-between">
           <span className="text-sm text-black/60 underline">Hously fees</span>
           <div className="flex items-center gap-x-4">
-            <span>{reservation.price}$ x 5%</span>
+            <span>{price}$ x 5%</span>
             <span>x</span>
-            <span>{reservation.nights}</span>
+            <span>{nights}</span>
           </div>
         </div>
       </div>
@@ -48,7 +50,7 @@ const ReservationDetails = ({
         <span className="absolute top-0 mx-auto hidden h-px w-[calc(100%-2rem)] bg-grey md:block"></span>
         <span className="text-lg font-bold">Reservation total</span>
         <span className="flex items-center gap-x-4 text-lg font-bold">
-          {reservation.reservationTotal}$
+          {reservationTotal}$
         </span>
       </div>
     </>

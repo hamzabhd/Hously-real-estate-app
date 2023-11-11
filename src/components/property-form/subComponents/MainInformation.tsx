@@ -104,8 +104,8 @@ const MainInformation = ({
           label="Title"
           className="relative mb-4 md:mb-5"
           error={detailsErrors.title}
-          max={20}
-          letterCounter={20}
+          max={25}
+          letterCounter={25}
         />
         <CustomTextArea
           name="description"
@@ -114,7 +114,7 @@ const MainInformation = ({
           label="Description"
           className="relative mb-4 md:mb-5"
           error={detailsErrors.description}
-          letterCounter={160}
+          letterCounter={600}
         />
       </Container>
     </>
