@@ -1,7 +1,7 @@
 import Image from 'next/image'
 import React, { useState } from 'react'
 import { PiCaretLeftBold, PiCaretRightBold } from 'react-icons/pi'
-
+import { CldImage } from 'next-cloudinary'
 const ImageSlider = ({
   imagesArr,
   isCard,
@@ -55,22 +55,22 @@ const ImageSlider = ({
         <div
           key={i}
           style={{ translate: `${-100 * imageCount}%` }}
-          className="${ flex aspect-[16/10] w-full flex-shrink-0 transition-all ease-in md:col-span-2 md:h-full
+          className="relative flex aspect-[16/10] w-full flex-shrink-0 transition-all ease-in md:col-span-2 md:h-full
              lg:cursor-pointer"
           onClick={() => handleClick(image)}
         >
-          <Image
+          {/* using cloudinary Image for optimizing purposes */}
+          <CldImage
             src={image}
             alt="property image"
-            height={500}
-            width={500}
             placeholder="blur"
             blurDataURL="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR42mP88R8AAvUB+VkkrXoAAAAASUVORK5CYII="
+            loading="lazy"
             style={{
               objectFit: 'cover',
-              width: 'auto',
-              height: 'auto',
             }}
+            sizes="(min-width: 1024px) 1200px, 100vw"
+            fill
           />
         </div>
       ))}

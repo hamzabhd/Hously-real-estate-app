@@ -195,8 +195,6 @@ const ListingFrom = ({
     return router.back()
   }
 
-  console.log(details)
-
   return (
     <>
       {isLoading && (

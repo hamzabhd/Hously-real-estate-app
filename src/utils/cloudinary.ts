@@ -33,6 +33,7 @@ export const uploadImage = async (imagePath: string, folder: string) => {
     use_filename: true,
     unique_filename: false,
     folder: 'hously_app/' + folder,
+    quality: 'auto',
   }
 
   try {

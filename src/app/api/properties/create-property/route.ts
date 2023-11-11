@@ -1,10 +1,11 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { listingSchema } from 'utils/validations/validations'
 import { connectToDb } from 'utils/connectToDb'
-import Property from 'models/property'
 import { uploadImage } from 'utils/cloudinary'
-import User from 'models/user'
 import { serverSession } from 'utils/getUser'
+import { reformDate } from 'utils/reformDate'
+import Property from 'models/property'
+import User from 'models/user'
 
 export const POST = async (req: NextRequest) => {
   const { body, images } = await req.json()
@@ -19,7 +20,10 @@ export const POST = async (req: NextRequest) => {
     let imagesArr: string[] = []
 
     for (let i = 0; i < images.length; i++) {
-      const secure_url = await uploadImage(images[i], 'properties')
+      const secure_url = await uploadImage(
+        images[i],
+        'properties/' + body.title + '-' + reformDate(new Date().toString()),
+      )
       imagesArr.push(secure_url!)
     }
 

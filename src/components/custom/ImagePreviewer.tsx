@@ -1,5 +1,4 @@
-import Image from 'next/image'
-import React from 'react'
+import { CldImage } from 'next-cloudinary'
 import { HiOutlineX } from 'react-icons/hi'
 
 const ImagePreviewer = ({
@@ -11,23 +10,23 @@ const ImagePreviewer = ({
 }) => {
   return (
     <div
-      className={`left-0 top-0 z-50 hidden h-full w-full items-center justify-center bg-black/60 backdrop-blur-sm lg:fixed ${
+      className={`relative left-0 top-0 z-50 hidden h-full w-full items-center justify-center bg-black/60 backdrop-blur-sm lg:fixed ${
         !image ? 'hidden' : 'lg:flex'
       }`}
     >
-      <div className="relative flex overflow-hidden rounded-3xl shadow-md lg:w-3/4 xl:w-1/2">
+      <div className="relative aspect-video  h-3/4 w-[1200px] overflow-hidden rounded-3xl shadow-md ">
         {image && (
-          <Image
+          <CldImage
             src={image}
             alt="property image"
-            height={500}
-            width={500}
             placeholder="blur"
             blurDataURL="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR42mP88R8AAvUB+VkkrXoAAAAASUVORK5CYII="
+            loading="lazy"
             style={{
               objectFit: 'cover',
-              width: '100%',
             }}
+            sizes="(min-width: 1024px) 1200px"
+            fill
           />
         )}
       </div>
