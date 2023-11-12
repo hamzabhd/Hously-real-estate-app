@@ -253,3 +253,14 @@ export interface TextAreaPropsType
   extends Omit<InputPropsType, 'placeholder' | 'children' | 'type'> {}
 
 export type ChoiceKeys = 'bedrooms' | 'beds' | 'bathrooms'
+
+export interface CustomSelectionPropType {
+  name: string
+  label: string
+  listItems: string[]
+  Icon: IconType
+  error?: string
+}
+
+export interface CustomRangePropType
+  extends Omit<CustomSelectionPropType, 'listItems'> {}

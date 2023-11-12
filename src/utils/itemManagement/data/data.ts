@@ -158,3 +158,12 @@ export const reviewsArr = [
     rating: '1',
   },
 ]
+
+export const regions = [
+  'Europe',
+  'America',
+  'Asia',
+  'Africa',
+  'Australia',
+  'Anywhere',
+]
