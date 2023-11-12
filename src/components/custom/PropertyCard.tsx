@@ -1,17 +1,22 @@
 'use client'
-import React from 'react'
 import ImageSlider from './ImageSlider'
+import SavePropertyButton from '../features/SavePropertyButton'
+import Link from 'next/link'
+import { IoStar } from 'react-icons/io5'
 import { LuBath, LuBedDouble } from 'react-icons/lu'
 import { HiLocationMarker } from 'react-icons/hi'
 import { TbResize } from 'react-icons/tb'
-import SavePropertyButton from '../features/SavePropertyButton'
-import { IoStar } from 'react-icons/io5'
-import Link from 'next/link'
 import { useRouter } from 'next/navigation'
 import { PropertyType } from '@/types/types'
 import { reviewsRate } from 'utils/reviewsRate'
 
-const PropertyCard = ({ property }: { property: PropertyType }) => {
+const PropertyCard = ({
+  property,
+  isSaved,
+}: {
+  property: PropertyType
+  isSaved: boolean
+}) => {
   const router = useRouter()
   const redirectClick = () => {
     return router.push(`/property/${property._id}`)
@@ -56,7 +61,7 @@ const PropertyCard = ({ property }: { property: PropertyType }) => {
             </div>
           </Link>
 
-          <SavePropertyButton isSaved={false} propertyId={property._id} />
+          <SavePropertyButton isSaved={isSaved} propertyId={property._id} />
         </div>
 
         <Link href={`/property/${property._id}`} className="cursor-pointer">
