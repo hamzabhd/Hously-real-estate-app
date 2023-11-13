@@ -258,6 +258,8 @@ export interface CustomSelectionPropType {
   name: string
   label: string
   listItems: string[]
+  selectedValue: string
+  getValue: (value: string) => void
   Icon: IconType
   error?: string
 }

@@ -137,6 +137,23 @@
   .calender-grid {
     grid-template-columns: repeat(7, 54px);
   }
+
+  .custom-slider .rc-slider-rail {
+    @apply h-2 rounded-full border-2 bg-white;
+  }
+
+  .custom-slider .rc-slider-track {
+    @apply h-2 rounded-full bg-neutral-800;
+  }
+
+  .custom-slider .rc-slider-handle {
+    @apply h-5 w-5 border-2 border-white bg-neutral-800 opacity-100;
+  }
+
+  .custom-slider
+    .rc-slider-handle-dragging.rc-slider-handle-dragging.rc-slider-handle-dragging {
+    @apply border-none border-transparent shadow-none;
+  }
 }
 
 .map-container {

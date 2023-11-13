@@ -18,7 +18,7 @@ const NavOptions = ({
         <div className="flex items-center gap-x-2">
           <Link
             href="/create-property"
-            className="hidden cursor-pointer rounded-full border border-grey px-6 py-3 font-medium text-black hover:border-black/60 focus:outline-none focus-visible:ring-4 focus-visible:ring-neutral-600 lg:block"
+            className="hidden cursor-pointer rounded-full bg-black px-6 py-3 font-medium text-white transition-colors hover:bg-neutral-800 focus:outline-none focus-visible:ring-4 focus-visible:ring-neutral-600 lg:block"
           >
             <span>List your property</span>
           </Link>

@@ -1,13 +1,12 @@
 'use client'
 import { useState } from 'react'
 import { HiMenuAlt1, HiOutlineX } from 'react-icons/hi'
-import Link from 'next/link'
 import { UserObj } from '@/types/types'
+import { FiSearch } from 'react-icons/fi'
+import Link from 'next/link'
 import NavDropDown from './NavDropDown'
 import NavOptions from './NavOptions'
-import { FiSearch } from 'react-icons/fi'
-import FindProperty from './FindProperty'
-import SearchInputs from './SearchInputs'
+import SearchForm from '../custom/SearchForm'
 
 type NavbarPropsType = {
   user: UserObj
@@ -34,6 +33,7 @@ const Navbar = ({ user, session }: NavbarPropsType) => {
         isOpen || activeSearch ? 'bg-white' : 'bg-white/60'
       }`}
     >
+      {/* App logo goes here */}
       <div className="w-[238px]">
         <Link
           href="/"
@@ -43,17 +43,26 @@ const Navbar = ({ user, session }: NavbarPropsType) => {
         </Link>
       </div>
 
-      <FindProperty
-        activeSearch={activeSearch}
-        setActiveSearch={setActiveSearch}
-      />
+      {/* button for toggling search */}
+      <button
+        className="hidden items-center gap-x-4 rounded-full border border-grey p-0.5 pr-6 transition-colors hover:border-black/60 lg:flex"
+        onClick={toggleSearch}
+      >
+        <div className="rounded-full bg-black p-3 ">
+          <FiSearch className="text-lg text-white " />
+        </div>
 
+        <span className="font-medium">Find a property</span>
+      </button>
+
+      {/* right options depends on the authentication state */}
       <NavOptions
         toggleNav={() => setIsOpen(!isOpen)}
         user={user}
         session={Boolean(session)}
       />
 
+      {/* small to medium screens buttons */}
       <div className="flex cursor-pointer items-center gap-x-4 lg:hidden">
         <button onClick={toggleSearch}>
           <FiSearch className="text-xl" />
@@ -66,12 +75,10 @@ const Navbar = ({ user, session }: NavbarPropsType) => {
           )}
         </button>
       </div>
-
-      {activeSearch && (
-        <SearchInputs activeSearch={activeSearch} toggleSearch={toggleSearch} />
-      )}
-
+      {/* nav dropdown */}
       {isOpen && <NavDropDown user={user} session={Boolean(session)} />}
+      {/* search form opened */}
+      {activeSearch && <SearchForm toggleSearch={toggleSearch} />}
     </nav>
   )
 }

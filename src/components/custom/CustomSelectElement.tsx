@@ -6,11 +6,12 @@ const CustomSelectElement = ({
   name,
   label,
   listItems,
+  selectedValue,
+  getValue,
   Icon,
   error,
 }: CustomSelectionPropType) => {
   const [select, setSelect] = useState(false)
-  const [selectedValue, setSelectedValue] = useState('')
   return (
     <div
       className={`relative w-full cursor-pointer appearance-none border bg-white p-4 ${
@@ -38,10 +39,8 @@ const CustomSelectElement = ({
         }`}
       >
         <Icon className="text-lg" />
-        <span className="text-sm">{selectedValue || '_'}</span>
+        <span className="text-sm">{selectedValue || '.'}</span>
       </div>
-      {/* holds the current selected value */}
-      <input hidden type="text" name={name} defaultValue={selectedValue} />
       {/* selection list rendered dynamically  */}
       {select && (
         <ul
@@ -53,7 +52,7 @@ const CustomSelectElement = ({
             <li
               key={i}
               className="flex cursor-pointer items-center gap-x-4 rounded-2xl px-2 py-3"
-              onClick={() => setSelectedValue(item)}
+              onClick={() => getValue(item)}
             >
               <Icon className="text h-4 w-4" />
               <span className="text-black/60">{item}</span>
