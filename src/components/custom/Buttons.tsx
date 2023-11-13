@@ -3,17 +3,19 @@ import Line from './Line'
 
 const Buttons = ({
   name,
+  className,
   handleClick,
   handleCancel,
 }: {
   name: string
+  className?: string
   handleClick?: () => void
   handleCancel?: () => void
 }) => {
   return (
-    <div className="mt-12">
-      <Line />
-      <div className="mb-4 mt-auto flex gap-x-2 md:mb-5 md:ml-auto md:w-fit">
+    <div className={`bg-white ${className ? className : 'mb-4 mt-12'}`}>
+      {!className && <Line />}
+      <div className="mt-auto flex gap-x-2 md:mb-5 md:ml-auto md:w-fit">
         <button
           type="button"
           className="flex w-full cursor-pointer items-center justify-center rounded-full border border-grey px-8 py-3 font-medium text-black transition-colors hover:border-black/60 focus:outline-none focus-visible:ring-4 focus-visible:ring-neutral-600"

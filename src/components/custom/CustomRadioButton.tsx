@@ -15,7 +15,7 @@ const CustomRadioButton = ({
   handleChange?: (e: ChangeEvent<HTMLInputElement>) => void
 }) => {
   return (
-    <div className="relative">
+    <label className="relative">
       <input
         type="radio"
         className="peer absolute right-4 top-4"
@@ -25,13 +25,10 @@ const CustomRadioButton = ({
         id={id}
         checked={selected}
       />
-      <label
-        htmlFor={id}
-        className="transitions-colors group flex h-24 w-full cursor-pointer flex-col justify-center  gap-y-2 rounded-2xl border-2 border-grey p-4 peer-checked:border-black/60"
-      >
+      <div className="transitions-colors group flex h-24 w-full cursor-pointer flex-col justify-center  gap-y-2 rounded-2xl border-2 border-grey p-4 peer-checked:border-black/60">
         {children}
-      </label>
-    </div>
+      </div>
+    </label>
   )
 }
 

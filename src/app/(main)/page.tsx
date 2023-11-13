@@ -7,7 +7,7 @@ const Home = async () => {
   // const currentUser = await getUser()
 
   return (
-    <div className="min-h-screen">
+    <div className="min-h-screen bg-red-100">
       {/* <PropertiesPage
         properties={properties}
         savedProperties={currentUser?.savedProperties}

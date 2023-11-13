@@ -67,7 +67,9 @@ const Navbar = ({ user, session }: NavbarPropsType) => {
         </button>
       </div>
 
-      {activeSearch && <SearchInputs activeSearch={activeSearch} />}
+      {activeSearch && (
+        <SearchInputs activeSearch={activeSearch} toggleSearch={toggleSearch} />
+      )}
 
       {isOpen && <NavDropDown user={user} session={Boolean(session)} />}
     </nav>
