@@ -15,9 +15,18 @@ import Container from '../layouts/Container'
 import CustomRadioButton from '../custom/CustomRadioButton'
 import Buttons from '../custom/Buttons'
 import SearchContainer from '../layouts/SearchContainer'
+import { useSearchQueries } from 'hooks/useSearchQueries'
+
+export type SearchInputsTypes = {
+  property: string
+  type: string
+  region: string
+  range: number[]
+}
 
 const SearchForm = ({ toggleSearch }: { toggleSearch: () => void }) => {
-  const [searchInputs, setSearchInput] = useState({
+  const { handleQueries, searchParams } = useSearchQueries()
+  const [searchInputs, setSearchInput] = useState<SearchInputsTypes>({
     property: '',
     type: '',
     region: '',
@@ -39,8 +48,19 @@ const SearchForm = ({ toggleSearch }: { toggleSearch: () => void }) => {
       region: value,
     }))
   }
-  const handleSubmit = (e: FormEvent<HTMLFormElement>) => {
-    e.preventDefault()
+  const handleSearch = () => {
+    for (let input in searchInputs) {
+      const currentInput = searchInputs[input as keyof SearchInputsTypes]
+      if (input === 'range') {
+        const minSearch = searchParams.get('min')
+        const maxSearch = searchParams.get('max')
+        handleQueries(currentInput[0].toString(), 'min', minSearch, 'search')
+        handleQueries(currentInput[1].toString(), 'max', maxSearch, 'search')
+      } else {
+        const currentSearch = searchParams.get(input)
+        handleQueries(currentInput as string, input, currentSearch, 'search')
+      }
+    }
   }
 
   const clearAllForm = () => {
@@ -53,10 +73,7 @@ const SearchForm = ({ toggleSearch }: { toggleSearch: () => void }) => {
   }
   return (
     <SearchContainer clearAllForm={clearAllForm}>
-      <form
-        className="h-[calc(100%-140px)] w-full flex-col overflow-y-auto bg-white p-4 pb-6 md:relative md:flex md:h-[calc(100%-57px)] md:rounded-3xl  lg:p-6"
-        onSubmit={handleSubmit}
-      >
+      <div className="h-[calc(100%-140px)] w-full flex-col overflow-y-auto bg-white p-4 pb-6 md:relative md:flex md:h-[calc(100%-57px)] md:rounded-3xl  lg:p-6">
         <Container
           title="What type of property are you looking for?"
           type="grid"
@@ -153,10 +170,11 @@ const SearchForm = ({ toggleSearch }: { toggleSearch: () => void }) => {
         />
         <Buttons
           name="Search"
+          handleClick={handleSearch}
           handleCancel={toggleSearch}
           className="absolute bottom-0 left-0 z-50 w-full border-t p-4"
         />
-      </form>
+      </div>
     </SearchContainer>
   )
 }
