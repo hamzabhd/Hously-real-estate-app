@@ -160,3 +160,17 @@
   width: 100%;
   height: 100%;
 }
+
+.show-items {
+  animation: show-items 1.5s;
+}
+
+@keyframes show-items {
+  0% {
+    opacity: 0;
+  }
+
+  100% {
+    opacity: 100;
+  }
+}

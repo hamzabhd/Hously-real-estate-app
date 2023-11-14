@@ -3,10 +3,12 @@ import { useState } from 'react'
 import { HiMenuAlt1, HiOutlineX } from 'react-icons/hi'
 import { UserObj } from '@/types/types'
 import { FiSearch } from 'react-icons/fi'
+import { IoFilter } from 'react-icons/io5'
 import Link from 'next/link'
 import NavDropDown from './NavDropDown'
 import NavOptions from './NavOptions'
 import SearchForm from '../custom/SearchForm'
+import FilterNav from '../custom/FilterNav'
 
 type NavbarPropsType = {
   user: UserObj
@@ -79,6 +81,8 @@ const Navbar = ({ user, session }: NavbarPropsType) => {
       {isOpen && <NavDropDown user={user} session={Boolean(session)} />}
       {/* search form opened */}
       {activeSearch && <SearchForm toggleSearch={toggleSearch} />}
+
+      <FilterNav />
     </nav>
   )
 }
