@@ -9,7 +9,7 @@ import {
   MdOutlineSell,
   MdOutlineVilla,
 } from 'react-icons/md'
-import { ChangeEvent, FormEvent, useState } from 'react'
+import { ChangeEvent, useState } from 'react'
 import CustomRangeInput from '../custom/CustomRangeInput'
 import Container from '../layouts/Container'
 import CustomRadioButton from '../custom/CustomRadioButton'
@@ -17,16 +17,9 @@ import Buttons from '../custom/Buttons'
 import SearchContainer from '../layouts/SearchContainer'
 import { useSearchQueries } from 'hooks/useSearchQueries'
 
-export type SearchInputsTypes = {
-  property: string
-  type: string
-  region: string
-  range: number[]
-}
-
 const SearchForm = ({ toggleSearch }: { toggleSearch: () => void }) => {
-  const { handleQueries, searchParams } = useSearchQueries()
-  const [searchInputs, setSearchInput] = useState<SearchInputsTypes>({
+  const { handleSearchQueries } = useSearchQueries()
+  const [searchInputs, setSearchInput] = useState({
     property: '',
     type: '',
     region: '',
@@ -49,18 +42,15 @@ const SearchForm = ({ toggleSearch }: { toggleSearch: () => void }) => {
     }))
   }
   const handleSearch = () => {
-    for (let input in searchInputs) {
-      const currentInput = searchInputs[input as keyof SearchInputsTypes]
-      if (input === 'range') {
-        const minSearch = searchParams.get('min')
-        const maxSearch = searchParams.get('max')
-        handleQueries(currentInput[0].toString(), 'min', minSearch, 'search')
-        handleQueries(currentInput[1].toString(), 'max', maxSearch, 'search')
-      } else {
-        const currentSearch = searchParams.get(input)
-        handleQueries(currentInput as string, input, currentSearch, 'search')
-      }
+    const searchObj = {
+      property: searchInputs.property,
+      listing: searchInputs.type,
+      region: searchInputs.region.toLowerCase(),
+      min: searchInputs.range[0].toString(),
+      max: searchInputs.range[1].toString(),
     }
+    handleSearchQueries(searchObj, 'search')
+    toggleSearch()
   }
 
   const clearAllForm = () => {
@@ -80,41 +70,41 @@ const SearchForm = ({ toggleSearch }: { toggleSearch: () => void }) => {
           isSearch
         >
           <CustomRadioButton
-            value="Apartment"
+            value="apartment"
             name="property"
             id="apartment"
             handleChange={handleChange}
-            selected={searchInputs.property === 'Apartment'}
+            selected={searchInputs.property === 'apartment'}
           >
             <MdOutlineApartment className="h-6 w-6" />
             <span className="font-medium">Apartment</span>
           </CustomRadioButton>
           <CustomRadioButton
-            value="House"
+            value="house"
             name="property"
             id="house"
             handleChange={handleChange}
-            selected={searchInputs.property === 'House'}
+            selected={searchInputs.property === 'house'}
           >
             <HiOutlineHome className="h-6 w-6" />
             <span className="font-medium">House</span>
           </CustomRadioButton>
           <CustomRadioButton
-            value="Villa"
+            value="villa"
             name="property"
             id="villa"
             handleChange={handleChange}
-            selected={searchInputs.property === 'Villa'}
+            selected={searchInputs.property === 'villa'}
           >
             <MdOutlineVilla className="h-6 w-6" />
             <span className="font-medium">Villa</span>
           </CustomRadioButton>
           <CustomRadioButton
-            value="Cabin"
+            value="cabin"
             name="property"
             id="cabin"
             handleChange={handleChange}
-            selected={searchInputs.property === 'Cabin'}
+            selected={searchInputs.property === 'cabin'}
           >
             <MdOutlineCabin className="h-6 w-6" />
             <span className="font-medium">Cabin</span>
@@ -126,21 +116,21 @@ const SearchForm = ({ toggleSearch }: { toggleSearch: () => void }) => {
           type="grid"
         >
           <CustomRadioButton
-            value="Rent"
+            value="rent"
             name="type"
             id="rent"
             handleChange={handleChange}
-            selected={searchInputs.type === 'Rent'}
+            selected={searchInputs.type === 'rent'}
           >
             <MdAccessTime className="h-6 w-6" />
             <span className="font-medium">Rent</span>
           </CustomRadioButton>
           <CustomRadioButton
-            value="Buy"
+            value="buy"
             name="type"
             id="buy"
             handleChange={handleChange}
-            selected={searchInputs.type === 'Buy'}
+            selected={searchInputs.type === 'buy'}
           >
             <MdOutlineSell className="h-6 w-6" />
             <span className="font-medium">Buy</span>

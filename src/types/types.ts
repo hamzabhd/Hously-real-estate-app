@@ -266,3 +266,11 @@ export interface CustomSelectionPropType {
 
 export interface CustomRangePropType
   extends Omit<CustomSelectionPropType, 'listItems'> {}
+
+export type SearchObjTypes = {
+  property: string
+  listing: string
+  region: string
+  min: string
+  max: string
+}
