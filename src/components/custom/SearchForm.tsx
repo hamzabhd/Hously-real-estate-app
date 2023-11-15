@@ -44,10 +44,10 @@ const SearchForm = ({ toggleSearch }: { toggleSearch: () => void }) => {
   const handleSearch = () => {
     const searchObj = {
       property: searchInputs.property,
-      listing: searchInputs.type,
+      type: searchInputs.type,
       region: searchInputs.region.toLowerCase(),
-      min: searchInputs.range[0].toString(),
-      max: searchInputs.range[1].toString(),
+      minPrice: searchInputs.range[0].toString(),
+      maxPrice: searchInputs.range[1].toString(),
     }
     handleSearchQueries(searchObj, 'search')
     toggleSearch()

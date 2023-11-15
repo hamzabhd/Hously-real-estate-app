@@ -8,24 +8,27 @@ const FilterNav = () => {
   const style = !isFilter
     ? {
         width: '85px',
-        backgroundColor: 'transparent',
         borderRadius: '50px',
       }
     : {
         width: '100%',
-        backgroundColor: 'rgba(255, 255, 255, .6)',
       }
 
   return (
     <div className="absolute left-0 top-full mt-px flex w-full items-center justify-center">
-      <div className="px-4 py-2 transition-all duration-300" style={style}>
+      <div
+        className={`px-4 py-2 transition-all duration-300 ${
+          isFilter ? 'bg-white/60 backdrop-blur-lg ' : ''
+        }`}
+        style={style}
+      >
         {isFilter ? (
           <FilterButtons hideFilter={() => setIsFilter(false)} />
         ) : (
           <>
             {/* main button that fires the filter nav */}
             <button
-              className="show-items flex items-center justify-center gap-x-2 rounded-full bg-white/60 px-4 py-2 transition-colors hover:bg-white"
+              className="show-items flex items-center justify-center gap-x-2 rounded-full bg-black/10 px-4 py-2 backdrop-blur-lg transition-colors hover:bg-black/20"
               onClick={() => setIsFilter(true)}
             >
               <IoFilter className="text-sm" />

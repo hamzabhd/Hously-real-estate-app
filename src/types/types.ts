@@ -58,6 +58,7 @@ export type DetailsState = {
   price: string
   cleaningFee: string
   securityFee: string
+  region: string
 }
 
 export interface ListingsDetails extends DetailsState {
@@ -268,9 +269,9 @@ export interface CustomRangePropType
   extends Omit<CustomSelectionPropType, 'listItems'> {}
 
 export type SearchObjTypes = {
-  property: string
-  listing: string
-  region: string
-  min: string
-  max: string
+  property: string | null
+  type: string | null
+  region: string | null
+  minPrice: string | null
+  maxPrice: string | null
 }

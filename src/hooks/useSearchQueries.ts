@@ -5,6 +5,13 @@ export const useSearchQueries = () => {
   const router = useRouter()
   const searchParams = useSearchParams()
   const pathname = usePathname()
+  const searchQueries = {
+    type: searchParams.get('listing'),
+    property: searchParams.get('property'),
+    region: searchParams.get('region'),
+    minPrice: searchParams.get('min'),
+    maxPrice: searchParams.get('max'),
+  }
   const handleQueries = (
     value: string,
     query: string,
@@ -33,5 +40,6 @@ export const useSearchQueries = () => {
     handleQueries,
     handleSearchQueries,
     searchParams,
+    searchQueries,
   }
 }

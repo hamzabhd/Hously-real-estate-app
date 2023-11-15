@@ -18,13 +18,13 @@ const FilterButtons = ({ hideFilter }: { hideFilter: () => void }) => {
     if (type === value) {
       return 'border-black/60'
     }
-    return 'border-grey'
+    return 'border-black/20'
   }
 
   return (
     <div className="show-items flex w-full flex-col items-center justify-center gap-x-2 md:flex-row md:justify-between">
       <div className="w-full py-2 md:w-1/4 md:py-1 ">
-        <span className="mb-4 block text-xs font-medium tracking-wider text-black/60 md:hidden">
+        <span className="mb-4 block text-xs font-medium tracking-wider md:hidden">
           Listing type
         </span>
         <ul className="flex items-center gap-x-2">
@@ -49,7 +49,7 @@ const FilterButtons = ({ hideFilter }: { hideFilter: () => void }) => {
         </ul>
       </div>
       <div className="w-full py-2 pb-4 md:ml-auto md:w-1/2 md:py-1">
-        <span className="mb-4 block text-xs font-medium tracking-wider text-black/60 md:hidden">
+        <span className="mb-4 block text-xs font-medium tracking-wider md:hidden">
           Property type
         </span>
         <ul className="grid w-full grid-cols-2 gap-2 md:flex">
