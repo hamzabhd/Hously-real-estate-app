@@ -1,5 +1,5 @@
-import UserImage from '@/components/custom/UserImage'
 import { ProfileImageUploadType } from '@/types/types'
+import Image from 'next/image'
 import { ChangeEvent, useState } from 'react'
 import { IoClose } from 'react-icons/io5'
 import { LuImagePlus } from 'react-icons/lu'
@@ -32,11 +32,12 @@ const ProfileImageUploader = ({
   }
   return (
     <div className="mb-4 flex gap-x-4 sm:col-start-1 sm:col-end-3 md:mb-5">
-      <UserImage
-        name="Jana Lorene"
-        imageUrl={image || oldImage}
+      <Image
+        src={image || oldImage}
+        alt="User profile image"
         width={96}
         height={96}
+        className="aspect-square flex-shrink-0 rounded-full object-cover"
       />
       <div
         className={`group flex w-full flex-col items-center justify-center gap-y-4 overflow-hidden rounded-3xl border-2 border-grey transition-colors ${

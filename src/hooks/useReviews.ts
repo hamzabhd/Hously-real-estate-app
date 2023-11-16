@@ -4,7 +4,7 @@ import { ReviewObj } from '@/types/types'
 export const useReviews = (reviewObj: ReviewObj[]) => {
   const [reviewToShow, setReviewToShow] = useState<string>('')
 
-  const reviewFound = reviewObj.find((review) => review.id === reviewToShow)
+  const reviewFound = reviewObj.find((review) => review._id === reviewToShow)
 
   return {
     reviewFound,

@@ -255,12 +255,12 @@ export interface TextAreaPropsType
 export type ChoiceKeys = 'bedrooms' | 'beds' | 'bathrooms'
 
 export interface CustomSelectionPropType {
-  name: string
   label: string
   listItems: string[]
   selectedValue: string
   getValue: (value: string) => void
-  Icon: IconType
+  className?: string
+  Icon?: IconType
   error?: string
 }
 
@@ -278,4 +278,26 @@ export type SearchObjTypes = {
 export type ProfileImageUploadType = {
   oldImage: string
   setProfileImage: Dispatch<SetStateAction<string>>
+}
+
+export type PersonalInfoPropType = {
+  details: UserDetails
+  errors: UserDetails
+  handleChange: (e: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => void
+}
+
+export type UserLocationType = {
+  details: UserDetails
+  setUserDetails: Dispatch<SetStateAction<UserDetails>>
+}
+
+export interface CountryObjType {
+  countryName: string
+  countryCode: string
+  continent: string
+}
+
+export interface CityObjType {
+  cityName: string
+  cityRegion: string
 }

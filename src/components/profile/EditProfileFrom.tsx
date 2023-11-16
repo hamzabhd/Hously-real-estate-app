@@ -12,6 +12,7 @@ import axios from 'axios'
 import { useRouter } from 'next/navigation'
 import Spinner from '../loaders/Spinner'
 import ProfileImageUploader from './subComponents/ProfileImageUploader'
+import EditLocationInfo from './subComponents/EditLocationInfo'
 
 const EditProfileForm = ({ user }: { user: UserObj }) => {
   const router = useRouter()
@@ -125,7 +126,7 @@ const EditProfileForm = ({ user }: { user: UserObj }) => {
   return (
     <>
       {isLoading && <Spinner label="Updating profile..." />}
-      <form className="my-4 lg:mt-8" onSubmit={handleSubmit}>
+      <form className="my-6 lg:mt-8" onSubmit={handleSubmit}>
         <MainContainer
           order="01"
           title="Personal information"
@@ -140,6 +141,10 @@ const EditProfileForm = ({ user }: { user: UserObj }) => {
               details={userDetails}
               errors={errorInputs}
               handleChange={handleChange}
+            />
+            <EditLocationInfo
+              details={userDetails}
+              setUserDetails={setUserDetails}
             />
           </div>
         </MainContainer>

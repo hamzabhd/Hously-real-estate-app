@@ -1,13 +1,5 @@
-import { ChangeEvent } from 'react'
-import { UserDetails } from '@/types/types'
-
+import { PersonalInfoPropType } from '@/types/types'
 import CustomInput from '@/components/custom/CustomInput'
-
-type PersonalInfoPropType = {
-  details: UserDetails
-  errors: UserDetails
-  handleChange: (e: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => void
-}
 
 const PersonalInfo = ({
   details,
@@ -37,24 +29,6 @@ const PersonalInfo = ({
         className="relative mb-4 md:mb-5"
         message="Please include your country code (e.g. +1)"
         error={errors.phoneNumber}
-      />
-
-      <CustomInput
-        name="country"
-        value={details.country}
-        handleChange={handleChange}
-        type="text"
-        label="Country"
-        className="relative mb-4 md:mb-0"
-      />
-
-      <CustomInput
-        name="city"
-        value={details.city}
-        handleChange={handleChange}
-        type="text"
-        label="City"
-        className="relative mb-0"
       />
     </>
   )
