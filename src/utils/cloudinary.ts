@@ -4,16 +4,18 @@ cloudinary.config({
   secure: true,
 })
 
-export const uploadProfileImage = async (imagePath: string) => {
+export const uploadProfileImage = async (imagePath: string, id: string) => {
   const options = {
     use_filename: true,
     unique_filename: false,
-    folder: 'hously_app/profiles',
+    folder: 'hously_app/profiles/' + id,
+    width: 1000,
+    crop: 'scale',
+    quality: 'auto',
   }
 
   try {
     const result = await cloudinary.uploader.upload(imagePath, options)
-    console.log(result)
     return result.secure_url
   } catch (e) {
     console.error(e)
@@ -45,7 +47,7 @@ export const uploadImage = async (imagePath: string, folder: string) => {
 }
 
 export const getPublicId = (url: string) => {
-  const regEx = /[a-z]+\_\w+\/[a-z]+\/\w+/g
+  const regEx = /[a-z]+\_\w+\/[a-z]+\/\w+\/\w+/g
   const publicId = url.match(regEx)
 
   return publicId?.[0]

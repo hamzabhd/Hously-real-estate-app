@@ -4,10 +4,11 @@ import User from 'models/user'
 import { getUser, serverSession } from 'utils/getUser'
 import { userSchema } from 'utils/validations/validations'
 import {
-  uploadImage,
   destroyOldProfileImage,
   getPublicId,
+  uploadProfileImage,
 } from 'utils/cloudinary'
+import { revalidatePath } from 'next/cache'
 
 export const POST = async (req: NextRequest) => {
   const { body, profileImage } = await req.json()
@@ -21,6 +22,7 @@ export const POST = async (req: NextRequest) => {
     })
   }
 
+  // everything within this block is handling the profile image
   if (profileImage !== user.profilePicture) {
     console.log('image does not match profile')
     if (/res.cloudinary.com/g.test(user.profilePicture)) {
@@ -36,7 +38,7 @@ export const POST = async (req: NextRequest) => {
       }
     }
     try {
-      const secure_url = await uploadImage(profileImage, 'profiles')
+      const secure_url = await uploadProfileImage(profileImage, user._id)
       await connectToDb()
       await User.findByIdAndUpdate(
         userId,
@@ -53,6 +55,7 @@ export const POST = async (req: NextRequest) => {
     }
   }
 
+  // everything within this block is handling the user information
   try {
     await connectToDb()
     await User.findByIdAndUpdate(
@@ -76,9 +79,12 @@ export const POST = async (req: NextRequest) => {
       },
       { new: true },
     )
-    console.log('user updated successfully')
+    revalidatePath('/')
   } catch (e) {
-    throw new Error('Updating user profile failed: ' + e)
+    return NextResponse.json({
+      success: false,
+      message: 'Updating profile went wrong',
+    })
   }
   return NextResponse.json({
     success: true,

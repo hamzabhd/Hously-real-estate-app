@@ -168,7 +168,6 @@ const ListingFrom = ({
       )
 
       if (response.status === 200) {
-        console.log(response.data.message)
         router.refresh()
         router.push(`/property/${response.data.id}`)
         setIsLoading(false)
@@ -180,7 +179,6 @@ const ListingFrom = ({
       })
 
       if (response.status === 200) {
-        console.log(response.data.message)
         router.refresh()
         router.push(`/property/${response.data.id}`)
         setIsLoading(false)

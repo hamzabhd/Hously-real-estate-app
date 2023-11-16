@@ -58,7 +58,6 @@ export type DetailsState = {
   price: string
   cleaningFee: string
   securityFee: string
-  region: string
 }
 
 export interface ListingsDetails extends DetailsState {
@@ -274,4 +273,9 @@ export type SearchObjTypes = {
   region: string | null
   minPrice: string | null
   maxPrice: string | null
+}
+
+export type ProfileImageUploadType = {
+  oldImage: string
+  setProfileImage: Dispatch<SetStateAction<string>>
 }

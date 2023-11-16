@@ -1,22 +1,20 @@
 import { UserObj } from '@/types/types'
 import UserImage from '../custom/UserImage'
-import { montserrat } from '@/app/fonts'
 import Link from 'next/link'
 
 const ProfileCard = ({ user }: { user: UserObj }) => {
   const year = new Date(user.createdAt as string).getFullYear()
   return (
-    <div className="mt-32 px-4 xl:mt-48">
-      <div className="mx-auto w-fit rounded-full border-2 border-white drop-shadow">
+    <div className="mt-36 px-4 lg:mt-28 xl:mt-44">
+      <div className="relative mx-auto h-24 w-fit rounded-full border-2 border-white drop-shadow lg:h-32">
         <UserImage
           imageUrl={user.profilePicture}
-          width={96}
-          height={96}
           name={user.fullName}
+          isProfile
         />
       </div>
 
-      <div className="mt-2 flex items-center justify-center gap-2">
+      <div className="mt-4 flex items-center justify-center gap-2">
         <span className="text-xl font-bold leading-3 text-black">
           {user.fullName}
         </span>

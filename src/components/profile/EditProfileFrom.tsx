@@ -11,6 +11,7 @@ import { userSchema } from 'utils/validations/validations'
 import axios from 'axios'
 import { useRouter } from 'next/navigation'
 import Spinner from '../loaders/Spinner'
+import ProfileImageUploader from './subComponents/ProfileImageUploader'
 
 const EditProfileForm = ({ user }: { user: UserObj }) => {
   const router = useRouter()
@@ -88,20 +89,6 @@ const EditProfileForm = ({ user }: { user: UserObj }) => {
       [name]: value,
     }))
   }
-  const uploadImage = (e: ChangeEvent<HTMLInputElement>) => {
-    if (/\.(jpe?g|png)/.test(e.target.files?.[0].name as string)) {
-      const fileReader = new FileReader()
-      fileReader.onload = (e) => {
-        setProfileImage(e.target?.result as string)
-      }
-      fileReader.readAsDataURL(e.target.files?.[0] as File)
-      return
-    }
-    alert('This is not a valid image file')
-  }
-  const resetImage = () => {
-    setProfileImage('')
-  }
   const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault()
 
@@ -134,6 +121,7 @@ const EditProfileForm = ({ user }: { user: UserObj }) => {
   const handleCancel = () => {
     return router.back()
   }
+
   return (
     <>
       {isLoading && <Spinner label="Updating profile..." />}
@@ -143,15 +131,17 @@ const EditProfileForm = ({ user }: { user: UserObj }) => {
           title="Personal information"
           message="Please note that the name field is required."
         >
-          <PersonalInfo
-            details={userDetails}
-            errors={errorInputs}
-            image={profileImage}
-            oldImage={oldImage}
-            handleChange={handleChange}
-            resetImage={resetImage}
-            uploadImage={uploadImage}
-          />
+          <div className="mb-6 sm:grid sm:grid-cols-2 sm:gap-x-4 md:col-start-2 md:col-end-4 lg:pt-7">
+            <ProfileImageUploader
+              setProfileImage={setProfileImage}
+              oldImage={oldImage}
+            />
+            <PersonalInfo
+              details={userDetails}
+              errors={errorInputs}
+              handleChange={handleChange}
+            />
+          </div>
         </MainContainer>
 
         <MainContainer order="02" title="Additional information">
