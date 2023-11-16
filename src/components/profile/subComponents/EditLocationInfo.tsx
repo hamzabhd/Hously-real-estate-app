@@ -27,7 +27,6 @@ const EditLocationInfo = ({ details, setUserDetails }: UserLocationType) => {
       }))
     }
   }
-  console.log(listOfCities)
 
   // handle the city selection
   const getCity = (value: string) => {

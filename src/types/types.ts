@@ -123,13 +123,16 @@ export interface ImagesUploaderType {
   setImages: Dispatch<SetStateAction<string[]>>
 }
 
-export interface LocationPropType extends MainInformationPropType {}
+export interface LocationPropType extends MainInformationPropType {
+  setDetails: Dispatch<SetStateAction<DetailsState>>
+  setErrors: Dispatch<SetStateAction<DetailsStateErrors>>
+}
 
-export interface RulesPropType extends LocationPropType {
+export interface RulesPropType extends MainInformationPropType {
   handleRules: (rule: string) => void
 }
 
-export interface PricingPropType extends LocationPropType {}
+export interface PricingPropType extends MainInformationPropType {}
 
 export interface ReviewObj {
   _id: string

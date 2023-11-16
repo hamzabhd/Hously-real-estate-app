@@ -32,13 +32,11 @@ const CustomInput = ({
               maxLength={max}
               className={`peer block w-full appearance-none rounded-full border border-grey bg-transparent p-4 text-sm focus:border-black/60 focus:text-black focus:outline-none ${
                 message && 'focus:pr-10'
-              } ${error && 'border-red-500 pr-10 text-red-500'} ${
-                tel && 'pl-8'
-              }`}
+              } ${error && 'border-red-500 text-red-500'} ${tel && 'pl-8'}`}
             />
             <label
               htmlFor={name}
-              className={`absolute left-4 top-1 z-10 origin-[0] -translate-y-4 scale-75 transform cursor-text select-none bg-white px-1 text-sm font-medium text-black/40 duration-300 peer-placeholder-shown:top-1/2 peer-placeholder-shown:-translate-y-1/2 peer-placeholder-shown:scale-100 peer-focus:top-1 peer-focus:-translate-y-4 peer-focus:cursor-default peer-focus:px-2 peer-focus:text-gray-600 ${
+              className={`absolute left-4 top-1 z-10 origin-[0] -translate-y-4 scale-75 transform cursor-text select-none bg-white px-1 text-sm font-medium text-black/40 duration-300 peer-placeholder-shown:top-1/2 peer-placeholder-shown:-translate-y-1/2 peer-placeholder-shown:scale-100 peer-focus:top-1 peer-focus:scale-75 peer-focus:-translate-y-4 peer-focus:cursor-default peer-focus:px-2 peer-focus:text-gray-600 ${
                 error ? 'text-red-400' : ''
               }`}
             >

@@ -196,7 +196,7 @@ const ListingFrom = ({
           label={isEdit ? 'Updating listing...' : 'Creating listing...'}
         />
       )}
-      <form className="my-4 lg:mt-8" onSubmit={handleSubmit}>
+      <form className="my-6 lg:mt-8" onSubmit={handleSubmit}>
         <MainContainer
           order="01"
           title="main information"
@@ -228,6 +228,8 @@ const ListingFrom = ({
             details={details}
             handleChange={handleChange}
             detailsErrors={detailsErrors}
+            setErrors={setDetailsErrors}
+            setDetails={setDetails}
           />
         </MainContainer>
 
