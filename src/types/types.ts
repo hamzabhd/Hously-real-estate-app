@@ -304,3 +304,8 @@ export interface CityObjType {
   cityName: string
   cityRegion: string
 }
+
+export interface ServerObjType {
+  success: boolean
+  message: string
+}

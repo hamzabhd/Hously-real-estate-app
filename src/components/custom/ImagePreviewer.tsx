@@ -10,7 +10,7 @@ const ImagePreviewer = ({
 }) => {
   return (
     <div
-      className={`relative left-0 top-0 z-50 hidden h-full w-full items-center justify-center bg-black/60 backdrop-blur-sm lg:fixed ${
+      className={`relative left-0 top-0 z-[1111] hidden h-full w-full items-center justify-center bg-black/60 backdrop-blur-sm lg:fixed ${
         !image ? 'hidden' : 'lg:flex'
       }`}
     >

@@ -26,8 +26,8 @@ const PropertyCard = ({
   }
 
   const longAddress = (address: string) => {
-    if (address.length > 35) {
-      return address.slice(0, 35) + '...'
+    if (address.length > 27) {
+      return address.slice(0, 27) + '...'
     }
     return address
   }
