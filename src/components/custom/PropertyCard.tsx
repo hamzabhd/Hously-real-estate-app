@@ -9,6 +9,8 @@ import { TbResize } from 'react-icons/tb'
 import { useRouter } from 'next/navigation'
 import { PropertyType } from '@/types/types'
 import { reviewsRate } from 'utils/reviewsRate'
+import { useLocations } from 'hooks/useLocations'
+import { getCountryCode } from 'utils/getCountryCode'
 
 const PropertyCard = ({
   property,
@@ -17,6 +19,7 @@ const PropertyCard = ({
   property: PropertyType
   isSaved: boolean
 }) => {
+  const { countries } = useLocations()
   const router = useRouter()
   const redirectClick = () => {
     return router.push(`/property/${property._id}`)
@@ -29,10 +32,16 @@ const PropertyCard = ({
     return address
   }
 
+  //check if the property country is too long
   const isPlural = (item: number) => {
     if (item > 1) return 's'
     return ''
   }
+
+  const propertyCountry = /\s/g.test(property.country)
+    ? getCountryCode(countries, property.country)
+    : property.country
+
   return (
     <div className="sm:container-shadow relative sm:overflow-hidden sm:rounded-3xl sm:border-2 sm:border-white">
       <div className="group relative flex w-full cursor-pointer overflow-hidden">
@@ -51,7 +60,7 @@ const PropertyCard = ({
         <div className="mb-4 flex items-center justify-between">
           <Link href={`/property/${property._id}`}>
             <h2 className="text-xl font-bold tracking-wide">
-              {property.city}, {property.country}
+              {property.city}, {propertyCountry}
             </h2>
             <div className="flex items-center gap-x-2">
               <HiLocationMarker className="text-neutral-800" />

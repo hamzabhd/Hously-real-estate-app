@@ -41,7 +41,6 @@ export const listingSchema = z.object({
   address: z.string().optional(),
   country: z.string().min(1, { message: 'This field is required' }),
   city: z.string().min(1, { message: 'This field is required' }),
-  state: z.string().min(1, { message: 'This field is required' }),
   postalCode: z.string().min(1, { message: 'This field is required' }),
   propertySpace: z.string().refine((item) => Number(item) && item.length >= 1, {
     message: 'This field accepts only numbers',

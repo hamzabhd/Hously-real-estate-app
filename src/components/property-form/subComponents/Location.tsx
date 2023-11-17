@@ -5,6 +5,7 @@ import CustomSelectElement from '@/components/custom/CustomSelectElement'
 import { getCountryCode } from 'utils/getCountryCode'
 import { useLocations } from 'hooks/useLocations'
 import { useEffect } from 'react'
+import { getCityRegion } from 'utils/getRegion'
 const Location = ({
   details,
   handleChange,
@@ -43,7 +44,12 @@ const Location = ({
     if (city) {
       setErrors((prevState) => ({ ...prevState, city: '' }))
     }
-    setDetails((prevState) => ({ ...prevState, city: value }))
+    const cityRegion = getCityRegion(cities, value)
+    setDetails((prevState) => ({
+      ...prevState,
+      city: value,
+      state: cityRegion,
+    }))
   }
 
   // set cities list depending on the user country
@@ -54,6 +60,7 @@ const Location = ({
       setSelectedCountry(countryCode)
     }
   }, [countries])
+
   return (
     <Container title="Property address" type="normal">
       <div className="sm:grid sm:grid-cols-4  sm:gap-4 lg:gap-5">
