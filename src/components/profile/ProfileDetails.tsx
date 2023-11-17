@@ -6,7 +6,7 @@ import { FaXTwitter, FaFacebookF, FaLinkedinIn } from 'react-icons/fa6'
 import { MdOutlineLocalPhone, MdOutlineEmail } from 'react-icons/md'
 import { BsQuestionLg } from 'react-icons/bs'
 import { UserObj } from '@/types/types'
-import { reviewsArr } from 'utils/itemManagement/data/data'
+import { reviewsArr } from 'utils/data/data'
 import Reviews from '../custom/Reviews'
 import ContactCard from '../custom/ContactCard'
 

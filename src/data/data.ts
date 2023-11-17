@@ -113,52 +113,6 @@ export const choices = {
   ],
 }
 
-export const reviewsArr = [
-  {
-    id: '1',
-    username: 'Jana Lorene',
-    userImage: '/images/person.jpg',
-    reviewDate: '1 year ago',
-    review: 'Lorem, ipsum dolor sit amet consectetur adipisicing elit.',
-    rating: '5',
-  },
-  {
-    id: '2',
-    username: 'Jana Lorene',
-    userImage: '/images/person.jpg',
-    reviewDate: '1 year ago',
-    review:
-      'Lorem, ipsum dolor sit amet consectetur adipisicing elit. Nobis ipsum labore sunt possimus.',
-    rating: '4',
-  },
-  {
-    id: '3',
-    username: 'Jana Lorene',
-    userImage: '/images/person.jpg',
-    reviewDate: '1 year ago',
-    review:
-      'Lorem, ipsum dolor sit amet consectetur adipisicing elit. Nobis ipsum labore sunt possimus commodi numquam blanditiis.',
-    rating: '3',
-  },
-  {
-    id: '4',
-    username: 'Jana Lorene',
-    userImage: '/images/person.jpg',
-    reviewDate: '1 year ago',
-    review:
-      'Lorem, ipsum dolor sit amet consectetur adipisicing elit. Nobis ipsum labore sunt possimus commodi numquam blanditiis ad fugit corporis nostrum ratione dolorum aperiam, pariatur veritatis quos culpa, accusantium illo! Unde.',
-    rating: '2',
-  },
-  {
-    id: '5',
-    username: 'Jana Lorene',
-    userImage: '/images/person.jpg',
-    reviewDate: '1 year ago',
-    review: 'Lorem, ipsum dolor sit amet consectetur adipisicing elit. ',
-    rating: '1',
-  },
-]
-
 export const regions = [
   'Europe',
   'America',

@@ -2,7 +2,7 @@
 import { ChangeEvent, Fragment, useState } from 'react'
 import { BiMinus } from 'react-icons/bi'
 import Container from '@/components/layouts/Container'
-import { choices } from 'utils/itemManagement/data/data'
+import { choices } from 'data/data'
 import { addItem, removeItem } from 'utils/itemManagement/itemManagement'
 import { LuBedSingle, LuBedDouble, LuBath } from 'react-icons/lu'
 import CustomRadioButton from '@/components/custom/CustomRadioButton'

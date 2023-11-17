@@ -15,7 +15,9 @@ const MainContainer = ({
     <div className="lg:grid lg:grid-cols-3">
       <div className="mb-4 mt-2 lg:my-0 lg:mb-5 lg:text-xl">
         <h2 className="mb-2 text-lg font-medium lg:mb-5 lg:text-xl">
-          <span className="block text-black/60">{order}.</span>
+          <span className="block font-bold tracking-wide text-black/40">
+            {order}.
+          </span>
           {title}
         </h2>
         <div className="">

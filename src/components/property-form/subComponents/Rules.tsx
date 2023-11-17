@@ -1,7 +1,7 @@
 import Container from '@/components/layouts/Container'
 import SelectionList from './SelectionList'
 import CustomInput from '@/components/custom/CustomInput'
-import { rules } from 'utils/itemManagement/data/data'
+import { rules } from 'data/data'
 import { RulesPropType } from '@/types/types'
 
 const Rules = ({

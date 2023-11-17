@@ -1,6 +1,6 @@
 import CustomSelectElement from '../custom/CustomSelectElement'
 import { HiLocationMarker, HiOutlineHome } from 'react-icons/hi'
-import { regions } from 'utils/itemManagement/data/data'
+import { regions } from 'data/data'
 import {
   MdAccessTime,
   MdOutlineApartment,

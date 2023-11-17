@@ -13,19 +13,10 @@ const ReviewFound = ({
   setReviewToShow: (review: string) => void
 }) => {
   return (
-    <DetailsContainer>
-      <div className="flex items-center justify-between gap-x-4 border-b border-grey p-4 lg:px-6">
-        <span className="cursor-pointer font-medium text-black">
-          User review
-        </span>
-
-        <div
-          className="cursor-pointer rounded-full bg-light-100 p-2 transition-colors hover:bg-grey"
-          onClick={() => setReviewToShow('')}
-        >
-          <HiOutlineX className="h-4 w-4" />
-        </div>
-      </div>
+    <DetailsContainer
+      title="User review"
+      toggleContainer={() => setReviewToShow('')}
+    >
       <ReviewCard
         review={reviewFound}
         setReviewToShow={setReviewToShow}

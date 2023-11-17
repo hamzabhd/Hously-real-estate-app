@@ -1,5 +1,5 @@
 import { CountryObjType, PropertyType, SearchObjTypes } from '@/types/types'
-import { regions } from './itemManagement/data/data'
+import { regions } from '../data/data'
 import { getCountryRegion } from './getCountryRegion'
 
 export const filterProperties = (

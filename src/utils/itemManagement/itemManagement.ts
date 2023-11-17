@@ -6,7 +6,7 @@ import {
   ChoiceType,
 } from '@/types/types'
 import { Dispatch, SetStateAction } from 'react'
-import { choices } from './data/data'
+import { choices } from '../../data/data'
 
 export const addItem = (
   listItems: ArrType,
