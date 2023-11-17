@@ -12,14 +12,9 @@ export const useSearchQueries = () => {
     min: searchParams.get('min'),
     max: searchParams.get('max'),
   }
-  const handleQueries = (
-    value: string,
-    query: string,
-    type: string | null,
-    page: string,
-  ) => {
+  const handleQueries = (value: string, query: string, type: string | null) => {
     const newSearchParams = new URLSearchParams(searchParams.toString())
-    const filterPage = pathname === '/search' ? pathname : page
+    const filterPage = pathname === '/search' ? pathname : '/'
     if (value && !type) {
       newSearchParams.append(query, value)
     } else if (value && type !== value) {
@@ -27,7 +22,7 @@ export const useSearchQueries = () => {
     } else {
       newSearchParams.delete(query)
     }
-    router.push(`/${filterPage}?` + newSearchParams)
+    router.push(`${filterPage}?` + newSearchParams)
   }
 
   const handleSearchQueries = (obj: SearchObjTypes, page: string) => {

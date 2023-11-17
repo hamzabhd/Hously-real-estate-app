@@ -1,4 +1,4 @@
-import PropertiesPage from '@/components/custom/PropertiesPage'
+import HomePage from '@/components/custom/HomePage'
 import { getProperties } from 'utils/getProperties'
 import { getUser } from 'utils/getUser'
 
@@ -8,10 +8,7 @@ const Home = async () => {
 
   return (
     <div className="mx-auto min-h-screen max-w-[1600px]">
-      <PropertiesPage
-        properties={properties}
-        savedProperties={currentUser?.savedProperties}
-      />
+      <HomePage properties={properties} savedProperties={currentUser?.savedProperties} />
     </div>
   )
 }

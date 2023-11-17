@@ -59,3 +59,29 @@ export const filterProperties = (
 
   return filteredProperties
 }
+
+export const filterHomeProperties = (
+  properties: PropertyType[],
+  property: string | null,
+  type: string | null,
+) => {
+  const filteredProperties = properties.filter((p) => {
+    // reform the type to match the property listing type
+    const exactType = type && type === 'rent' ? type : 'sell'
+    // return the filters conditionally
+    if (property && type) {
+      return (
+        p.propertyType.toLowerCase() === property &&
+        p.listingType.toLowerCase() === exactType
+      )
+    } else if (property) {
+      return p.propertyType.toLowerCase() === property
+    } else if (type) {
+      return p.listingType.toLowerCase() === exactType
+    }
+    // the default is the property
+    return p
+  })
+
+  return filteredProperties
+}

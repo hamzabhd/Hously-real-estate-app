@@ -4,14 +4,14 @@ import { PiCaretUpBold } from 'react-icons/pi'
 const FilterButtons = ({ hideFilter }: { hideFilter: () => void }) => {
   const { handleQueries, searchParams } = useSearchQueries()
   const property = searchParams.get('property')
-  const listing = searchParams.get('listing')
+  const listing = searchParams.get('type')
 
   const handleListing = (value: string) => {
-    handleQueries(value, 'listing', listing, 'filter')
+    handleQueries(value, 'type', listing)
   }
 
   const handleProperty = (value: string) => {
-    handleQueries(value, 'property', property, 'filter')
+    handleQueries(value, 'property', property)
   }
 
   const setClassName = (value: string, type: string | null) => {

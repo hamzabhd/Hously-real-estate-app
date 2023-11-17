@@ -21,12 +21,10 @@ const SearchPage = ({
   )
 
   return (
-    <div>
       <PropertiesPage
         properties={filteredProperties}
         savedProperties={savedProperties}
       />
-    </div>
   )
 }
 

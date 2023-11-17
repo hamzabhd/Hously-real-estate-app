@@ -1,9 +1,14 @@
-import { useState } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import { IoFilter } from 'react-icons/io5'
 import FilterButtons from './FilterButtons'
+import detectOutsideClick from 'utils/detectOutsideClick'
+import { useOnScroll } from 'hooks/useOnScroll'
 
 const FilterNav = () => {
+  const { isScrollingDown } = useOnScroll()
   const [isFilter, setIsFilter] = useState(false)
+  const filterRef = useRef<HTMLDivElement>(null)
+  detectOutsideClick(filterRef, () => setIsFilter(false))
 
   const style = !isFilter
     ? {
@@ -14,11 +19,28 @@ const FilterNav = () => {
         width: '100%',
       }
 
+  const filterStyle = isScrollingDown
+    ? {
+        transform: 'translateY(-100%)',
+        zIndex: -1111,
+      }
+    : {}
+
+  useEffect(() => {
+    if (isScrollingDown && isFilter) {
+      setIsFilter(false)
+    }
+  }, [isScrollingDown])
+
   return (
-    <div className="absolute left-0 top-full mt-px flex w-full items-center justify-center">
+    <div
+      className="absolute left-0 top-full -z-10 flex w-full translate-y-0 items-center justify-center transition-transform duration-300"
+      ref={filterRef}
+      style={filterStyle}
+    >
       <div
-        className={`px-4 py-2 transition-all duration-300 ${
-          isFilter ? 'bg-white/60 backdrop-blur-lg ' : ''
+        className={`py-2 transition-all duration-300 ${
+          isFilter ? 'bg-white/60 px-4 backdrop-blur-lg ' : ''
         }`}
         style={style}
       >
@@ -28,7 +50,7 @@ const FilterNav = () => {
           <>
             {/* main button that fires the filter nav */}
             <button
-              className="show-items flex items-center justify-center gap-x-2 rounded-full bg-black/10 px-4 py-2 backdrop-blur-lg transition-colors hover:bg-black/20"
+              className="show-items container-shadow flex items-center justify-center gap-x-2 rounded-full bg-white/50 px-4 py-2 backdrop-blur-lg transition-colors hover:bg-white"
               onClick={() => setIsFilter(true)}
             >
               <IoFilter className="text-sm" />
