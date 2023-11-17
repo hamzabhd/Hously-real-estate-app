@@ -6,11 +6,11 @@ export const useSearchQueries = () => {
   const searchParams = useSearchParams()
   const pathname = usePathname()
   const searchQueries = {
-    type: searchParams.get('listing'),
+    type: searchParams.get('type'),
     property: searchParams.get('property'),
     region: searchParams.get('region'),
-    minPrice: searchParams.get('min'),
-    maxPrice: searchParams.get('max'),
+    min: searchParams.get('min'),
+    max: searchParams.get('max'),
   }
   const handleQueries = (
     value: string,
@@ -31,7 +31,9 @@ export const useSearchQueries = () => {
   }
 
   const handleSearchQueries = (obj: SearchObjTypes, page: string) => {
-    const reformedObj = Object.entries(obj).filter((item) => item[1])
+    const reformedObj = Object.entries(obj).filter(
+      (item) => item[1],
+    ) as string[][]
     const newSearchParams = new URLSearchParams(reformedObj)
     router.push(`/${page}?` + newSearchParams)
   }

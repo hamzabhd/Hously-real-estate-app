@@ -274,8 +274,8 @@ export type SearchObjTypes = {
   property: string | null
   type: string | null
   region: string | null
-  minPrice: string | null
-  maxPrice: string | null
+  min: string | null
+  max: string | null
 }
 
 export type ProfileImageUploadType = {

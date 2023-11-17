@@ -1,8 +1,9 @@
 'use client'
-import { PropertyType, SearchObjTypes } from '@/types/types'
+import { PropertyType } from '@/types/types'
 import PropertiesPage from './PropertiesPage'
 import { useSearchQueries } from 'hooks/useSearchQueries'
 import { filterProperties } from 'utils/filterProperties'
+import { useLocations } from 'hooks/useLocations'
 
 const SearchPage = ({
   properties,
@@ -12,7 +13,12 @@ const SearchPage = ({
   savedProperties: string[]
 }) => {
   const { searchQueries } = useSearchQueries()
-  const filteredProperties = filterProperties(searchQueries, properties)
+  const { countries } = useLocations()
+  const filteredProperties = filterProperties(
+    searchQueries,
+    properties,
+    countries,
+  )
 
   return (
     <div>

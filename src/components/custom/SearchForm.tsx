@@ -46,8 +46,8 @@ const SearchForm = ({ toggleSearch }: { toggleSearch: () => void }) => {
       property: searchInputs.property,
       type: searchInputs.type,
       region: searchInputs.region.toLowerCase(),
-      minPrice: searchInputs.range[0].toString(),
-      maxPrice: searchInputs.range[1].toString(),
+      min: searchInputs.range[0].toString(),
+      max: searchInputs.range[1].toString(),
     }
     handleSearchQueries(searchObj, 'search')
     toggleSearch()
@@ -145,7 +145,6 @@ const SearchForm = ({ toggleSearch }: { toggleSearch: () => void }) => {
           getValue={handleRegion}
           Icon={HiLocationMarker}
           label="Location"
-          name="location"
           listItems={regions}
         />
 
