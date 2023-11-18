@@ -17,3 +17,15 @@ export const getUser = async () => {
   )
   return response.json()
 }
+
+export const getUserProfile = async () => {
+  const id = await serverSession().then((res) => res?.user.id)
+
+  if (!id) return null
+
+  const response = await fetch(
+    `${process.env.NEXTAUTH_URL}/api/profiles/${id}`,
+    { cache: 'no-cache' },
+  )
+  return response.json()
+}

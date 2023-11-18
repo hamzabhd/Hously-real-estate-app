@@ -4,6 +4,7 @@ import { useState } from 'react'
 import Reviews from '../../custom/Reviews'
 import SeeMoreBtn from '../../custom/SeeMoreBtn'
 import AddReview from '../features/AddReview'
+import { useShowMore } from 'hooks/useShowMore'
 
 const PropertyReviews = ({
   propertyId,
@@ -12,18 +13,9 @@ const PropertyReviews = ({
   propertyId: string
   propertyReviews: ReviewObj[]
 }) => {
-  const [reviewsToSee, setReviewsToSee] = useState(3)
+  const itemsLength = propertyReviews.length
+  const { handleItems, itemsToSee } = useShowMore(itemsLength)
   const { addReview, toggleAddReview } = useAddReview()
-
-  // show show more reviews
-  const handleReviews = () => {
-    setReviewsToSee((prevState) => {
-      if (propertyReviews.length <= prevState) {
-        return 3
-      }
-      return prevState + 3
-    })
-  }
 
   return (
     <>
@@ -38,7 +30,7 @@ const PropertyReviews = ({
         {
           <Reviews
             reviewsArr={propertyReviews}
-            reviewsToShow={reviewsToSee}
+            reviewsToShow={itemsToSee}
             toggleAddReview={toggleAddReview}
           />
         }
@@ -46,11 +38,11 @@ const PropertyReviews = ({
         {propertyReviews.length > 3 && (
           <SeeMoreBtn
             label={
-              propertyReviews.length <= reviewsToSee
+              propertyReviews.length <= itemsToSee
                 ? 'Hide all reviews'
                 : 'View more reviews'
             }
-            onClick={handleReviews}
+            onClick={handleItems}
             className="md:ml-0"
           />
         )}

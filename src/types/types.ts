@@ -17,6 +17,12 @@ export type UserObj = {
   destinations?: string[]
   links?: string[]
 }
+
+export interface UserProfileObj extends UserObj {
+  reservations: UserReservation & { property: PropertyType }
+  savedProperties: PropertyType[]
+  properties: PropertyType[]
+}
 export interface UserDetails {
   fullName: string
   country: string

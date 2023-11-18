@@ -168,6 +168,7 @@ export const makeReservation = async (
       }
     }
     const reservation = await Reservation.create({
+      property: propertyId,
       reserver: userId,
       from,
       to,

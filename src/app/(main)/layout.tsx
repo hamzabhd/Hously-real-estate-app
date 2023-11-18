@@ -10,7 +10,7 @@ const MainLayout = async ({ children }: { children: ReactNode }) => {
     <main className="relative min-h-screen">
       <Navbar user={currentUser} session={session?.user.id} />
       {children}
-      {/* <Footer /> */}
+      <Footer />
     </main>
   )
 }
