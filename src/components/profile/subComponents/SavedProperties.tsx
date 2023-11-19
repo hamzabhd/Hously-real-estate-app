@@ -13,7 +13,7 @@ const SavedProperties = ({
   const itemsLength = savedProperties.length
   const { handleItems, itemsToSee } = useShowMore(itemsLength)
 
-  const isPropertySaved = savedProperties.map((p) => p._id)
+  const propertiesSaved = savedProperties.map((p) => p._id)
   return (
     <>
       <PropertiesContainer>
@@ -21,14 +21,14 @@ const SavedProperties = ({
           <PropertyCard
             key={i}
             property={property}
-            isSaved={isAdded(property._id, isPropertySaved)}
+            isSaved={isAdded(property._id, propertiesSaved)}
           />
         ))}
       </PropertiesContainer>
-      {savedProperties.length > 3 && (
+      {itemsLength > 3 && (
         <SeeMoreBtn
           label={
-            savedProperties.length <= itemsToSee
+            itemsLength <= itemsToSee
               ? 'Hide all properties'
               : 'View more properties'
           }

@@ -1,5 +1,4 @@
-import Image from 'next/image'
-import React, { useState } from 'react'
+import { useState } from 'react'
 import { PiCaretLeftBold, PiCaretRightBold } from 'react-icons/pi'
 import { CldImage } from 'next-cloudinary'
 const ImageSlider = ({
@@ -40,6 +39,9 @@ const ImageSlider = ({
     if (!isCard && selectImage) return selectImage(image)
     return redirectClick?.()
   }
+  const imageSizes = isCard
+    ? '(min-width: 640px) 300px, 100vw'
+    : '(min-width: 1024px) 1200px, 100vw'
 
   return (
     <>
@@ -69,7 +71,7 @@ const ImageSlider = ({
             style={{
               objectFit: 'cover',
             }}
-            sizes="(min-width: 1024px) 1200px, 100vw"
+            sizes={imageSizes}
             fill
           />
         </div>

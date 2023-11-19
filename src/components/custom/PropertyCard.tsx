@@ -11,6 +11,7 @@ import { PropertyType } from '@/types/types'
 import { reviewsRate } from 'utils/reviewsRate'
 import { useLocations } from 'hooks/useLocations'
 import { getCountryCode } from 'utils/getCountryCode'
+import { reformLongAddress } from 'utils/reformLongAddress'
 
 const PropertyCard = ({
   property,
@@ -23,13 +24,6 @@ const PropertyCard = ({
   const router = useRouter()
   const redirectClick = () => {
     return router.push(`/property/${property._id}`)
-  }
-
-  const longAddress = (address: string) => {
-    if (address.length > 27) {
-      return address.slice(0, 27) + '...'
-    }
-    return address
   }
 
   //check if the property country is too long
@@ -65,7 +59,7 @@ const PropertyCard = ({
             <div className="flex items-center gap-x-2">
               <HiLocationMarker className="text-neutral-800" />
               <span className="inline-block truncate text-xs font-medium tracking-wider text-black/40">
-                {longAddress(property.address)}
+                {reformLongAddress(property.address)}
               </span>
             </div>
           </Link>

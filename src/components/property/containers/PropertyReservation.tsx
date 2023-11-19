@@ -1,6 +1,6 @@
 import { makeReservation } from '@/app/actions'
 import Calendar from '@/components/features/Calendar'
-import { PropertyType, ReservationsType } from '@/types/types'
+import { PropertyType } from '@/types/types'
 import { useSession } from 'next-auth/react'
 import { useRouter } from 'next/navigation'
 import { useState, useTransition } from 'react'

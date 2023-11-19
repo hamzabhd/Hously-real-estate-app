@@ -30,6 +30,11 @@ export const GET = async (
         populate: [
           {
             path: 'reservations',
+            populate: [
+              {
+                path: 'property reserver', // Separate fields with a space
+              },
+            ],
             model: Reservation,
           },
           {

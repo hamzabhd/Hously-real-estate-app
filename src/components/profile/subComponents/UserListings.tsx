@@ -3,10 +3,9 @@ import SeeMoreBtn from '@/components/custom/SeeMoreBtn'
 import PropertiesContainer from '@/components/layouts/PropertiesContainer'
 import { PropertyType } from '@/types/types'
 import { useShowMore } from 'hooks/useShowMore'
-import React from 'react'
 import { isAdded } from 'utils/isAdded'
 
-const ProfileListings = ({
+const UserListings = ({
   properties,
   savedProperties,
 }: {
@@ -27,10 +26,10 @@ const ProfileListings = ({
         ))}
       </PropertiesContainer>
 
-      {properties.length > 3 && (
+      {itemsLength > 3 && (
         <SeeMoreBtn
           label={
-            properties.length <= itemsToSee
+            itemsLength <= itemsToSee
               ? 'Hide all properties'
               : 'View more properties'
           }
@@ -42,4 +41,4 @@ const ProfileListings = ({
   )
 }
 
-export default ProfileListings
+export default UserListings

@@ -8,9 +8,9 @@ const ProfileAbout = ({ user }: { user: UserObj }) => {
   const { bio, background, facts, links, destinations } = user
 
   return (
-    <div className="mt-6 px-4 md:px-6 lg:mt-8 lg:grid lg:grid-cols-3 lg:gap-x-6">
+    <div className="p-4 lg:grid lg:grid-cols-3 lg:gap-x-6 lg:p-6">
       <div className="lg:col-start-1 lg:col-end-3">
-        <h3 className="mb-4 mt-6 text-xl font-medium text-black lg:mt-0 lg:text-2xl">
+        <h3 className="mb-4 mt-6 text-lg font-medium text-black lg:mt-0 lg:text-xl">
           Biography
         </h3>
         {
@@ -19,14 +19,14 @@ const ProfileAbout = ({ user }: { user: UserObj }) => {
           </p>
         }
 
-        <h3 className="mb-4 mt-6 text-xl font-medium text-black lg:mt-8 lg:text-2xl">
+        <h3 className="mb-4 mt-6 text-lg font-medium text-black lg:mt-8 lg:text-xl">
           Professional background
         </h3>
         <p className="font-normal leading-relaxed text-black/60">
           {background || "Looks like the user didn't update this section yet."}
         </p>
 
-        <h3 className="mb-4 mt-6 text-xl font-medium text-black lg:mt-8 lg:text-2xl">
+        <h3 className="mb-4 mt-6 text-lg font-medium text-black lg:mt-8 lg:text-xl">
           Fun facts
         </h3>
         {facts?.filter((item) => item).length !== 0 ? (
@@ -47,7 +47,7 @@ const ProfileAbout = ({ user }: { user: UserObj }) => {
           </p>
         )}
 
-        <h3 className="mb-4 mt-6 text-xl font-medium text-black lg:mt-8 lg:text-2xl">
+        <h3 className="mb-4 mt-6 text-lg font-medium text-black lg:mt-8 lg:text-xl">
           Favorite destinations
         </h3>
 
@@ -69,7 +69,7 @@ const ProfileAbout = ({ user }: { user: UserObj }) => {
           </p>
         )}
 
-        <h3 className="mb-4 mt-6 text-xl font-medium text-black lg:mt-8 lg:text-2xl">
+        <h3 className="mb-4 mt-6 text-lg font-medium text-black lg:mt-8 lg:text-xl">
           Connect with me
         </h3>
         {links?.filter((item) => item).length !== 0 ? (

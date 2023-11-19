@@ -19,7 +19,7 @@ export type UserObj = {
 }
 
 export interface UserProfileObj extends UserObj {
-  reservations: UserReservation & { property: PropertyType }
+  reservations: UserReservation[]
   savedProperties: PropertyType[]
   properties: PropertyType[]
 }
@@ -77,7 +77,7 @@ export interface ListingsObj extends DetailsState {
 export interface PropertyType extends ListingsObj {
   owner: UserObj
   reviews: ReviewObj[]
-  reservations: { reserver: string; guests: number; from: string; to: string }[]
+  reservations: UserReservation[]
 }
 
 export interface DetailsStateErrors
@@ -167,12 +167,13 @@ export interface ReservationsType {
 }
 
 export interface UserReservation {
-  reserver: string
+  _id: string
+  property: PropertyType
+  reserver: UserObj | string
   guests: number
   from: string
   to: string
 }
-
 export interface ReservationType {
   guestsLimit: number
   pricePerNight: string
