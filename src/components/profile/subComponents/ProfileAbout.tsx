@@ -1,7 +1,7 @@
 import ContactCard from '@/components/custom/ContactCard'
+import SpecialButton from '@/components/custom/SpecialButton'
 import { UserObj } from '@/types/types'
-import { Link } from 'lucide-react'
-import React from 'react'
+import Link from 'next/link'
 import { getLinkIcon } from 'utils/getLinkIcon'
 
 const ProfileAbout = ({ user }: { user: UserObj }) => {
@@ -84,7 +84,7 @@ const ProfileAbout = ({ user }: { user: UserObj }) => {
                       href={link}
                       className="group inline-block cursor-pointer rounded-full border border-grey p-2 transition-colors hover:border-black/60"
                     >
-                      <IconLink className="h-4 w-4 text-base text-black/60 transition-colors group-hover:text-black" />
+                      <IconLink className="h-4 w-4 text-black/60 transition-colors group-hover:text-black" />
                     </Link>
                   </li>
                 )

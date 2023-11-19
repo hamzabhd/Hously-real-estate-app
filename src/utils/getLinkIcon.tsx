@@ -8,13 +8,11 @@ export const getLinkIcon = (link: string) => {
 
   if (facebook) {
     return FaFacebookF
-  }
-  if (twitter) {
+  } else if (twitter) {
     return FaXTwitter
-  }
-  if (linkedIn) {
+  } else if (linkedIn) {
     return FaLinkedinIn
+  } else {
+    return BsQuestionLg
   }
-
-  return BsQuestionLg
 }

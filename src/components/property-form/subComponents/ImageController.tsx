@@ -31,6 +31,7 @@ const ImageController = ({
           width: '100%',
           height: 'auto',
         }}
+        loading="lazy"
       />
       {!isEdit && (
         <button

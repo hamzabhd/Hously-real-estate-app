@@ -9,8 +9,8 @@ const ProfileNavbar = ({
 }) => {
   return (
     <div className="px-4 md:px-6">
-      <div className="overflow-x-auto overflow-y-hidden pb-px">
-        <ul className="flex items-center gap-x-10 border-b border-b-grey">
+      <div className="w-full overflow-x-auto overflow-y-hidden pb-px">
+        <ul className="flex w-full items-center gap-x-10 border-b border-b-grey">
           <li className="relative flex-shrink-0 py-5">
             <span
               className={`cursor-pointer font-medium ${

@@ -1,5 +1,4 @@
 import { FaXTwitter, FaFacebookF, FaLinkedinIn } from 'react-icons/fa6'
-import { montserrat } from '@/app/fonts'
 import Link from 'next/link'
 import React from 'react'
 
@@ -11,9 +10,7 @@ const Footer = () => {
           href="/"
           className="w-fit cursor-pointer select-none rounded-lg py-2 text-xl transition-colors"
         >
-          <span className={`${montserrat.className} font-bold lg:text-xl`}>
-            Hously.
-          </span>
+          <span className="font-bold lg:text-xl">Hously.</span>
         </Link>
 
         <ul className="mt-9 flex flex-col gap-y-6 md:mt-0 md:flex-row md:gap-x-8 md:gap-y-0">

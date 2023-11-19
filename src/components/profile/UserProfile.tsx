@@ -38,13 +38,13 @@ const UserProfile = ({
           savedProperties={savedProperties}
         />
       )}
-      {link === 'savedProperties' && (
+      {link === 'savedProperties' && currentUserProfile && (
         <SavedProperties savedProperties={user.savedProperties} />
       )}
-      {link === 'reserved' && (
+      {link === 'reserved' && currentUserProfile && (
         <ReservedProperties reservations={reservationsArr} />
       )}
-      {link === 'myReservations' && (
+      {link === 'myReservations' && currentUserProfile && (
         <UserReservations reservations={user.reservations} />
       )}
       {link === 'about' && <ProfileAbout user={user} />}

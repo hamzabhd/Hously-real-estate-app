@@ -9,9 +9,11 @@ import { TbResize } from 'react-icons/tb'
 import { useRouter } from 'next/navigation'
 import { PropertyType } from '@/types/types'
 import { reviewsRate } from 'utils/reviewsRate'
-import { useLocations } from 'hooks/useLocations'
-import { getCountryCode } from 'utils/getCountryCode'
+import { reformCountryName } from 'utils/getCountryCode'
 import { reformLongAddress } from 'utils/reformLongAddress'
+import { useSession } from 'next-auth/react'
+import { LuPen } from 'react-icons/lu'
+import SpecialButton from './SpecialButton'
 
 const PropertyCard = ({
   property,
@@ -20,8 +22,8 @@ const PropertyCard = ({
   property: PropertyType
   isSaved: boolean
 }) => {
-  const { countries } = useLocations()
   const router = useRouter()
+  const { data: session, status } = useSession()
   const redirectClick = () => {
     return router.push(`/property/${property._id}`)
   }
@@ -33,9 +35,25 @@ const PropertyCard = ({
   }
 
   const propertyCountry = /\s/g.test(property.country)
-    ? getCountryCode(countries, property.country)
+    ? reformCountryName(property.country)
     : property.country
 
+  const uniqueButton = () => {
+    if (status === 'loading') {
+      return <></>
+    }
+    if (session?.user.id === property.owner) {
+      return (
+        <Link href={`/edit-property/${property._id}`}>
+          <SpecialButton name="Edit">
+            <LuPen className="h-4 w-4 text-black/40 transition-colors group-hover:text-black/60" />
+          </SpecialButton>
+        </Link>
+      )
+    } else {
+      return <SavePropertyButton isSaved={isSaved} propertyId={property._id} />
+    }
+  }
   return (
     <div className="sm:container-shadow relative sm:overflow-hidden sm:rounded-3xl sm:border-2 sm:border-white">
       <div className="group relative flex w-full cursor-pointer overflow-hidden">
@@ -58,13 +76,13 @@ const PropertyCard = ({
             </h2>
             <div className="flex items-center gap-x-2">
               <HiLocationMarker className="text-neutral-800" />
-              <span className="inline-block truncate text-xs font-medium tracking-wider text-black/40">
+              <span className="inline-block text-xs font-medium tracking-wider text-black/40">
                 {reformLongAddress(property.address)}
               </span>
             </div>
           </Link>
 
-          <SavePropertyButton isSaved={isSaved} propertyId={property._id} />
+          {uniqueButton()}
         </div>
 
         <Link href={`/property/${property._id}`} className="cursor-pointer">

@@ -14,7 +14,7 @@ const SpecialButton = ({
   return (
     <button
       type="button"
-      className="border-gray group relative block cursor-pointer rounded-full border p-3 transition-colors hover:border-black/60"
+      className="group relative block shrink-0 cursor-pointer rounded-full border border-grey p-3 transition-colors hover:border-black/60"
       onClick={onClick}
     >
       {children}

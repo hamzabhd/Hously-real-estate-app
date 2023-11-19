@@ -75,7 +75,7 @@ export interface ListingsObj extends DetailsState {
   _id: string
 }
 export interface PropertyType extends ListingsObj {
-  owner: UserObj
+  owner: UserObj | string
   reviews: ReviewObj[]
   reservations: UserReservation[]
 }
