@@ -4,8 +4,16 @@ import { UserObj } from '@/types/types'
 import Link from 'next/link'
 import { getLinkIcon } from 'utils/getLinkIcon'
 
-const ProfileAbout = ({ user }: { user: UserObj }) => {
+const ProfileAbout = ({
+  user,
+  currentUser,
+}: {
+  user: UserObj
+  currentUser: string
+}) => {
   const { bio, background, facts, links, destinations } = user
+  const exactMessage =
+    user._id === currentUser ? "you haven't" : "this user hasn't"
 
   return (
     <div className="p-4 md:p-6 lg:grid lg:grid-cols-3 lg:gap-x-6">
@@ -15,7 +23,7 @@ const ProfileAbout = ({ user }: { user: UserObj }) => {
         </h3>
         {
           <p className="font-normal leading-relaxed text-black/60">
-            {bio || "Looks like the user didn't update this section yet."}
+            {bio || `Looks like ${exactMessage} updated this section yet.`}
           </p>
         }
 
@@ -23,7 +31,7 @@ const ProfileAbout = ({ user }: { user: UserObj }) => {
           Professional background
         </h3>
         <p className="font-normal leading-relaxed text-black/60">
-          {background || "Looks like the user didn't update this section yet."}
+          {background || `Looks like ${exactMessage} updated this section yet.`}
         </p>
 
         <h3 className="mb-4 mt-6 text-lg font-medium text-black lg:mt-8 lg:text-xl">
@@ -43,7 +51,7 @@ const ProfileAbout = ({ user }: { user: UserObj }) => {
           </ul>
         ) : (
           <p className="font-normal leading-relaxed text-black/60">
-            Looks like the user didn't update this section yet.
+            Looks like {exactMessage} updated this section yet.
           </p>
         )}
 
@@ -65,7 +73,7 @@ const ProfileAbout = ({ user }: { user: UserObj }) => {
           </ul>
         ) : (
           <p className="font-normal leading-relaxed text-black/60">
-            Looks like the user didn't update this section yet.
+            Looks like {exactMessage} updated this section yet.
           </p>
         )}
 
@@ -92,7 +100,7 @@ const ProfileAbout = ({ user }: { user: UserObj }) => {
           </ul>
         ) : (
           <p className="font-normal leading-relaxed text-black/60">
-            Looks like the user didn't update this section yet.
+            Looks like {exactMessage} updated this section yet.
           </p>
         )}
       </div>

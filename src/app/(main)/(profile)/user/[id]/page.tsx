@@ -3,12 +3,19 @@ import UserProfile from '@/components/profile/UserProfile'
 import ProfileCard from '@/components/profile/ProfileCard'
 import { redirect } from 'next/navigation'
 
-const Profile = async () => {
-  const currentUserId = await serverSession().then((res) => res?.user.id)
-  if (!currentUserId) {
+const User = async ({ params }: { params: { id: string } }) => {
+  const currentUserId = (await serverSession().then(
+    (res) => res?.user.id,
+  )) as string
+  const user = await getUserProfile(params.id)
+
+  if (!user) {
     redirect('/')
   }
-  const user = await getUserProfile(currentUserId)
+
+  if (user._id === currentUserId) {
+    redirect('/profile')
+  }
 
   return (
     <div className="mx-auto min-h-screen max-w-[1248px]">
@@ -18,4 +25,4 @@ const Profile = async () => {
   )
 }
 
-export default Profile
+export default User

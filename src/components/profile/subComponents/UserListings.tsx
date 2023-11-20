@@ -9,16 +9,19 @@ import EmptyStatePrompt from './EmptyStatePrompt'
 const UserListings = ({
   properties,
   savedProperties,
+  message,
 }: {
   properties: PropertyType[]
   savedProperties: string[]
+  message: string | undefined
 }) => {
   const itemsLength = properties.length
   const { handleItems, itemsToSee } = useShowMore(itemsLength)
+
   return (
     <>
       {properties.length === 0 ? (
-        <EmptyStatePrompt name="create" link="/create-property" />
+        <EmptyStatePrompt name="create" link="/create-property" message={message} />
       ) : (
         <>
           <PropertiesContainer>

@@ -10,11 +10,13 @@ const EmptyStatePrompt = ({
   message?: string
 }) => {
   const actionLink =
-    name === 'create' ? 'Create a property' : 'Explore properties'
+    name === 'create' && !message ? 'Create a property' : 'Explore properties'
   return (
     <div className="p-4 md:p-6">
       <p className="mb-6 leading-relaxed text-black/60">
-        {message ? message : `You haven't ${name}d any properties`}
+        {typeof message === 'string'
+          ? message
+          : `You haven't ${name}d any properties`}
       </p>
       <Link
         href={link}

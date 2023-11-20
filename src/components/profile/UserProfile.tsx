@@ -8,7 +8,6 @@ import SavedProperties from './subComponents/SavedProperties'
 import UserListings from './subComponents/UserListings'
 import UserReservations from './subComponents/UserReservations'
 import ReservedProperties from './subComponents/ReservedProperties'
-import EmptyStatePrompt from './subComponents/EmptyStatePrompt'
 
 const UserProfile = ({
   user,
@@ -26,19 +25,10 @@ const UserProfile = ({
   const savedProperties = user.savedProperties.map((p) => p._id)
   let reservationsArr = getReservedProperties(user.properties)
 
-  const listings =
-    currentUser === user._id ? (
-      <UserListings
-        properties={user.properties}
-        savedProperties={savedProperties}
-      />
-    ) : (
-      <EmptyStatePrompt
-        link="/"
-        name="listing"
-        message="This user haven\'t created any listings"
-      />
-    )
+  const message =
+    user._id !== currentUser
+      ? "This user haven't created any properties"
+      : undefined
 
   return (
     <div className="mt-6 min-h-screen">
@@ -47,7 +37,13 @@ const UserProfile = ({
         setActiveLink={setActiveLink}
         currentUser={currentUserProfile}
       />
-      {link === 'listings' && listings}
+      {link === 'listings' && (
+        <UserListings
+          properties={user.properties}
+          savedProperties={savedProperties}
+          message={message}
+        />
+      )}
       {link === 'savedProperties' && currentUserProfile && (
         <SavedProperties savedProperties={user.savedProperties} />
       )}
@@ -57,7 +53,9 @@ const UserProfile = ({
       {link === 'myReservations' && currentUserProfile && (
         <UserReservations reservations={user.reservations} />
       )}
-      {link === 'about' && <ProfileAbout user={user} />}
+      {link === 'about' && (
+        <ProfileAbout user={user} currentUser={currentUser} />
+      )}
     </div>
   )
 }

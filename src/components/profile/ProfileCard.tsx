@@ -7,11 +7,18 @@ import { useState } from 'react'
 import ShareLink from '../custom/ShareLink'
 import { getProfileReviews } from 'utils/getProfileReviews'
 
-const ProfileCard = ({ user }: { user: UserProfileObj }) => {
+const ProfileCard = ({
+  user,
+  currentUser,
+}: {
+  user: UserProfileObj
+  currentUser: string
+}) => {
   const [share, setShare] = useState(false)
   const link = `${process.env.NEXT_PUBLIC_BASE_URL as string}user/${user._id}`
   const year = new Date(user.createdAt as string).getFullYear()
   const profileReviews = getProfileReviews(user.properties)
+  const isCurrentUserProfile = user._id === currentUser
   return (
     <div className="mt-36 px-4 lg:mt-28 xl:mt-44">
       <div className="relative mx-auto h-24 w-fit rounded-full border-2 border-white drop-shadow lg:h-32">
@@ -53,13 +60,17 @@ const ProfileCard = ({ user }: { user: UserProfileObj }) => {
       </div>
 
       <div className="mt-auto flex w-full items-center gap-x-2 md:mx-auto md:w-2/5">
-        <Link
-          href="/edit-profile"
-          className="flex w-1/2 cursor-pointer items-center justify-center rounded-full border border-grey py-[calc(.75rem-1px)] font-medium text-black transition-colors hover:border-black/60 focus:outline-none focus-visible:ring-4 focus-visible:ring-neutral-600"
+        {isCurrentUserProfile && (
+          <Link
+            href="/edit-profile"
+            className="flex w-1/2 cursor-pointer items-center justify-center rounded-full border border-grey py-[calc(.75rem-1px)] font-medium text-black transition-colors hover:border-black/60 focus:outline-none focus-visible:ring-4 focus-visible:ring-neutral-600"
+          >
+            <span>Edit profile</span>
+          </Link>
+        )}
+        <div
+          className={`relative ${isCurrentUserProfile ? 'w-1/2' : 'w-full'}`}
         >
-          <span>Edit profile</span>
-        </Link>
-        <div className="relative w-1/2">
           {share && <ShareLink setShare={setShare} link={link} />}
           <button
             onClick={() => setShare(!share)}
