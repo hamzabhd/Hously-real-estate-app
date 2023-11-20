@@ -19,16 +19,14 @@ const Reviews = ({
 
   return (
     <>
-      {reviewsArr.length === 0 && (
+      {reviewsArr.length === 0 ? (
         <div className="mb-6">
           <p className="mb-4 leading-relaxed text-black/60">
             This property doesn't have any reviews yet
           </p>
           <SeeMoreBtn label="Add review" onClick={toggleAddReview} />
         </div>
-      )}
-
-      {reviewsArr.length !== 0 && (
+      ) : (
         <ReviewContainer>
           {reviewsArr.slice(0, reviewsToShow).map((review, i) => (
             <ReviewCard

@@ -18,9 +18,7 @@ export const getUser = async () => {
   return response.json()
 }
 
-export const getUserProfile = async () => {
-  const id = await serverSession().then((res) => res?.user.id)
-
+export const getUserProfile = async (id: string) => {
   if (!id) return null
 
   const response = await fetch(

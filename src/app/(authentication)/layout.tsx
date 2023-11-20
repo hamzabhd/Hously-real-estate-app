@@ -1,7 +1,6 @@
 import Image from 'next/image'
 import Link from 'next/link'
-import React, { ReactNode } from 'react'
-import { montserrat } from '../fonts'
+import { ReactNode } from 'react'
 import { HiHome } from 'react-icons/hi'
 
 const layout = ({ children }: { children: ReactNode }) => {
@@ -12,9 +11,7 @@ const layout = ({ children }: { children: ReactNode }) => {
           href="/"
           className="w-fit cursor-pointer select-none py-2 transition-colors md:absolute md:top-4"
         >
-          <span className={`${montserrat.className} font-bold lg:text-xl`}>
-            Hously.
-          </span>
+          <span className="font-bold lg:text-xl">Hously.</span>
         </Link>
         {children}
       </div>
@@ -28,7 +25,7 @@ const layout = ({ children }: { children: ReactNode }) => {
 
         <Link
           href="/"
-          className={`${montserrat.className} z-10 flex flex-col items-center justify-center`}
+          className="z-10 flex flex-col items-center justify-center"
         >
           <div className="flex h-24 w-24 items-center justify-center rounded-3xl bg-black drop-shadow ">
             <HiHome className="h-12 w-12 text-beige" />

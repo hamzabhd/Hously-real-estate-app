@@ -1,16 +1,17 @@
 'use client'
 
-import { UserObj } from '@/types/types'
+import { UserObj, UserProfileObj } from '@/types/types'
 import UserImage from '../custom/UserImage'
 import Link from 'next/link'
 import { useState } from 'react'
 import ShareLink from '../custom/ShareLink'
+import { getProfileReviews } from 'utils/getProfileReviews'
 
-const ProfileCard = ({ user }: { user: UserObj }) => {
+const ProfileCard = ({ user }: { user: UserProfileObj }) => {
   const [share, setShare] = useState(false)
   const link = `${process.env.NEXT_PUBLIC_BASE_URL as string}user/${user._id}`
   const year = new Date(user.createdAt as string).getFullYear()
-
+  const profileReviews = getProfileReviews(user.properties)
   return (
     <div className="mt-36 px-4 lg:mt-28 xl:mt-44">
       <div className="relative mx-auto h-24 w-fit rounded-full border-2 border-white drop-shadow lg:h-32">
@@ -36,32 +37,36 @@ const ProfileCard = ({ user }: { user: UserObj }) => {
       <div className="mx-auto mb-6 mt-4 flex w-[160px] items-center justify-between">
         <div className="flex flex-col items-center justify-center gap-y-1">
           <span className="text-xs font-medium text-black/40">reviews</span>
-          <span className="font-medium text-black">150</span>
+          <span className="font-medium text-black">
+            {profileReviews.reviews}
+          </span>
         </div>
         {/* line */}
         <span className="inline-block h-[35px] w-[1px] bg-black/40"></span>
         {/* line */}
         <div className="flex flex-col items-center justify-center gap-y-1">
           <span className="text-xs font-medium text-black/40">Rating</span>
-          <span className="font-medium text-black">4.5</span>
+          <span className="font-medium text-black">
+            {profileReviews.rating}
+          </span>
         </div>
       </div>
 
-      <div className="mt-auto flex gap-x-2 md:mx-auto md:w-fit">
+      <div className="mt-auto flex w-full items-center gap-x-2 md:mx-auto md:w-2/5">
         <Link
           href="/edit-profile"
-          className="flex w-full cursor-pointer items-center justify-center rounded-full border border-grey px-8 py-3 font-medium text-black transition-colors hover:border-black/60 focus:outline-none focus-visible:ring-4 focus-visible:ring-neutral-600 md:w-auto"
+          className="flex w-1/2 cursor-pointer items-center justify-center rounded-full border border-grey py-[calc(.75rem-1px)] font-medium text-black transition-colors hover:border-black/60 focus:outline-none focus-visible:ring-4 focus-visible:ring-neutral-600"
         >
-          <span className="block">Edit profile</span>
+          <span>Edit profile</span>
         </Link>
-        <div className="relative w-full">
+        <div className="relative w-1/2">
           {share && <ShareLink setShare={setShare} link={link} />}
           <button
             onClick={() => setShare(!share)}
             type="button"
-            className="flex w-full cursor-pointer items-center justify-center rounded-full bg-black px-8 py-3 font-medium text-white transition-colors hover:bg-neutral-800 focus:outline-none focus-visible:ring-4 focus-visible:ring-neutral-600 md:w-auto"
+            className="flex w-full cursor-pointer items-center justify-center rounded-full bg-black py-3 font-medium text-white transition-colors hover:bg-neutral-800 focus:outline-none focus-visible:ring-4 focus-visible:ring-neutral-600"
           >
-            <span className="block">Share profile</span>
+            <span>Share profile</span>
           </button>
         </div>
       </div>

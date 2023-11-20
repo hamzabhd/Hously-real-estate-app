@@ -8,9 +8,9 @@ const ProfileAbout = ({ user }: { user: UserObj }) => {
   const { bio, background, facts, links, destinations } = user
 
   return (
-    <div className="p-4 lg:grid lg:grid-cols-3 lg:gap-x-6 lg:p-6">
+    <div className="p-4 md:p-6 lg:grid lg:grid-cols-3 lg:gap-x-6">
       <div className="lg:col-start-1 lg:col-end-3">
-        <h3 className="mb-4 mt-6 text-lg font-medium text-black lg:mt-0 lg:text-xl">
+        <h3 className="mb-4 text-lg font-medium text-black lg:mt-0 lg:text-xl">
           Biography
         </h3>
         {

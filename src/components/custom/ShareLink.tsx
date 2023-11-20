@@ -29,7 +29,7 @@ const ShareLink = ({
   return (
     <div
       ref={shareRef}
-      className="absolute left-0 top-full z-50 mt-2 block w-max animate-popup rounded-3xl border border-grey bg-white p-2"
+      className="absolute left-0 top-full z-50 mt-2 block min-w-max w-full animate-popup rounded-3xl border border-grey bg-white p-2"
     >
       <a
         href={`https://wa.me/send?text=${encodeURIComponent(link)}`}

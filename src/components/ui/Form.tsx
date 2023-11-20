@@ -1,6 +1,5 @@
 'use client'
 import { useState, useRef } from 'react'
-import { montserrat } from '@/app/fonts'
 import { FcGoogle } from 'react-icons/fc'
 import { HiOutlineEye, HiOutlineEyeOff } from 'react-icons/hi'
 import { usePathname } from 'next/navigation'
@@ -21,9 +20,7 @@ const Form = () => {
 
   return (
     <form className="w-full py-8 xl:w-[386px]">
-      <h2
-        className={`${montserrat.className} mb-4 text-4xl font-bold md:text-5xl `}
-      >
+      <h2 className="mb-4 text-4xl font-bold md:text-5xl">
         {isSignIn ? 'Sign in' : 'Sign up'}
       </h2>
       <p className="mb-12 font-medium text-neutral-600">
