@@ -1,11 +1,12 @@
 import { useRouter } from 'next/navigation'
-import SmallSpinner from '../loaders/SmallSpinner'
 import { useSession } from 'next-auth/react'
 import { useTransition } from 'react'
 import { saveProperty, unSaveProperty } from '@/app/actions'
 import { HiBookmark, HiOutlineBookmark } from 'react-icons/hi'
+import { ToastContainer, toast } from 'react-toastify'
+import SmallSpinner from '../loaders/SmallSpinner'
 import SpecialButton from '../custom/SpecialButton'
-
+import 'react-toastify/dist/ReactToastify.css'
 const SavePropertyButton = ({
   propertyId,
   isSaved,
@@ -19,6 +20,33 @@ const SavePropertyButton = ({
   const saveActionWithId = saveProperty.bind(null, propertyId)
   const unSaveActionWithId = unSaveProperty.bind(null, propertyId)
 
+  const notify = (notifyObj: { success: boolean; message: string }) => {
+    const { message, success } = notifyObj
+    if (success) {
+      return toast.success(message, {
+        position: 'top-center',
+        autoClose: 5000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+        theme: 'light',
+      })
+    } else {
+      return toast.error(message, {
+        position: 'top-right',
+        autoClose: 5000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+        theme: 'light',
+      })
+    }
+  }
+
   const handleSave = () => {
     if (status === 'loading') return
     if (status === 'unauthenticated') {
@@ -26,24 +54,29 @@ const SavePropertyButton = ({
     }
     if (isSaved) {
       return startTransition(async () => {
-        await unSaveActionWithId()
+        const result = await unSaveActionWithId()
+        notify(result)
       })
     }
     return startTransition(async () => {
-      await saveActionWithId()
+      const result = await saveActionWithId()
+      notify(result)
     })
   }
   return (
-    <div className="relative">
-      {pending && <SmallSpinner />}
-      <SpecialButton name={isSaved ? 'Saved' : 'Save'} onClick={handleSave}>
-        {isSaved ? (
-          <HiBookmark className="h-4 w-4 text-black/40 transition-colors group-hover:text-black/60" />
-        ) : (
-          <HiOutlineBookmark className="h-4 w-4 text-black/40 transition-colors group-hover:text-black/60" />
-        )}
-      </SpecialButton>
-    </div>
+    <>
+      <ToastContainer />
+      <div className="relative">
+        {pending && <SmallSpinner />}
+        <SpecialButton name={isSaved ? 'Saved' : 'Save'} onClick={handleSave}>
+          {isSaved ? (
+            <HiBookmark className="h-4 w-4 text-black/40 transition-colors group-hover:text-black/60" />
+          ) : (
+            <HiOutlineBookmark className="h-4 w-4 text-black/40 transition-colors group-hover:text-black/60" />
+          )}
+        </SpecialButton>
+      </div>
+    </>
   )
 }
 
