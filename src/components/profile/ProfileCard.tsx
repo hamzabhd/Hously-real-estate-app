@@ -1,9 +1,16 @@
+'use client'
+
 import { UserObj } from '@/types/types'
 import UserImage from '../custom/UserImage'
 import Link from 'next/link'
+import { useState } from 'react'
+import ShareLink from '../custom/ShareLink'
 
 const ProfileCard = ({ user }: { user: UserObj }) => {
+  const [share, setShare] = useState(false)
+  const link = `${process.env.NEXT_PUBLIC_BASE_URL as string}user/${user._id}`
   const year = new Date(user.createdAt as string).getFullYear()
+
   return (
     <div className="mt-36 px-4 lg:mt-28 xl:mt-44">
       <div className="relative mx-auto h-24 w-fit rounded-full border-2 border-white drop-shadow lg:h-32">
@@ -47,12 +54,16 @@ const ProfileCard = ({ user }: { user: UserObj }) => {
         >
           <span className="block">Edit profile</span>
         </Link>
-        <button
-          type="button"
-          className="flex w-full cursor-pointer items-center justify-center rounded-full bg-black px-8 py-3 font-medium text-white transition-colors hover:bg-neutral-800 focus:outline-none focus-visible:ring-4 focus-visible:ring-neutral-600 md:w-auto"
-        >
-          <span className="block">Share profile</span>
-        </button>
+        <div className="relative w-full">
+          {share && <ShareLink setShare={setShare} link={link} />}
+          <button
+            onClick={() => setShare(!share)}
+            type="button"
+            className="flex w-full cursor-pointer items-center justify-center rounded-full bg-black px-8 py-3 font-medium text-white transition-colors hover:bg-neutral-800 focus:outline-none focus-visible:ring-4 focus-visible:ring-neutral-600 md:w-auto"
+          >
+            <span className="block">Share profile</span>
+          </button>
+        </div>
       </div>
     </div>
   )

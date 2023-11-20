@@ -11,6 +11,7 @@ import ReportProperty from '../features/ReportProperty'
 import SavePropertyButton from '@/components/features/SavePropertyButton'
 import SharePropertyButton from '@/components/features/SharePropertyButton'
 import { TbMessageCircle } from 'react-icons/tb'
+import { LuPen } from 'react-icons/lu'
 
 const PropertyOptions = ({
   userName,
@@ -25,7 +26,7 @@ const PropertyOptions = ({
   propertyId: string
   isSaved: boolean
 }) => {
-  const { data: session } = useSession()
+  const { data: session, status } = useSession()
   const router = useRouter()
   const [reportProperty, setReportProperty] = useState(false)
   const { addReview, toggleAddReview } = useAddReview()
@@ -35,6 +36,37 @@ const PropertyOptions = ({
       return router.push('/sign-up')
     }
     setReportProperty(!reportProperty)
+  }
+
+  const buttons = () => {
+    if (status === 'loading') {
+      return <></>
+    }
+    if (session?.user.id === propertyOwner) {
+      return (
+        <>
+          <Link href={`/edit-property/${propertyId}`}>
+            <SpecialButton name="Edit">
+              <LuPen className="h-4 w-4 text-black/40 transition-colors group-hover:text-black/60" />
+            </SpecialButton>
+          </Link>
+          <SharePropertyButton propertyId={propertyId} />
+        </>
+      )
+    } else {
+      return (
+        <>
+          <SavePropertyButton propertyId={propertyId} isSaved={isSaved} />
+          <SharePropertyButton propertyId={propertyId} />
+          <SpecialButton name="Review" onClick={toggleAddReview}>
+            <TbMessageCircle className="h-4 w-4 text-black/40 transition-colors group-hover:text-black/60" />
+          </SpecialButton>
+          <SpecialButton name="Report" onClick={toggleReportProperty}>
+            <HiOutlineFlag className="h-4 w-4 text-black/40 transition-colors group-hover:text-black/60" />
+          </SpecialButton>
+        </>
+      )
+    }
   }
   return (
     <>
@@ -52,20 +84,7 @@ const PropertyOptions = ({
           <Link href={`/user/${propertyOwner}`} className="rounded-full">
             <UserImage imageUrl={profileImage} name={userName} />
           </Link>
-
-          {session?.user.id !== propertyOwner && (
-            <>
-              <SavePropertyButton propertyId={propertyId} isSaved={isSaved} />
-
-              <SpecialButton name="Review" onClick={toggleAddReview}>
-                <TbMessageCircle className="h-4 w-4 text-black/40 transition-colors group-hover:text-black/60" />
-              </SpecialButton>
-              <SpecialButton name="Report" onClick={toggleReportProperty}>
-                <HiOutlineFlag className="h-4 w-4 text-black/40 transition-colors group-hover:text-black/60" />
-              </SpecialButton>
-            </>
-          )}
-          <SharePropertyButton propertyId={propertyId} />
+          {buttons()}
         </div>
       </div>
     </>

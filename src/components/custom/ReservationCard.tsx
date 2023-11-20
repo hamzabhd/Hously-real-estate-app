@@ -1,7 +1,6 @@
 import Image from 'next/image'
 import { UserReservation } from '@/types/types'
 import { HiOutlineLocationMarker, HiOutlineTag } from 'react-icons/hi'
-import { reformLongAddress } from 'utils/reformLongAddress'
 import { reformDate } from 'utils/reformDate'
 import { MdOutlinePeople } from 'react-icons/md'
 import { TbDoorEnter, TbDoorExit } from 'react-icons/tb'
@@ -46,9 +45,9 @@ const ReservationCard = ({ reservation }: { reservation: UserReservation }) => {
           </div>
           <ul className="my-4 mb-6 flex flex-col gap-y-2">
             <li className="flex items-center gap-x-2">
-              <HiOutlineLocationMarker className="text-sm text-black/60" />
-              <span className="inline-block truncate text-xs font-medium tracking-wider text-black/40">
-                {reformLongAddress(property.address)}
+              <HiOutlineLocationMarker className="shrink-0 text-sm text-black/60" />
+              <span className="truncate text-xs font-medium tracking-wider text-black/40">
+                {property.address}
               </span>
             </li>
             <li className="flex items-center gap-x-2">

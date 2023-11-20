@@ -1,6 +1,6 @@
 import { makeReservation } from '@/app/actions'
 import Calendar from '@/components/features/Calendar'
-import { PropertyType } from '@/types/types'
+import { PropertyType, UserObj } from '@/types/types'
 import { useSession } from 'next-auth/react'
 import { useRouter } from 'next/navigation'
 import { useState, useTransition } from 'react'
@@ -129,10 +129,14 @@ const PropertyReservation = ({ property }: { property: PropertyType }) => {
       return prevState - 1
     })
   }
+  // check the user status before any reservations
   const toggleReserve = () => {
     if (status === 'loading') return
     if (status === 'unauthenticated') {
       return router.push('/sign-up')
+    }
+    if (session?.user.id === (property.owner as UserObj)._id) {
+      return
     }
     setReserve(true)
     setAvailability(false)

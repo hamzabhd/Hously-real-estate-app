@@ -30,9 +30,9 @@ const Reviews = ({
 
       {reviewsArr.length !== 0 && (
         <ReviewContainer>
-          {reviewsArr.slice(0, reviewsToShow).map((review) => (
+          {reviewsArr.slice(0, reviewsToShow).map((review, i) => (
             <ReviewCard
-              key={review._id}
+              key={i}
               review={review}
               setReviewToShow={setReviewToShow}
             />

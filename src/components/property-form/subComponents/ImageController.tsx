@@ -16,7 +16,7 @@ const ImageController = ({
   return (
     <div
       className={`group relative flex aspect-square h-full w-full flex-shrink-0 overflow-hidden rounded-3xl ${
-        !isEdit ? 'cursor-pointer' : ''
+        !isEdit ? 'cursor-pointer' : 'opacity-60'
       }`}
     >
       <Image

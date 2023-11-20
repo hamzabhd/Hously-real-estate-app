@@ -1,4 +1,4 @@
-import { PropertyType } from '@/types/types'
+import { PropertyType, UserObj } from '@/types/types'
 import { useState } from 'react'
 import { PiCaretRightBold } from 'react-icons/pi'
 import { HiLocationMarker } from 'react-icons/hi'
@@ -37,6 +37,9 @@ const PropertyMainDetails = ({
   }
   // getting the property reviews rate based on the reviews
   const rate = reviewsRate(property.reviews)
+  // avoid any checking errors
+  const owner = property.owner as UserObj
+
   return (
     <div className="items-start lg:grid lg:h-[752px] lg:grid-cols-2 lg:gap-x-6 lg:px-6">
       {/* Image previewer */}
@@ -61,9 +64,9 @@ const PropertyMainDetails = ({
         <PropertyOptions
           propertyId={property._id}
           isSaved={isSaved}
-          propertyOwner={property.owner._id}
-          profileImage={property.owner.profilePicture}
-          userName={property.owner.fullName}
+          propertyOwner={owner._id}
+          profileImage={owner.profilePicture}
+          userName={owner.fullName}
         />
         {selected && (
           <ViewMore
@@ -79,8 +82,8 @@ const PropertyMainDetails = ({
               {property.title}
             </h1>
             <div className="flex items-center gap-x-2">
-              <HiLocationMarker className="text-neutral-800" />
-              <span className="text-xs font-medium tracking-wider text-black/40">
+              <HiLocationMarker className="shrink-0 text-neutral-800" />
+              <span className="truncate text-xs font-medium tracking-wider text-black/40">
                 {property.address}
               </span>
             </div>
@@ -151,8 +154,8 @@ const PropertyMainDetails = ({
           </ul>
 
           <div className="mb-6">
-            <p className="mb-4 overflow-hidden leading-relaxed text-black/60">
-              {property.description.slice(0, 156)}...
+            <p className="mb-4 line-clamp-3 overflow-hidden leading-relaxed text-black/60">
+              {property.description}
             </p>
             <SeeMoreBtn
               label="Read more"
@@ -202,7 +205,7 @@ const PropertyMainDetails = ({
           {property.listingType === 'Rent' ? (
             <PropertyReservation property={property} />
           ) : (
-            <OwnerContact user={property.owner} />
+            <OwnerContact user={owner} />
           )}
         </div>
       </div>

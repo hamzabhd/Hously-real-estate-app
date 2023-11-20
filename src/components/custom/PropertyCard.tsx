@@ -10,7 +10,6 @@ import { useRouter } from 'next/navigation'
 import { PropertyType } from '@/types/types'
 import { reviewsRate } from 'utils/reviewsRate'
 import { reformCountryName } from 'utils/getCountryCode'
-import { reformLongAddress } from 'utils/reformLongAddress'
 import { useSession } from 'next-auth/react'
 import { LuPen } from 'react-icons/lu'
 import SpecialButton from './SpecialButton'
@@ -42,7 +41,7 @@ const PropertyCard = ({
     if (status === 'loading') {
       return <></>
     }
-    if (session?.user.id === property.owner) {
+    if (session?.user.id === (property.owner as string)) {
       return (
         <Link href={`/edit-property/${property._id}`}>
           <SpecialButton name="Edit">
@@ -75,9 +74,9 @@ const PropertyCard = ({
               {property.city}, {propertyCountry}
             </h2>
             <div className="flex items-center gap-x-2">
-              <HiLocationMarker className="text-neutral-800" />
-              <span className="inline-block text-xs font-medium tracking-wider text-black/40">
-                {reformLongAddress(property.address)}
+              <HiLocationMarker className="shrink-0 text-neutral-800" />
+              <span className="line-clamp-1 text-xs font-medium tracking-wider text-black/40">
+                {property.address}
               </span>
             </div>
           </Link>
