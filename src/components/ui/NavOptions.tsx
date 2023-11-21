@@ -1,5 +1,4 @@
 import Link from 'next/link'
-import React from 'react'
 import UserImage from '../custom/UserImage'
 import { UserObj } from '@/types/types'
 
@@ -33,7 +32,7 @@ const NavOptions = ({
         <div className="hidden gap-x-2 lg:flex">
           <Link
             href="/sign-in"
-            className="cursor-pointer rounded-full border border-grey px-6 py-3 font-medium text-black hover:border-black/60 focus:outline-none focus-visible:ring-4 focus-visible:ring-neutral-600"
+            className="cursor-pointer rounded-full border border-grey px-6 py-[calc(0.75rem-1px)] font-medium text-black hover:border-black/60 focus:outline-none focus-visible:ring-4 focus-visible:ring-neutral-600"
           >
             Sign in
           </Link>

@@ -82,7 +82,13 @@ const Navbar = ({ user, session }: NavbarPropsType) => {
           </button>
         </div>
         {/* nav dropdown */}
-        {isOpen && <NavDropDown user={user} session={Boolean(session)} />}
+        {isOpen && (
+          <NavDropDown
+            toggleNav={toggleNav}
+            user={user}
+            session={Boolean(session)}
+          />
+        )}
         {/* search form opened */}
         {activeSearch && <SearchForm toggleSearch={toggleSearch} />}
       </nav>

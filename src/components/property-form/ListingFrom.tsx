@@ -203,10 +203,10 @@ const ListingFrom = ({
           label={isEdit ? 'Updating property...' : 'Creating property...'}
         />
       )}
-      <form className="my-6 lg:mt-8" onSubmit={handleSubmit}>
+      <form className="mt-6 lg:mt-8" onSubmit={handleSubmit}>
         <MainContainer
           order="01"
-          title="main information"
+          title="Main information"
           message={
             isEdit
               ? 'Please note that all fields in the section are required. and also note that images are not editable otherwise create a new listing'
@@ -228,7 +228,7 @@ const ListingFrom = ({
 
         <MainContainer
           order="02"
-          title="location details"
+          title="Location details"
           message="Please ensure you input accurate location details, including the state if applicable."
         >
           <Location
@@ -242,7 +242,7 @@ const ListingFrom = ({
 
         <MainContainer
           order="03"
-          title="property details"
+          title="Property details"
           message="Please make sure to select at least one option for each item."
         >
           <DetailsSelection
@@ -301,7 +301,7 @@ const ListingFrom = ({
 
         <MainContainer
           order="04"
-          title="property rules"
+          title="Property rules"
           message="Kindly select the property rules that best align with your requirements, and feel free to provide specific rules if necessary."
         >
           <Rules
@@ -314,7 +314,7 @@ const ListingFrom = ({
 
         <MainContainer
           order="05"
-          title="property pricing"
+          title="Property pricing"
           message="Please note that only the price field is mandatory. The other fees are optional."
         >
           <Pricing
