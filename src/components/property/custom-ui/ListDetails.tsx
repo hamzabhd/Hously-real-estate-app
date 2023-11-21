@@ -20,10 +20,13 @@ const ListDetails = ({
   // render the details dynamically based on the type provided
   return (
     <div className="mb-4">
-      <div className="flex items-center justify-between border-b border-grey py-4">
-        <h2 className="text-lg font-medium">{type}s</h2>
+      <div
+        className="flex cursor-pointer items-center justify-between border-b border-grey py-4"
+        onClick={() => setExtend(!extend)}
+      >
+        <h2 className="font-medium">{type}s</h2>
         {/* toggle the details container */}
-        <button className="" onClick={() => setExtend(!extend)}>
+        <button>
           <PiCaretDownBold
             className={`${extend ? ' rotate-180 ' : 'rotate-0'} transition-all`}
           />

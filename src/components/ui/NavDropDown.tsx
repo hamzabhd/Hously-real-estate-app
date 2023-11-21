@@ -37,7 +37,7 @@ const NavDropDown = ({
           <li
             className="block cursor-pointer items-center justify-center rounded-2xl px-4 py-2 text-black/60 transition-all hover:bg-lightGrey  hover:text-black"
             onClick={() => {
-              signOut({ callbackUrl: '/' })
+              signOut()
               toggleNav()
             }}
           >

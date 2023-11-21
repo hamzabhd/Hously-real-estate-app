@@ -6,6 +6,7 @@ import { HiBookmark, HiOutlineBookmark } from 'react-icons/hi'
 import SmallSpinner from '../loaders/SmallSpinner'
 import SpecialButton from '../custom/SpecialButton'
 import { notify } from 'utils/notify'
+import { useSearchQueries } from 'hooks/useSearchQueries'
 
 const SavePropertyButton = ({
   propertyId,
@@ -14,26 +15,23 @@ const SavePropertyButton = ({
   propertyId: string
   isSaved: boolean
 }) => {
-  const router = useRouter()
-  const { status } = useSession()
+  const { checkAuthenticatedUser } = useSearchQueries()
   const [pending, startTransition] = useTransition()
   const saveActionWithId = saveProperty.bind(null, propertyId)
   const unSaveActionWithId = unSaveProperty.bind(null, propertyId)
 
   const handleSave = () => {
-    if (status === 'loading') return
-    if (status === 'unauthenticated') {
-      return router.push('/sign-up')
-    }
-    if (isSaved) {
+    checkAuthenticatedUser(() => {
+      if (isSaved) {
+        return startTransition(async () => {
+          const result = await unSaveActionWithId()
+          notify(result)
+        })
+      }
       return startTransition(async () => {
-        const result = await unSaveActionWithId()
+        const result = await saveActionWithId()
         notify(result)
       })
-    }
-    return startTransition(async () => {
-      const result = await saveActionWithId()
-      notify(result)
     })
   }
   return (

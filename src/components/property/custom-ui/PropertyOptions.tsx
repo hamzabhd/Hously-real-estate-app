@@ -1,17 +1,16 @@
-import SpecialButton from '@/components/custom/SpecialButton'
-import UserImage from '@/components/custom/UserImage'
-import { useAddReview } from 'hooks/useAddReview'
 import { useSession } from 'next-auth/react'
-import Link from 'next/link'
-import { useRouter } from 'next/navigation'
+import { TbMessageCircle } from 'react-icons/tb'
+import { LuPen } from 'react-icons/lu'
 import { useState } from 'react'
 import { HiOutlineFlag } from 'react-icons/hi'
+import { useSearchQueries } from 'hooks/useSearchQueries'
+import SpecialButton from '@/components/custom/SpecialButton'
+import UserImage from '@/components/custom/UserImage'
+import Link from 'next/link'
 import AddReview from '../features/AddReview'
 import ReportProperty from '../features/ReportProperty'
 import SavePropertyButton from '@/components/features/SavePropertyButton'
 import SharePropertyButton from '@/components/features/SharePropertyButton'
-import { TbMessageCircle } from 'react-icons/tb'
-import { LuPen } from 'react-icons/lu'
 
 const PropertyOptions = ({
   userName,
@@ -27,15 +26,20 @@ const PropertyOptions = ({
   isSaved: boolean
 }) => {
   const { data: session, status } = useSession()
-  const router = useRouter()
+  const { checkAuthenticatedUser } = useSearchQueries()
   const [reportProperty, setReportProperty] = useState(false)
-  const { addReview, toggleAddReview } = useAddReview()
+  const [addReview, setAddReview] = useState(false)
 
   const toggleReportProperty = () => {
-    if (!session) {
-      return router.push('/sign-up')
-    }
-    setReportProperty(!reportProperty)
+    checkAuthenticatedUser(() => {
+      setReportProperty(!reportProperty)
+    })
+  }
+
+  const toggleAddReview = () => {
+    checkAuthenticatedUser(() => {
+      setAddReview(!reportProperty)
+    })
   }
 
   const buttons = () => {
@@ -81,7 +85,10 @@ const PropertyOptions = ({
       )}
       <div className="border-b p-4 md:px-6 lg:border-none lg:p-0">
         <div className="flex items-center gap-2">
-          <Link href={`/user/${propertyOwner}`} className="rounded-full">
+          <Link
+            href={`/user/${propertyOwner}`}
+            className="rounded-full border border-transparent"
+          >
             <UserImage imageUrl={profileImage} name={userName} />
           </Link>
           {buttons()}

@@ -18,7 +18,7 @@ const EssentialDetails = ({
     >
       <div className="max-h-[580px] overflow-y-scroll p-4 pb-0 lg:max-h-[760px] lg:overflow-auto lg:px-6">
         <div className="mb-4">
-          <h2 className="text-lg font-medium">Spacing</h2>
+          <h2 className="font-medium">Spacing</h2>
           <div className="flex items-center justify-between pt-4 text-sm text-black">
             <div className="flex items-center gap-x-4">
               <TbResize className="h-4 w-4 text-black/60" />

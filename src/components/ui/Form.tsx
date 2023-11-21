@@ -3,10 +3,12 @@ import { useState, useRef } from 'react'
 import { FcGoogle } from 'react-icons/fc'
 import { HiOutlineEye, HiOutlineEyeOff } from 'react-icons/hi'
 import { usePathname } from 'next/navigation'
-import Link from 'next/link'
 import { signIn } from 'next-auth/react'
+import Link from 'next/link'
+import { useSearchQueries } from 'hooks/useSearchQueries'
 
 const Form = () => {
+  const { prevPage } = useSearchQueries()
   const [showPassword, setShowPassword] = useState(false)
   const passRef = useRef<HTMLInputElement>(null)
   const pathname = usePathname()
@@ -16,6 +18,20 @@ const Form = () => {
   function togglePassword() {
     setShowPassword(!showPassword)
     passRef.current?.focus()
+  }
+
+  const getLink = () => {
+    if (isSignIn) {
+      if (prevPage) {
+        return '/sign-up?prev-page=' + prevPage.replace(/\//g, '%2F')
+      }
+      return 'sign-up'
+    } else {
+      if (prevPage) {
+        return '/sign-in?prev-page=' + prevPage.replace(/\//g, '%2F')
+      }
+      return '/sign-in'
+    }
   }
 
   return (
@@ -30,7 +46,7 @@ const Form = () => {
       <button
         type="button"
         className="mb-6 flex w-full flex-wrap items-center justify-center gap-x-4 rounded-full border border-grey px-8 py-3 transition-colors hover:border-black focus:outline-none focus-visible:ring-4 focus-visible:ring-neutral-600"
-        onClick={() => signIn('google', { callbackUrl: '/' })}
+        onClick={() => signIn('google', { callbackUrl: prevPage || '/' })}
       >
         <FcGoogle className="h-6 w-6 flex-shrink-0" />
         <span className="font-medium text-black">
@@ -136,7 +152,7 @@ const Form = () => {
       <span className="text-sm text-gray-600">
         {isSignIn ? "Don't" : 'Already'} have an account?
         <Link
-          href={isSignIn ? '/sign-up' : '/sign-in'}
+          href={getLink()}
           className="font-bold transition-colors hover:text-black"
         >
           {isSignIn ? ' Sign up' : ' Sign in'}

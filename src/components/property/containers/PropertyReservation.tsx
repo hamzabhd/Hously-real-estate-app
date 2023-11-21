@@ -1,21 +1,22 @@
 import { makeReservation } from '@/app/actions'
-import Calendar from '@/components/features/Calendar'
 import { PropertyType, UserObj } from '@/types/types'
 import { useSession } from 'next-auth/react'
 import { useRouter } from 'next/navigation'
 import { useState, useTransition } from 'react'
 import { getReservationRange } from 'utils/isReserved'
 import { reservationSchema } from 'utils/validations/validations'
+import { notify } from 'utils/notify'
+import Calendar from '@/components/features/Calendar'
 import ReservationButtons from '../custom-ui/ReservationButtons'
 import ReservationContainer from '../custom-ui/ReservationContainer'
 import ReservationDetails from '../custom-ui/ReservationDetails'
 import PropertyAvailability from '../custom-ui/PropertyAvailability'
 import ReserveDateSelection from '../custom-ui/ReserveDateSelection'
 import ReservationGuests from '../custom-ui/ReservationGuests'
-import { notify } from 'utils/notify'
+import { useSearchQueries } from 'hooks/useSearchQueries'
 
 const PropertyReservation = ({ property }: { property: PropertyType }) => {
-  const router = useRouter()
+  const { checkAuthenticatedUser } = useSearchQueries()
   const { data: session, status } = useSession()
   const [availability, setAvailability] = useState(false)
   const [reserve, setReserve] = useState(false)
@@ -134,15 +135,13 @@ const PropertyReservation = ({ property }: { property: PropertyType }) => {
   }
   // check the user status before any reservations
   const toggleReserve = () => {
-    if (status === 'loading') return
-    if (status === 'unauthenticated') {
-      return router.push('/sign-up')
-    }
-    if (session?.user.id === (property.owner as UserObj)._id) {
-      return
-    }
-    setReserve(true)
-    setAvailability(false)
+    checkAuthenticatedUser(() => {
+      if (session?.user.id === (property.owner as UserObj)._id) {
+        return
+      }
+      setReserve(true)
+      setAvailability(false)
+    })
   }
   const toggleAvailability = () => {
     setAvailability(!availability)

@@ -1,10 +1,10 @@
-import { ReviewObj } from '@/types/types'
-import { useAddReview } from 'hooks/useAddReview'
-import { useState } from 'react'
 import Reviews from '../../custom/Reviews'
 import SeeMoreBtn from '../../custom/SeeMoreBtn'
 import AddReview from '../features/AddReview'
+import { ReviewObj } from '@/types/types'
 import { useShowMore } from 'hooks/useShowMore'
+import { useSearchQueries } from 'hooks/useSearchQueries'
+import { useState } from 'react'
 
 const PropertyReviews = ({
   propertyId,
@@ -14,8 +14,13 @@ const PropertyReviews = ({
   propertyReviews: ReviewObj[]
 }) => {
   const itemsLength = propertyReviews.length
+  const [addReview, setAddReview] = useState(false)
   const { handleItems, itemsToSee } = useShowMore(itemsLength)
-  const { addReview, toggleAddReview } = useAddReview()
+  const { checkAuthenticatedUser } = useSearchQueries()
+
+  const toggleAddReview = () => {
+    checkAuthenticatedUser(() => setAddReview(!addReview))
+  }
 
   return (
     <>
