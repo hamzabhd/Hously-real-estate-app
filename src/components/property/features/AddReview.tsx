@@ -1,5 +1,4 @@
 import { useEffect, useState } from 'react'
-import { HiOutlineX } from 'react-icons/hi'
 import { addReview } from '@/app/actions'
 import Line from '@/components/custom/Line'
 import ErrorDisplay from '@/components/custom/ErrorDisplay'
@@ -7,6 +6,7 @@ import SubmitButton from '../ui/SubmitButton'
 import DetailsContainer from '@/components/layouts/DetailsContainer'
 import CustomRadioButton from '@/components/custom/CustomRadioButton'
 import { useFormState } from 'react-dom'
+import { notify } from 'utils/notify'
 
 const AddReview = ({
   toggleAddReview,
@@ -23,8 +23,9 @@ const AddReview = ({
   const [range, setRange] = useState('0.5')
 
   useEffect(() => {
-    if (!state.success) return
+    if (!state.success && state.status !== 'error') return
     toggleAddReview()
+    notify(state)
   }, [state])
 
   return (
@@ -38,6 +39,7 @@ const AddReview = ({
           respectful. Inappropriate reviews may result in account restrictions.
         </p>
 
+        {!state.success && <ErrorDisplay error={state.message} />}
         <form
           action={(formData) => {
             formData.append('propertyId', propertyId)
@@ -47,7 +49,6 @@ const AddReview = ({
           <span className="mb-4 block font-medium lg:mb-5">
             Who you might be?
           </span>
-          {!state.success && <ErrorDisplay error={state.message} />}
           <div className="mb-6 grid grid-cols-2 gap-4 sm:grid-cols-3">
             <CustomRadioButton id="renter" name="reviewerType" value="Renter">
               <span className="font-medium">Already rented</span>

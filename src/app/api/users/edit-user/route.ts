@@ -27,14 +27,16 @@ export const POST = async (req: NextRequest) => {
     console.log('image does not match profile')
     if (/res.cloudinary.com/g.test(user.profilePicture)) {
       // Destroying old profile picture logic goes here
-      console.log('Destroying old profile picture')
       const publicId = getPublicId(user.profilePicture)
       try {
         if (publicId) {
           await destroyOldProfileImage(publicId)
         }
       } catch (e) {
-        throw new Error('Something went wrong during the image change')
+        return NextResponse.json({
+          success: false,
+          message: 'Something went wrong',
+        })
       }
     }
     try {
@@ -49,9 +51,11 @@ export const POST = async (req: NextRequest) => {
         },
         { new: true },
       )
-      console.log('image uploaded successfully', secure_url)
     } catch (e) {
-      throw new Error('Something went wrong during the image change')
+      return NextResponse.json({
+        success: false,
+        message: 'Something went wrong',
+      })
     }
   }
 
@@ -80,14 +84,14 @@ export const POST = async (req: NextRequest) => {
       { new: true },
     )
     revalidatePath('/')
+    return NextResponse.json({
+      success: true,
+      message: 'Your profile has been successfully updated',
+    })
   } catch (e) {
     return NextResponse.json({
       success: false,
       message: 'Updating profile went wrong',
     })
   }
-  return NextResponse.json({
-    success: true,
-    message: 'User was successfully updated',
-  })
 }

@@ -2,6 +2,7 @@ import './globals.css'
 import type { Metadata } from 'next'
 import AuthProvider from 'context/AuthProvider'
 import { Poppins } from 'next/font/google'
+import NotificationContainer from '@/components/custom/NotificationContainer'
 
 export const metadata: Metadata = {
   title: 'Hously-Project',
@@ -22,6 +23,7 @@ export default function RootLayout({
   return (
     <html lang="en" className={poppins.className}>
       <body className="relative box-border">
+        <NotificationContainer />
         <AuthProvider>{children}</AuthProvider>
       </body>
     </html>

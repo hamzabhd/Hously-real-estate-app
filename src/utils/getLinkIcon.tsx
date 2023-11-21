@@ -1,4 +1,4 @@
-import { BsQuestionLg } from 'react-icons/bs'
+import { HiOutlineLink } from 'react-icons/hi'
 import { FaFacebookF, FaLinkedinIn, FaXTwitter } from 'react-icons/fa6'
 
 export const getLinkIcon = (link: string) => {
@@ -13,6 +13,6 @@ export const getLinkIcon = (link: string) => {
   } else if (linkedIn) {
     return FaLinkedinIn
   } else {
-    return BsQuestionLg
+    return HiOutlineLink
   }
 }

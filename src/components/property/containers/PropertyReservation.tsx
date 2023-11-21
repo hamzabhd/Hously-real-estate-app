@@ -12,6 +12,7 @@ import ReservationDetails from '../custom-ui/ReservationDetails'
 import PropertyAvailability from '../custom-ui/PropertyAvailability'
 import ReserveDateSelection from '../custom-ui/ReserveDateSelection'
 import ReservationGuests from '../custom-ui/ReservationGuests'
+import { notify } from 'utils/notify'
 
 const PropertyReservation = ({ property }: { property: PropertyType }) => {
   const router = useRouter()
@@ -57,8 +58,10 @@ const PropertyReservation = ({ property }: { property: PropertyType }) => {
 
     startTransition(async () => {
       const result = await makeReservationAction()
-      if (result.success) {
+      console.log(result)
+      if (result.success || result.status === 'error') {
         clearReservation()
+        notify(result)
       }
     })
   }

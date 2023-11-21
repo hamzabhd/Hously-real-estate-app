@@ -1,18 +1,19 @@
 'use client'
 import { ChangeEvent, FormEvent, useState } from 'react'
 import { UserDetails, UserObj } from '@/types/types'
+import { useRouter } from 'next/navigation'
+import { validateForm } from 'utils/validateFrom'
+import { userSchema } from 'utils/validations/validations'
 import MainContainer from '../layouts/MainContainer'
 import PersonalInfo from './subComponents/PersonalInfo'
 import AdditionalInfo from './subComponents/AdditionalInfo'
 import ContactInfo from './subComponents/ContactInfo'
 import Buttons from '../custom/Buttons'
-import { validateForm } from 'utils/validateFrom'
-import { userSchema } from 'utils/validations/validations'
 import axios from 'axios'
-import { useRouter } from 'next/navigation'
 import Spinner from '../loaders/Spinner'
 import ProfileImageUploader from './subComponents/ProfileImageUploader'
 import EditLocationInfo from './subComponents/EditLocationInfo'
+import { notify } from 'utils/notify'
 
 const EditProfileForm = ({ user }: { user: UserObj }) => {
   const router = useRouter()
@@ -92,31 +93,28 @@ const EditProfileForm = ({ user }: { user: UserObj }) => {
   }
   const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault()
+    const result = validateForm(userSchema, userDetails)
 
-    try {
-      const result = validateForm(userSchema, userDetails)
+    if (!result.success) {
+      return setErrorInputs((prevState) => ({
+        ...prevState,
+        ...result.errors,
+      }))
+    }
 
-      if (!result.success) {
-        return setErrorInputs((prevState) => ({
-          ...prevState,
-          ...result.errors,
-        }))
-      }
+    setIsLoading(true)
+    const response = await axios.post(`/api/users/edit-user`, {
+      body: userDetails,
+      profileImage: profileImage || user.profilePicture,
+    })
 
-      setIsLoading(true)
-      const response = await axios.post(`/api/users/edit-user`, {
-        body: userDetails,
-        profileImage: profileImage || user.profilePicture,
-      })
-
-      if (response.status === 200) {
-        console.log(response.data.message)
-        router.refresh()
-        router.push('/profile')
-        setIsLoading(false)
-      }
-    } catch (err) {
-      alert(err)
+    if (response.status === 200) {
+      router.refresh()
+      router.push('/profile')
+      setIsLoading(false)
+      notify(response.data)
+    } else {
+      notify(response.data)
     }
   }
   const handleCancel = () => {

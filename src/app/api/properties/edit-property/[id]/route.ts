@@ -27,13 +27,13 @@ export const POST = async (
 
     return NextResponse.json({
       success: true,
-      message: 'Your property has been successfully updated!',
+      message: 'Your property has been successfully updated',
       id: property._id,
     })
   } catch (err) {
     return NextResponse.json({
       success: false,
-      message: 'Fail to updated property',
+      message: 'Updating property went wrong',
     })
   }
 }

@@ -1,10 +1,10 @@
+import { useEffect } from 'react'
+import { useFormState } from 'react-dom'
+import { makeReport } from '@/app/actions'
+import { notify } from 'utils/notify'
 import DetailsContainer from '@/components/layouts/DetailsContainer'
 import CustomRadioButton from '@/components/custom/CustomRadioButton'
 import Line from '@/components/custom/Line'
-import { useEffect } from 'react'
-import { HiOutlineX } from 'react-icons/hi'
-import { useFormState } from 'react-dom'
-import { makeReport } from '@/app/actions'
 import ErrorDisplay from '@/components/custom/ErrorDisplay'
 import SubmitButton from '../ui/SubmitButton'
 
@@ -22,8 +22,9 @@ const ReportProperty = ({
   const [state, formAction] = useFormState(makeReport, initialState)
 
   useEffect(() => {
-    if (!state.success) return
+    if (!state.success && state.status !== 'error') return
     toggleReportProperty()
+    notify(state)
   }, [state])
 
   return (
@@ -38,10 +39,10 @@ const ReportProperty = ({
             formAction(formData)
           }}
         >
+          {!state.success && <ErrorDisplay error={state.message} />}
           <span className="mb-4 block font-medium lg:mb-5">
             What is the reason for reporting this property?
           </span>
-          {!state.success && <ErrorDisplay error={state.message} />}
           <div className="mb-6 flex flex-col gap-4">
             <CustomRadioButton
               id="inaccurate"

@@ -21,6 +21,7 @@ import { validateForm } from 'utils/validateFrom'
 import { listingSchema } from 'utils/validations/validations'
 import { useRouter } from 'next/navigation'
 import { checkAddressValidity } from 'utils/validations/checkAddressValidity'
+import { notify } from 'utils/notify'
 
 const ListingFrom = ({
   isEdit,
@@ -171,6 +172,9 @@ const ListingFrom = ({
         router.refresh()
         router.push(`/property/${response.data.id}`)
         setIsLoading(false)
+        notify(response.data)
+      } else {
+        notify(response.data)
       }
     } else {
       const response = await axios.post(`/api/properties/create-property`, {
@@ -182,6 +186,9 @@ const ListingFrom = ({
         router.refresh()
         router.push(`/property/${response.data.id}`)
         setIsLoading(false)
+        notify(response.data)
+      } else {
+        notify(response.data)
       }
     }
   }
@@ -193,7 +200,7 @@ const ListingFrom = ({
     <>
       {isLoading && (
         <Spinner
-          label={isEdit ? 'Updating listing...' : 'Creating listing...'}
+          label={isEdit ? 'Updating property...' : 'Creating property...'}
         />
       )}
       <form className="my-6 lg:mt-8" onSubmit={handleSubmit}>
@@ -317,7 +324,10 @@ const ListingFrom = ({
           />
         </MainContainer>
 
-        <Buttons name="Create" handleCancel={handleCancel} />
+        <Buttons
+          name={isEdit ? 'Update' : 'Create'}
+          handleCancel={handleCancel}
+        />
       </form>
     </>
   )

@@ -50,7 +50,7 @@ export const addReview = async (prevState: any, formData: FormData) => {
     revalidatePath('/')
     return { success: true, message: 'Review was sent successfully' }
   } catch (e) {
-    return { success: false, message: 'Something went wrong' }
+    return { success: false, message: 'Something went wrong', status: 'error' }
   }
 }
 export const makeReport = async (prevState: any, formData: FormData) => {
@@ -84,7 +84,7 @@ export const makeReport = async (prevState: any, formData: FormData) => {
     revalidatePath('/')
     return { success: true, message: 'Report was sent successfully' }
   } catch (e) {
-    return { success: false, message: 'Something went wrong' }
+    return { success: false, message: 'Something went wrong', status: 'error' }
   }
 }
 export const saveProperty = async (propertyId: string) => {
@@ -105,7 +105,7 @@ export const saveProperty = async (propertyId: string) => {
       { new: true },
     )
     revalidatePath('/property/[id]', 'page')
-    return { success: true, message: 'Property was saved successfully' }
+    return { success: true, message: 'Property has been saved successfully' }
   } catch (e) {
     return { success: false, message: 'Saving property failed' }
   }
@@ -133,7 +133,7 @@ export const unSaveProperty = async (propertyId: string) => {
       { new: true },
     )
     revalidatePath('/(main)/property/[id]', 'page')
-    return { success: true, message: 'Property was unsaved successfully' }
+    return { success: true, message: 'Property has been unsaved successfully' }
   } catch (e) {
     return { success: false, message: 'Saving property failed' }
   }
@@ -145,6 +145,7 @@ export const makeReservation = async (
   guests: number,
 ) => {
   const userId = await serverSession().then((res) => res?.user.id)
+
   if (!userId)
     return {
       success: false,
@@ -189,8 +190,12 @@ export const makeReservation = async (
       { new: true },
     )
     revalidatePath('/(main)/property/[id]', 'page')
-    return { success: true, message: 'Property was reserved successfully' }
+    return { success: true, message: 'Property has been reserved successfully' }
   } catch (e) {
-    return { success: false, message: 'Reserving property failed' }
+    return {
+      success: false,
+      message: 'Reserving property failed',
+      status: 'error',
+    }
   }
 }

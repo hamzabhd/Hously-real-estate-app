@@ -88,12 +88,13 @@ const ProfileAbout = ({
                 const IconLink = getLinkIcon(link)
                 return (
                   <li key={i}>
-                    <Link
+                    <a
                       href={link}
+                      target="_blank"
                       className="group inline-block cursor-pointer rounded-full border border-grey p-2 transition-colors hover:border-black/60"
                     >
                       <IconLink className="h-4 w-4 text-black/60 transition-colors group-hover:text-black" />
-                    </Link>
+                    </a>
                   </li>
                 )
               })}

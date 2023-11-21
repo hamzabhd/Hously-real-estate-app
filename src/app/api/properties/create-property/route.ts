@@ -40,14 +40,13 @@ export const POST = async (req: NextRequest) => {
 
     return NextResponse.json({
       success: true,
-      message: 'Your property has been successfully saved!',
+      message: 'Your property has been successfully created',
       id: property._id,
     })
   } catch (err) {
-    console.error(err)
+    return NextResponse.json({
+      success: false,
+      message: 'Creating property went wrong',
+    })
   }
-
-  return NextResponse.json({
-    message: 'Your property has been successfully saved!',
-  })
 }

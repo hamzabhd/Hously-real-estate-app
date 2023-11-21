@@ -3,10 +3,10 @@ import { useSession } from 'next-auth/react'
 import { useTransition } from 'react'
 import { saveProperty, unSaveProperty } from '@/app/actions'
 import { HiBookmark, HiOutlineBookmark } from 'react-icons/hi'
-import { ToastContainer, toast } from 'react-toastify'
 import SmallSpinner from '../loaders/SmallSpinner'
 import SpecialButton from '../custom/SpecialButton'
-import 'react-toastify/dist/ReactToastify.css'
+import { notify } from 'utils/notify'
+
 const SavePropertyButton = ({
   propertyId,
   isSaved,
@@ -19,33 +19,6 @@ const SavePropertyButton = ({
   const [pending, startTransition] = useTransition()
   const saveActionWithId = saveProperty.bind(null, propertyId)
   const unSaveActionWithId = unSaveProperty.bind(null, propertyId)
-
-  const notify = (notifyObj: { success: boolean; message: string }) => {
-    const { message, success } = notifyObj
-    if (success) {
-      return toast.success(message, {
-        position: 'top-center',
-        autoClose: 5000,
-        hideProgressBar: false,
-        closeOnClick: true,
-        pauseOnHover: true,
-        draggable: true,
-        progress: undefined,
-        theme: 'light',
-      })
-    } else {
-      return toast.error(message, {
-        position: 'top-right',
-        autoClose: 5000,
-        hideProgressBar: false,
-        closeOnClick: true,
-        pauseOnHover: true,
-        draggable: true,
-        progress: undefined,
-        theme: 'light',
-      })
-    }
-  }
 
   const handleSave = () => {
     if (status === 'loading') return
@@ -65,7 +38,6 @@ const SavePropertyButton = ({
   }
   return (
     <>
-      <ToastContainer />
       <div className="relative">
         {pending && <SmallSpinner />}
         <SpecialButton name={isSaved ? 'Saved' : 'Save'} onClick={handleSave}>
