@@ -67,7 +67,7 @@ const Form = () => {
         </span>
       </ProviderAuthButton>
 
-      <div className="mb-6 mt-4 flex items-center justify-center gap-x-2">
+      <div className="mb-6 mt-8  flex items-center justify-center gap-x-2">
         <span className=" h-[1px] w-full rounded-[1px] bg-grey"></span>
         <span className="inline-block font-medium text-neutral-600">or</span>
         <span className=" h-[1px] w-full rounded-[1px] bg-grey"></span>

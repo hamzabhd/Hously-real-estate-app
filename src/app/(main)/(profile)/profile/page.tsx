@@ -11,10 +11,10 @@ const Profile = async () => {
   const user = await getUserProfile(currentUserId)
 
   return (
-    <div className="mx-auto min-h-screen max-w-[1248px]">
+    <>
       <ProfileCard user={user} currentUser={currentUserId} />
       <UserProfile user={user} currentUser={currentUserId} />
-    </div>
+    </>
   )
 }
 
