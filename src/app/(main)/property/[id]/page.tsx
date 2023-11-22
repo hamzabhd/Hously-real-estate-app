@@ -9,9 +9,10 @@ const PropertyPage = async ({ params }: { params: { id: string } }) => {
   const properties = await getProperties()
   const currentUser = await getUser()
 
-  if(property.length === 0) {
-    redirect('/')
+  if (!property) {
+    redirect('/404')
   }
+
   return (
     <div className="mx-auto max-w-[1248px]">
       <PropertyDetails

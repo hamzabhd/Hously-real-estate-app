@@ -13,6 +13,13 @@ import { revalidatePath } from 'next/cache'
 export const POST = async (req: NextRequest) => {
   const { body, profileImage } = await req.json()
   const userId = await serverSession().then((user) => user?.user.id)
+  if (!userId) {
+    return {
+      success: false,
+      message: 'User is not authenticated',
+    }
+  }
+
   const user = await getUser()
   const result = userSchema.safeParse(body)
   if (!result.success) {

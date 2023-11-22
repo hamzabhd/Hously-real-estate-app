@@ -25,5 +25,8 @@ export const getUserProfile = async (id: string) => {
     `${process.env.NEXTAUTH_URL}/api/profiles/${id}`,
     { cache: 'no-cache' },
   )
+  if (!response.ok) {
+    return null
+  }
   return response.json()
 }

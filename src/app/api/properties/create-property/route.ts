@@ -10,6 +10,12 @@ import User from 'models/user'
 export const POST = async (req: NextRequest) => {
   const { body, images } = await req.json()
   const user = await serverSession()
+  if (!user) {
+    return {
+      success: false,
+      message: 'User is not authenticated',
+    }
+  }
   try {
     const result = listingSchema.safeParse({ ...body, images })
 

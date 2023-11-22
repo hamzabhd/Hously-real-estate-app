@@ -1,10 +1,10 @@
 'use client'
 
-import { UserObj, UserProfileObj } from '@/types/types'
 import UserImage from '../custom/UserImage'
 import Link from 'next/link'
-import { useState } from 'react'
 import ShareLink from '../custom/ShareLink'
+import { UserProfileObj } from '@/types/types'
+import { useState } from 'react'
 import { getProfileReviews } from 'utils/getProfileReviews'
 
 const ProfileCard = ({

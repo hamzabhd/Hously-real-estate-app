@@ -4,7 +4,7 @@ export const getProperties = async () => {
   })
 
   if (!response.ok) {
-    return []
+    return null
   }
 
   return response.json()
@@ -16,7 +16,7 @@ export const getProperty = async (id: string) => {
     { cache: 'no-cache' },
   )
   if (!response.ok) {
-    return []
+    return null
   }
   return response.json()
 }

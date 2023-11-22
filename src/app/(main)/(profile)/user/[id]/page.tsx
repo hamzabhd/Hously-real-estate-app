@@ -1,7 +1,7 @@
 import { getUserProfile, serverSession } from 'utils/getUser'
+import { redirect } from 'next/navigation'
 import UserProfile from '@/components/profile/UserProfile'
 import ProfileCard from '@/components/profile/ProfileCard'
-import { redirect } from 'next/navigation'
 
 const User = async ({ params }: { params: { id: string } }) => {
   const currentUserId = (await serverSession().then(
@@ -10,7 +10,7 @@ const User = async ({ params }: { params: { id: string } }) => {
   const user = await getUserProfile(params.id)
 
   if (!user) {
-    redirect('/')
+    redirect('/404')
   }
 
   if (user._id === currentUserId) {
