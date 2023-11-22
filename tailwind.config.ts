@@ -34,6 +34,10 @@ const config: Config = {
           'conic-gradient(from 180deg at 50% 50%, var(--tw-gradient-stops))',
       },
       keyframes: {
+        loading: {
+          '0%': { backgroundColor: 'grey/40' },
+          '100%': { backgroundColor: 'lightGrey' },
+        },
         popup: {
           '0%': { transform: 'scale(.5)' },
           '100%': { transform: 'scale(1)' },
@@ -41,6 +45,7 @@ const config: Config = {
       },
       animation: {
         popup: 'popup .3s',
+        loading: 'loading 1s linear infinite alternate',
       },
     },
   },

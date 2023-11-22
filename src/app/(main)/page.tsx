@@ -8,7 +8,10 @@ const Home = async () => {
 
   return (
     <div className="mx-auto min-h-screen max-w-[1600px]">
-      <HomePage properties={properties} savedProperties={currentUser?.savedProperties} />
+      <HomePage
+        properties={properties}
+        savedProperties={currentUser?.savedProperties}
+      />
     </div>
   )
 }

@@ -14,7 +14,7 @@ const PropertyPage = async ({ params }: { params: { id: string } }) => {
   }
 
   return (
-    <div className="mx-auto max-w-[1248px]">
+    <div className="mx-auto max-w-[1248px] min-h-screen">
       <PropertyDetails
         property={property}
         savedProperties={currentUser?.savedProperties}

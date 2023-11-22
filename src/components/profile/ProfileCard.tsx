@@ -21,7 +21,7 @@ const ProfileCard = ({
   const isCurrentUserProfile = user._id === currentUser
   return (
     <div className="mt-36 px-4 lg:mt-28 xl:mt-44">
-      <div className="relative mx-auto h-24 w-fit rounded-full border-2 border-white drop-shadow lg:h-32">
+      <div className="relative mx-auto h-[calc(6rem+4px)] w-fit rounded-full border-2 border-white drop-shadow lg:h-[calc(8rem+4px)]">
         <UserImage
           imageUrl={user.profilePicture}
           name={user.fullName}
