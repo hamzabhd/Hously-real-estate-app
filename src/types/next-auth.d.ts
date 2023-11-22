@@ -10,5 +10,6 @@ declare module 'next-auth' {
 
   interface Profile {
     picture: string
+    avatar_url: string
   }
 }

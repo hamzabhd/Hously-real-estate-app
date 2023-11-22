@@ -15,6 +15,7 @@ export const useSearchQueries = () => {
     max: searchParams.get('max'),
   }
   const prevPage = searchParams.get('prev-page')
+  const authError = searchParams.get('error')
 
   const handleQueries = (value: string, query: string, type: string | null) => {
     const newSearchParams = new URLSearchParams(searchParams.toString())
@@ -58,5 +59,6 @@ export const useSearchQueries = () => {
     searchParams,
     searchQueries,
     prevPage,
+    authError,
   }
 }

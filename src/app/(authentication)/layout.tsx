@@ -17,22 +17,25 @@ const layout = ({ children }: { children: ReactNode }) => {
       </div>
       <div className="relative hidden h-screen flex-1 select-none sm:hidden md:flex md:items-center md:justify-center xl:absolute xl:right-0 xl:flex xl:w-1/2">
         <Image
-          className="object-cover"
-          src="/images/blur-bg.png"
+          src="/images/abstract-cover.jpg"
           alt="blur background"
+          sizes="(min-width: 1024px) 50vw, 100vw"
+          quality={100}
+          style={{
+            objectFit: 'cover',
+          }}
+          loading="lazy"
           fill
         />
 
-        <Link
-          href="/"
-          className="z-10 flex flex-col items-center justify-center"
-        >
-          <div className="flex h-24 w-24 items-center justify-center rounded-3xl bg-black drop-shadow ">
-            <HiHome className="h-12 w-12 text-beige" />
+        <Link href="/" className="z-10 flex flex-col justify-center">
+          <div className="flex items-end gap-x-2 ">
+            <HiHome className="h-12 w-12" />
+            <span className="text-4xl font-bold tracking-wider">Hously.</span>
           </div>
-
-          <span className="mb-1 mt-2 text-4xl font-bold">Hously.</span>
-          <span className="text-xl">Everyone should get a nice house</span>
+          <span className="text-xl font-light tracking-wider text-black/80">
+            Everyone should get a nicer house.
+          </span>
         </Link>
       </div>
     </div>
