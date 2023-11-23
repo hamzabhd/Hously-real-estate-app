@@ -3,10 +3,10 @@ import { useFormState } from 'react-dom'
 import { makeReport } from '@/app/actions'
 import { notify } from 'utils/notify'
 import DetailsContainer from '@/components/layouts/DetailsContainer'
-import CustomRadioButton from '@/components/custom/CustomRadioButton'
+import CustomRadioButton from '@/components/ui/CustomRadioButton'
 import Line from '@/components/custom/Line'
-import ErrorDisplay from '@/components/custom/ErrorDisplay'
-import SubmitButton from '../ui/SubmitButton'
+import ErrorDisplay from '@/components/shared/ErrorDisplay'
+import SubmitButton from '../shared/SubmitButton'
 
 const ReportProperty = ({
   toggleReportProperty,

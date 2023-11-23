@@ -1,5 +1,5 @@
 import { ReactNode } from 'react'
-import ErrorDisplay from '../custom/ErrorDisplay'
+import ErrorDisplay from '../shared/ErrorDisplay'
 
 const Container = ({
   children,

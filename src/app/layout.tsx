@@ -2,7 +2,7 @@ import './globals.css'
 import type { Metadata } from 'next'
 import AuthProvider from 'context/AuthProvider'
 import { Poppins } from 'next/font/google'
-import NotificationContainer from '@/components/custom/NotificationContainer'
+import NotificationContainer from '@/components/shared/NotificationContainer'
 
 export const metadata: Metadata = {
   title: 'Hously-Project',

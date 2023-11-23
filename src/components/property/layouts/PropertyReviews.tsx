@@ -1,5 +1,5 @@
-import Reviews from '../../custom/Reviews'
-import SeeMoreBtn from '../../custom/SeeMoreBtn'
+import Reviews from '../reviews/Reviews'
+import SeeMoreBtn from '../../shared/SeeMoreBtn'
 import AddReview from '../features/AddReview'
 import { ReviewObj } from '@/types/types'
 import { useShowMore } from 'hooks/useShowMore'

@@ -1,4 +1,4 @@
-import ImageCover from '@/components/custom/ImageCover'
+import ImageCover from '@/components/shared/ImageCover'
 import { ReactNode } from 'react'
 
 const layout = ({ children }: { children: ReactNode }) => {

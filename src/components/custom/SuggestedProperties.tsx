@@ -1,4 +1,4 @@
-import PropertyCard from '@/components/custom/PropertyCard'
+import PropertyCard from '../shared/PropertyCard'
 import PropertiesContainer from '@/components/layouts/PropertiesContainer'
 import { PropertyType } from '@/types/types'
 import React from 'react'

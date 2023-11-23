@@ -1,4 +1,4 @@
-import EditProfileForm from '@/components/profile/EditProfileFrom'
+import EditProfileForm from '@/components/profile/edit-profile/EditProfileFrom'
 import { getUser } from 'utils/getUser'
 
 const EditProfile = async () => {

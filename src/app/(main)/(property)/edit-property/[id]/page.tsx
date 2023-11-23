@@ -1,4 +1,4 @@
-import ListingFrom from '@/components/property-form/ListingFrom'
+import ListingFrom from '@/components/property/property-form/ListingFrom'
 import { getProperty } from 'utils/getProperties'
 
 const EditProperty = async ({ params }: { params: { id: string } }) => {
@@ -11,7 +11,9 @@ const EditProperty = async ({ params }: { params: { id: string } }) => {
           Edit your property
         </h1>
         <span className="text-sm">
-        Ready for a property glow-up? Edit your property details—tweak the description, update the images, or add a fresh vibe. Let's keep it snappy and make your property shine! 
+          Ready for a property glow-up? Edit your property details—tweak the
+          description, update the images, or add a fresh vibe. Let's keep it
+          snappy and make your property shine!
         </span>
       </div>
 

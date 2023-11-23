@@ -1,12 +1,12 @@
 import { useEffect, useState } from 'react'
-import { addReview } from '@/app/actions'
-import Line from '@/components/custom/Line'
-import ErrorDisplay from '@/components/custom/ErrorDisplay'
-import SubmitButton from '../ui/SubmitButton'
-import DetailsContainer from '@/components/layouts/DetailsContainer'
-import CustomRadioButton from '@/components/custom/CustomRadioButton'
 import { useFormState } from 'react-dom'
+import { addReview } from '@/app/actions'
 import { notify } from 'utils/notify'
+import Line from '@/components/custom/Line'
+import ErrorDisplay from '@/components/shared/ErrorDisplay'
+import SubmitButton from '../shared/SubmitButton'
+import DetailsContainer from '@/components/layouts/DetailsContainer'
+import CustomRadioButton from '@/components/ui/CustomRadioButton'
 
 const AddReview = ({
   toggleAddReview,

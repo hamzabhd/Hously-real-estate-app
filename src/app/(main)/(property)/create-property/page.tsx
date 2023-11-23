@@ -1,4 +1,4 @@
-import ListingFrom from '@/components/property-form/ListingFrom'
+import ListingFrom from '@/components/property/property-form/ListingFrom'
 
 const CreateListing = async () => {
   return (

@@ -1,4 +1,4 @@
-import HomePage from '@/components/custom/HomePage'
+import HomePage from '@/components/screens/HomePage'
 import { getProperties } from 'utils/getProperties'
 import { getUser } from 'utils/getUser'
 

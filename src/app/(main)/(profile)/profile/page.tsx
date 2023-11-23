@@ -1,6 +1,6 @@
 import { getUserProfile, serverSession } from 'utils/getUser'
-import UserProfile from '@/components/profile/UserProfile'
-import ProfileCard from '@/components/profile/ProfileCard'
+import UserProfile from '@/components/profile/user-profile/UserProfile'
+import ProfileCard from '@/components/profile/user-profile/ProfileCard'
 import { redirect } from 'next/navigation'
 
 const Profile = async () => {

@@ -1,5 +1,5 @@
 import SuggestedProperties from '@/components/custom/SuggestedProperties'
-import PropertyDetails from '@/components/property/PropertyDetails'
+import PropertyDetails from '@/components/property/layouts/PropertyDetails'
 import { redirect } from 'next/navigation'
 import { getProperties, getProperty } from 'utils/getProperties'
 import { getUser } from 'utils/getUser'

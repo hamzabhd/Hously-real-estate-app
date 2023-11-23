@@ -1,4 +1,4 @@
-import SearchPage from '@/components/custom/SearchPage'
+import SearchPage from '@/components/search/SearchPage' 
 import { getProperties } from 'utils/getProperties'
 import { getUser } from 'utils/getUser'
 
