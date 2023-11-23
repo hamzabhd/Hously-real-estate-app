@@ -127,6 +127,7 @@ export interface ImagesUploaderType {
   isEdit: boolean
   images: string[]
   setImages: Dispatch<SetStateAction<string[]>>
+  clearImagesError: () => void
 }
 
 export interface LocationPropType extends MainInformationPropType {

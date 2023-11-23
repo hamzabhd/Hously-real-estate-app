@@ -23,7 +23,7 @@ import { useRouter } from 'next/navigation'
 import { checkAddressValidity } from 'utils/validations/checkAddressValidity'
 import { notify } from 'utils/notify'
 
-const ListingFrom = ({
+const ListingForm = ({
   isEdit,
   listing,
 }: {
@@ -83,6 +83,12 @@ const ListingFrom = ({
   const [images, setImages] = useState<string[]>(listing?.images || [])
   const [isLoading, setIsLoading] = useState(false)
 
+  const clearImagesError = () => {
+    setDetailsErrors((prevState) => ({
+      ...prevState,
+      images: '',
+    }))
+  }
   const handleChange = (
     e: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>,
   ) => {
@@ -139,21 +145,21 @@ const ListingFrom = ({
     const result = validateForm(listingSchema, { ...details, images })
     const addressResult = await checkAddressValidity(details.address)
 
+    if (!result.success) {
+      return setDetailsErrors((prevState) => ({
+        ...prevState,
+        ...result.errors,
+      }))
+    }
+
     if (!addressResult.success) {
       const message =
         details.address === ''
           ? 'This field is required'
           : 'The property address is not valid'
-      setDetailsErrors((prevState) => ({
-        ...prevState,
-        address: message,
-      }))
-    }
-
-    if (!result.success) {
       return setDetailsErrors((prevState) => ({
         ...prevState,
-        ...result.errors,
+        address: message,
       }))
     }
 
@@ -223,6 +229,7 @@ const ListingFrom = ({
             images={images}
             isEdit={isEdit}
             error={detailsErrors.images}
+            clearImagesError={clearImagesError}
           />
         </MainContainer>
 
@@ -333,4 +340,4 @@ const ListingFrom = ({
   )
 }
 
-export default ListingFrom
+export default ListingForm

@@ -19,13 +19,17 @@ const Map = ({ address }: MapPropsType) => {
   })
 
   useEffect(() => {
-    if (!isLoaded) return
+    let subscribe = true
+    if (!isLoaded || !subscribe) return
     checkAddressValidity(address).then((res) => {
       setCoordinates({
         lat: res.coordinates?.lat,
         lng: res.coordinates?.lng,
       })
     })
+    return () => {
+      subscribe = false
+    }
   }, [isLoaded, address])
 
   if (!isLoaded) {

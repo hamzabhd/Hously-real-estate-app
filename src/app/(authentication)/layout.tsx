@@ -1,9 +1,15 @@
 import Image from 'next/image'
 import Link from 'next/link'
+import { redirect } from 'next/navigation'
 import { ReactNode } from 'react'
 import { HiHome } from 'react-icons/hi'
+import { serverSession } from 'utils/getUser'
 
-const layout = ({ children }: { children: ReactNode }) => {
+const layout = async ({ children }: { children: ReactNode }) => {
+  const currentUser = await serverSession()
+  if (currentUser) {
+    redirect('/')
+  }
   return (
     <div className="mx-auto flex h-screen max-w-[1248px]">
       <div className=" relative w-full p-4 md:flex md:w-1/2 md:items-center xl:p-0">

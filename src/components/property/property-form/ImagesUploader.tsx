@@ -4,12 +4,14 @@ import ImageController from './ImageController'
 import { LuImagePlus } from 'react-icons/lu'
 import { ImagesUploaderType } from '@/types/types'
 import { removeImage } from 'utils/itemManagement/itemManagement'
+import { notify } from 'utils/notify'
 
 const ImagesUploader = ({
   error,
   isEdit,
   images,
   setImages,
+  clearImagesError,
 }: ImagesUploaderType) => {
   const [imagesToPreview, setImagesToPreview] = useState<string[]>(images || [])
   const handleImage = (e: ChangeEvent<HTMLInputElement>) => {
@@ -20,6 +22,7 @@ const ImagesUploader = ({
       // read image as Blob avoiding any lack of performance
       const newImage = URL.createObjectURL(e.target.files![0])
       setImagesToPreview((prevState) => [...prevState, newImage!])
+      clearImagesError()
       const fileReader = new FileReader()
       fileReader.onload = (e) => {
         // prepare an array of images to upload
@@ -31,7 +34,7 @@ const ImagesUploader = ({
       fileReader.readAsDataURL(e.target.files?.[0] as File)
       return
     }
-    alert('This is not a valid image file')
+    notify({ success: false, message: 'Please provide a valid image' })
   }
   const removeImages = (index: number) => {
     // remove image from images to preview and images to upload

@@ -8,7 +8,7 @@ const NotFoundPage = () => {
     <div className="mx-auto flex min-h-screen w-full max-w-[1248px] items-center p-4 md:p-6">
       <div className="ali mx-auto flex flex-col md:w-1/2">
         <span className="mx-auto block text-9xl font-light">404</span>
-        <span className="mx-auto mb-4 block text-4xl font-extralight">
+        <span className="mx-auto mb-4 block text-center text-4xl font-extralight">
           Page Not Found
         </span>
         <p className="mb-6 inline-block text-center text-lg text-black/60">

@@ -1,4 +1,4 @@
-import ListingFrom from '@/components/property/property-form/ListingFrom'
+import ListingForm from '@/components/property/property-form/ListingForm'
 
 const CreateListing = async () => {
   return (
@@ -14,7 +14,7 @@ const CreateListing = async () => {
         </span>
       </div>
 
-      <ListingFrom isEdit={false} />
+      <ListingForm isEdit={false} />
     </div>
   )
 }

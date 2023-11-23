@@ -35,7 +35,7 @@ const CustomRangeInput = ({
           value={range}
           onChange={handleSliderChange}
           className="custom-slider"
-          step={100}
+          step={10}
         />
       </div>
     </>

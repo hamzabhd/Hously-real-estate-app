@@ -23,7 +23,7 @@ const SearchForm = ({ toggleSearch }: { toggleSearch: () => void }) => {
     property: '',
     type: '',
     region: '',
-    range: [100, 10000],
+    range: [10, 10000],
   })
   const handleSliderChange = (value: number | number[]) => {
     setSearchInput((prevState) => ({ ...prevState, range: value as number[] }))
@@ -154,7 +154,7 @@ const SearchForm = ({ toggleSearch }: { toggleSearch: () => void }) => {
         <CustomRangeInput
           range={searchInputs.range}
           handleSliderChange={handleSliderChange}
-          minMax={[100, 10000]}
+          minMax={[10, 10000]}
           Icon={MdOutlineAttachMoney}
         />
         <Buttons

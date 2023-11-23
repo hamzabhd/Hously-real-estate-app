@@ -1,3 +1,4 @@
+import { CityObjType, CountryObjType } from '@/types/types'
 import { useState, useEffect } from 'react'
 
 export const useLocations = () => {
@@ -12,17 +13,20 @@ export const useLocations = () => {
     fetchCities(signal)
       .then((cityData) => {
         if (!cityData.aborted) {
-          const cities = cityData.geonames.map((c: any) => ({
-            cityName: c.name,
-            cityRegion: c.adminName1,
-          }))
+          const cities = cityData.geonames
+            .map((c: any) => ({
+              cityName: c.name,
+              cityRegion: c.adminName1,
+            }))
+            .sort((a: CityObjType, b: CityObjType) => a.cityName > b.cityName)
           setCities(cities)
         }
       })
       .catch((error) => console.error('Error fetching cities:', error))
 
     return () => {
-      controller.abort() // Cleanup the controller when the component is unmounted
+      // Cleanup the controller when the component is unmounted
+      controller.abort()
     }
   }, [selectedCountry])
 
@@ -53,11 +57,16 @@ export const useLocations = () => {
     fetchCountries(signal)
       .then((data) => {
         if (!data.aborted) {
-          const countries = data.geonames.map((c: any) => ({
-            countryName: c.countryName,
-            countryCode: c.countryCode,
-            continent: c.continentName,
-          }))
+          const countries = data.geonames
+            .map((c: any) => ({
+              countryName: c.countryName,
+              countryCode: c.countryCode,
+              continent: c.continentName,
+            }))
+            .sort(
+              (a: CountryObjType, b: CountryObjType) =>
+                a.countryName > b.countryName,
+            )
           setCountries(countries)
         }
       })

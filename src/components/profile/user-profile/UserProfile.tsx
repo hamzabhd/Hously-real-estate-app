@@ -12,9 +12,11 @@ import ReservedProperties from '../layouts/ReservedProperties'
 const UserProfile = ({
   user,
   currentUser,
+  savedProperties,
 }: {
   user: UserProfileObj
   currentUser: string
+  savedProperties: string[]
 }) => {
   const currentUserProfile = user._id === currentUser
   const [link, setLink] = useState('listings')
@@ -22,7 +24,6 @@ const UserProfile = ({
   const setActiveLink = (link: string) => {
     setLink(link)
   }
-  const savedProperties = user.savedProperties.map((p) => p._id)
   let reservationsArr = getReservedProperties(user.properties)
 
   const message =
