@@ -4,6 +4,11 @@ import { PiCaretRightBold } from 'react-icons/pi'
 import { HiLocationMarker } from 'react-icons/hi'
 import { LuBath, LuBedDouble, LuBedSingle } from 'react-icons/lu'
 import { TbResize } from 'react-icons/tb'
+import { IoStar } from 'react-icons/io5'
+import { reviewsRate } from 'utils/reviewsRate'
+import { isAdded } from 'utils/isAdded'
+import { IoCheckmarkOutline } from 'react-icons/io5'
+import { useDisableClick } from 'hooks/useDisableClick'
 import ImageSlider from '../../custom/ImageSlider'
 import ImagePreviewer from '../../custom/ImagePreviewer'
 import PropertyOptions from '../prompts/PropertyOptions'
@@ -11,11 +16,7 @@ import ViewMore from '../shared/ViewMore'
 import SeeMoreBtn from '../../shared/SeeMoreBtn'
 import PropertyReservation from '../reservation/PropertyReservation'
 import OwnerContact from '../prompts/OwnerContact'
-import { useDisableClick } from 'hooks/useDisableClick'
-import { IoStar } from 'react-icons/io5'
-import { reviewsRate } from 'utils/reviewsRate'
 import EssentialDetails from '../prompts/EssentialDetails'
-import { isAdded } from 'utils/isAdded'
 
 const PropertyMainDetails = ({
   property,
@@ -168,10 +169,13 @@ const PropertyMainDetails = ({
               <h2 className="mb-4 text-lg font-medium tracking-wide lg:text-xl">
                 Property features
               </h2>
-              <ul className="list-style mb-4 list-image-[url(/images/check.png)] px-6">
+              <ul className="mb-4 px-2">
                 {property.features.slice(0, 3).map((item, i) => (
-                  <li key={i}>
-                    <span className="ml-2 text-sm text-black/60">{item}</span>
+                  <li key={i} className="mb-1 flex items-center gap-x-4">
+                    <IoCheckmarkOutline className=" shrink-0 text-xs" />
+                    <span className="truncate text-sm text-black/60">
+                      {item}
+                    </span>
                   </li>
                 ))}
               </ul>
@@ -187,10 +191,13 @@ const PropertyMainDetails = ({
                 <h2 className="mb-4 text-lg font-medium tracking-wide lg:text-xl">
                   Property rules
                 </h2>
-                <ul className="list-style mb-4 list-image-[url(/images/check.png)] px-6">
+                <ul className="mb-4 px-2">
                   {property.rules.slice(0, 3).map((item, i) => (
-                    <li key={i}>
-                      <span className="ml-2 text-sm text-black/60">{item}</span>
+                    <li key={i} className="mb-1 flex items-center gap-x-4">
+                      <IoCheckmarkOutline className=" shrink-0 text-xs" />
+                      <span className="truncate text-sm text-black/60">
+                        {item}
+                      </span>
                     </li>
                   ))}
                 </ul>

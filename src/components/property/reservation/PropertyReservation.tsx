@@ -29,6 +29,8 @@ const PropertyReservation = ({ property }: { property: PropertyType }) => {
   const [error, setError] = useState('')
   const [pending, startTransition] = useTransition()
 
+  const isPropertyOwner = session?.user.id === (property.owner as UserObj)._id
+
   const clearReservation = () => {
     setReserve(false)
     setSelectDate({ from: '', to: '' })
@@ -135,7 +137,7 @@ const PropertyReservation = ({ property }: { property: PropertyType }) => {
   // check the user status before any reservations
   const toggleReserve = () => {
     checkAuthenticatedUser(() => {
-      if (session?.user.id === (property.owner as UserObj)._id) {
+      if (isPropertyOwner) {
         return
       }
       setReserve(true)
@@ -154,6 +156,7 @@ const PropertyReservation = ({ property }: { property: PropertyType }) => {
       to: new Date(item.to),
     }))
 
+  // get the number of nights are selected
   const nights = getNightsRange(selectDate.from, selectDate.to).length || 0
   const reservationTotal =
     nights === 0
@@ -211,12 +214,13 @@ const PropertyReservation = ({ property }: { property: PropertyType }) => {
         </ReservationContainer>
       )}
       <ReservationButtons
+        pending={pending}
         reserve={reserve}
         availability={availability}
         alreadyReserved={alreadyReserved}
+        isPropertyOwner={isPropertyOwner}
         toggleReserve={toggleReserve}
         handleReservation={handleReservation}
-        pending={pending}
         toggleAvailability={toggleAvailability}
       />
     </div>

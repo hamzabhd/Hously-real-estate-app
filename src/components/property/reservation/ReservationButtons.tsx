@@ -4,12 +4,13 @@ import { MdOutlineCalendarMonth } from 'react-icons/md'
 import { reformDate } from 'utils/reformDate'
 
 const ReservationButtons = ({
+  pending,
   reserve,
   availability,
   alreadyReserved,
+  isPropertyOwner,
   toggleReserve,
   handleReservation,
-  pending,
   toggleAvailability,
 }: ReservationButtonsType) => {
   return (
@@ -17,7 +18,11 @@ const ReservationButtons = ({
       {!reserve ? (
         !alreadyReserved ? (
           <button
-            className="flex-grow cursor-pointer items-center justify-center rounded-full bg-black px-8 py-3 font-medium text-white transition-colors hover:bg-neutral-800 focus:outline-none focus-visible:ring-4 focus-visible:ring-neutral-600"
+            className={`flex-grow items-center justify-center rounded-full bg-black px-8 py-3 font-medium text-white transition-colors focus:outline-none focus-visible:ring-4 focus-visible:ring-neutral-600 ${
+              isPropertyOwner
+                ? 'bg-neutral-800'
+                : 'cursor-pointer bg-black hover:bg-neutral-800'
+            }`}
             onClick={toggleReserve}
           >
             Reserve

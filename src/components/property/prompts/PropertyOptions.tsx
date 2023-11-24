@@ -9,8 +9,8 @@ import UserImage from '@/components/shared/UserImage'
 import Link from 'next/link'
 import AddReview from '../features/AddReview'
 import ReportProperty from '../features/ReportProperty'
-import SavePropertyButton from '@/components/shared/SavePropertyButton' 
-import SharePropertyButton from '@/components/shared/SharePropertyButton' 
+import SavePropertyButton from '@/components/shared/SavePropertyButton'
+import SharePropertyButton from '@/components/shared/SharePropertyButton'
 
 const PropertyOptions = ({
   userName,
@@ -38,7 +38,7 @@ const PropertyOptions = ({
 
   const toggleAddReview = () => {
     checkAuthenticatedUser(() => {
-      setAddReview(!reportProperty)
+      setAddReview(!addReview)
     })
   }
 
