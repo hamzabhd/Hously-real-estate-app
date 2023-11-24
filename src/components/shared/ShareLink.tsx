@@ -2,6 +2,7 @@ import { Dispatch, SetStateAction, useEffect, useRef, useState } from 'react'
 import { MdWhatsapp } from 'react-icons/md'
 import { HiOutlineCheck, HiOutlineLink } from 'react-icons/hi'
 import detectOutsideClick from 'utils/detectOutsideClick'
+import { useParams, usePathname } from 'next/navigation'
 
 const ShareLink = ({
   link,
@@ -11,7 +12,8 @@ const ShareLink = ({
   setShare: Dispatch<SetStateAction<boolean>>
 }) => {
   const shareRef = useRef<HTMLDivElement>(null)
-
+  const pathname = usePathname()
+  const isProfileLink = /(profile|user)/g.test(pathname)
   const [copied, setCopied] = useState(false)
   useEffect(() => {
     if (!copied) return
@@ -29,7 +31,7 @@ const ShareLink = ({
   return (
     <div
       ref={shareRef}
-      className="absolute left-0 top-full z-50 mt-2 block min-w-max w-full animate-popup rounded-3xl border border-grey bg-white p-2"
+      className={`absolute top-full z-50 mt-2 block min-w-max w-full animate-popup rounded-3xl border border-grey bg-white p-2 ${isProfileLink ? 'right-0' : 'left-0'}`}
     >
       <a
         href={`https://wa.me/send?text=${encodeURIComponent(link)}`}
