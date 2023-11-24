@@ -28,9 +28,9 @@ const ReservationButtons = ({
             Reserve
           </button>
         ) : (
-          <div className="flex flex-grow items-center justify-center gap-x-2 rounded-full border-2 py-3 sm:gap-x-2">
+          <div className="flex flex-grow items-center justify-center gap-x-2 rounded-full border-2 py-[calc(0.75rem-2px)] sm:gap-x-2">
             <HiOutlineCheck className="h-4 w-4 flex-shrink-0 text-green-600" />
-            <span className=" text-sm text-black sm:text-base">
+            <span className="text-sm text-black sm:text-base">
               Reserved on {reformDate(alreadyReserved.from)}
             </span>
           </div>

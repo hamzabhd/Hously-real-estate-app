@@ -1,5 +1,7 @@
 'use client'
 
+import Link from 'next/link'
+
 const ErrorPage = ({
   error,
   reset,
@@ -17,13 +19,21 @@ const ErrorPage = ({
         <p className="mb-6 inline-block text-center text-lg text-black/60">
           Oops! An unexpected error occurred. Please try again later.
         </p>
+
         <div className="mt-auto flex gap-x-2">
+          <Link
+            href="/"
+            className="flex w-full cursor-pointer items-center justify-center rounded-full border border-grey px-8 py-[calc(0.75rem-1px)] font-medium text-black transition-colors hover:border-black/60 focus:outline-none focus-visible:ring-4 focus-visible:ring-neutral-600"
+          >
+            <span className="block">Go home</span>
+          </Link>
           <button className="flex w-full cursor-pointer items-center justify-center rounded-full bg-black px-8 py-3 font-medium text-white transition-colors hover:bg-neutral-800 focus:outline-none focus-visible:ring-4 focus-visible:ring-neutral-600">
             <span className="block" onClick={() => reset()}>
               Try again
             </span>
           </button>
         </div>
+        <div className="mt-auto flex gap-x-2"></div>
       </div>
     </div>
   )
