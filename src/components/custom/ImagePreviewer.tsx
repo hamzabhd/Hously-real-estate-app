@@ -1,3 +1,4 @@
+import useDisableScroll from 'hooks/useDIsableScroll'
 import { CldImage } from 'next-cloudinary'
 import { HiOutlineX } from 'react-icons/hi'
 
@@ -8,6 +9,7 @@ const ImagePreviewer = ({
   image: string
   clearImage: () => void
 }) => {
+  useDisableScroll(!!image)
   return (
     <div
       className={`relative left-0 top-0 z-[1111] hidden h-full w-full items-center justify-center bg-black/60 backdrop-blur-sm lg:fixed ${

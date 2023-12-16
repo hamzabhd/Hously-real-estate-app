@@ -11,7 +11,6 @@ const PropertyDetails = ({
   property: PropertyType
   savedProperties: string[]
 }) => {
-  const isIntercepted = true
   return (
     <div className="lg:mt-4">
       <PropertyMainDetails

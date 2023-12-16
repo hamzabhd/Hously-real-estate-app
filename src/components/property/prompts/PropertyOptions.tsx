@@ -11,6 +11,7 @@ import AddReview from '../features/AddReview'
 import ReportProperty from '../features/ReportProperty'
 import SavePropertyButton from '@/components/shared/SavePropertyButton'
 import SharePropertyButton from '@/components/shared/SharePropertyButton'
+import useDisableScroll from 'hooks/useDIsableScroll'
 
 const PropertyOptions = ({
   userName,
@@ -42,6 +43,8 @@ const PropertyOptions = ({
     })
   }
 
+  useDisableScroll(reportProperty)
+  useDisableScroll(addReview)
   const buttons = () => {
     if (status === 'loading') {
       return <></>

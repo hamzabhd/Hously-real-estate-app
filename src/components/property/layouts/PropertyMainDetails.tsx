@@ -17,6 +17,7 @@ import SeeMoreBtn from '../../shared/SeeMoreBtn'
 import PropertyReservation from '../reservation/PropertyReservation'
 import OwnerContact from '../prompts/OwnerContact'
 import EssentialDetails from '../prompts/EssentialDetails'
+import useDisableScroll from 'hooks/useDIsableScroll'
 
 const PropertyMainDetails = ({
   property,
@@ -40,6 +41,9 @@ const PropertyMainDetails = ({
   const rate = reviewsRate(property.reviews)
   // avoid any checking errors
   const owner = property.owner as UserObj
+
+  useDisableScroll(moreDetails)
+  useDisableScroll(!!selected)
 
   return (
     <div className="items-start lg:grid lg:h-[752px] lg:grid-cols-2 lg:gap-x-6 lg:px-6">

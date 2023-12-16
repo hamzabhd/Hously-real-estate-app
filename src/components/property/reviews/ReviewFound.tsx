@@ -4,6 +4,7 @@ import ReviewCard from './ReviewCard'
 import { ReviewObj } from '@/types/types'
 import DetailsContainer from '../../layouts/DetailsContainer'
 import { HiOutlineX } from 'react-icons/hi'
+import useDisableScroll from 'hooks/useDIsableScroll'
 
 const ReviewFound = ({
   reviewFound,
@@ -12,6 +13,7 @@ const ReviewFound = ({
   reviewFound: ReviewObj
   setReviewToShow: (review: string) => void
 }) => {
+  useDisableScroll(!!reviewFound)
   return (
     <DetailsContainer
       title="User review"

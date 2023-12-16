@@ -5,6 +5,7 @@ import { ReviewObj } from '@/types/types'
 import { useShowMore } from 'hooks/useShowMore'
 import { useSearchQueries } from 'hooks/useSearchQueries'
 import { useState } from 'react'
+import useDisableScroll from 'hooks/useDIsableScroll'
 
 const PropertyReviews = ({
   propertyId,
@@ -22,6 +23,7 @@ const PropertyReviews = ({
     checkAuthenticatedUser(() => setAddReview(!addReview))
   }
 
+  useDisableScroll(addReview)
   return (
     <>
       {addReview && (

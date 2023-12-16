@@ -9,6 +9,7 @@ import NavOptions from './NavOptions'
 import SearchForm from '../search/SearchForm'
 import FilterNav from './FilterNav'
 import { usePathname } from 'next/navigation'
+import useDisableScroll from 'hooks/useDIsableScroll'
 
 type NavbarPropsType = {
   user: UserObj
@@ -32,6 +33,7 @@ const Navbar = ({ user, session }: NavbarPropsType) => {
     setActiveSearch(false)
   }
 
+  useDisableScroll(activeSearch)
   return (
     <div className="sticky top-0" style={{ zIndex: '100' }}>
       <nav
