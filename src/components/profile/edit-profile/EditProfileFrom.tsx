@@ -14,6 +14,7 @@ import Spinner from '../../loaders/Spinner'
 import ProfileImageUploader from './ProfileImageUploader'
 import EditLocationInfo from './EditLocationInfo'
 import { notify } from 'utils/notify'
+import useDisableScroll from 'hooks/useDIsableScroll'
 
 const EditProfileForm = ({ user }: { user: UserObj }) => {
   const router = useRouter()
@@ -121,6 +122,7 @@ const EditProfileForm = ({ user }: { user: UserObj }) => {
     return router.back()
   }
 
+  useDisableScroll(isLoading)
   return (
     <>
       {isLoading && <Spinner label="Updating profile..." />}

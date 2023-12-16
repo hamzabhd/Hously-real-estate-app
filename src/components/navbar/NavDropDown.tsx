@@ -15,7 +15,7 @@ const NavDropDown = ({
   toggleNav: () => void
 }) => {
   return (
-    <ul className="absolute left-0 top-full z-50 w-full border-t bg-white p-2 pb-4 lg:left-auto lg:right-4 lg:mt-2 lg:w-fit lg:rounded-3xl lg:border lg:pb-2 ">
+    <ul className="absolute left-0 top-full z-50 w-full border-y bg-white p-2 pb-4 lg:left-auto lg:right-4 lg:mt-2 lg:w-fit lg:rounded-3xl lg:border lg:pb-2">
       {session ? (
         <>
           <li className="lg:hidden" onClick={toggleNav}>

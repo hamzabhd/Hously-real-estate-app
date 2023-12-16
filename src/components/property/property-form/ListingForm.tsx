@@ -22,6 +22,7 @@ import { listingSchema } from 'utils/validations/validations'
 import { useRouter } from 'next/navigation'
 import { checkAddressValidity } from 'utils/validations/checkAddressValidity'
 import { notify } from 'utils/notify'
+import useDisableScroll from 'hooks/useDIsableScroll'
 
 const ListingForm = ({
   isEdit,
@@ -202,6 +203,7 @@ const ListingForm = ({
     return router.back()
   }
 
+  useDisableScroll(isLoading)
   return (
     <>
       {isLoading && (
