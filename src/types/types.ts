@@ -196,7 +196,7 @@ export interface ReservationButtonsType {
   reserve: boolean
   availability: boolean
   pending: boolean
-  alreadyReserved: UserReservation | undefined
+  lastReservation: UserReservation | undefined
   isPropertyOwner: boolean
   toggleReserve: () => void
   handleReservation: () => void

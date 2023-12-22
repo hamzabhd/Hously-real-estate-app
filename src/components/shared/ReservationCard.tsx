@@ -9,7 +9,8 @@ import Link from 'next/link'
 const ReservationCard = ({ reservation }: { reservation: UserReservation }) => {
   const { property, reserver } = reservation
   const propertyImage = property.images[0]
-  const isCheckedOut = new Date() > new Date(reservation.to)
+  const isCheckedOut = new Date().getTime() > new Date(reservation.to).getTime()
+
   const reserverType = typeof reserver === 'string'
 
   return (

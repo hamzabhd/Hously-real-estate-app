@@ -7,34 +7,45 @@ const ReservationButtons = ({
   pending,
   reserve,
   availability,
-  alreadyReserved,
+  lastReservation,
   isPropertyOwner,
   toggleReserve,
   handleReservation,
   toggleAvailability,
 }: ReservationButtonsType) => {
+  const buttonStatus = () => {
+    console.log(lastReservation)
+    if (
+      !lastReservation ||
+      new Date().getTime() > new Date(lastReservation.to).getTime()
+    ) {
+      return (
+        <button
+          className={`flex-grow items-center justify-center rounded-full bg-black px-8 py-3 font-medium text-white transition-colors focus:outline-none focus-visible:ring-4 focus-visible:ring-neutral-600 ${
+            isPropertyOwner
+              ? 'bg-neutral-800'
+              : 'cursor-pointer bg-black hover:bg-neutral-800'
+          }`}
+          onClick={toggleReserve}
+        >
+          Reserve
+        </button>
+      )
+    }
+    return (
+      <div className="flex flex-grow items-center justify-center gap-x-2 rounded-full border-2 py-[calc(0.75rem-2px)] sm:gap-x-2">
+        <HiOutlineCheck className="h-4 w-4 flex-shrink-0 text-green-600" />
+        <span className="text-sm text-black sm:text-base">
+          Reserved on {reformDate(lastReservation.from)}
+        </span>
+      </div>
+    )
+  }
+
   return (
     <>
       {!reserve ? (
-        !alreadyReserved ? (
-          <button
-            className={`flex-grow items-center justify-center rounded-full bg-black px-8 py-3 font-medium text-white transition-colors focus:outline-none focus-visible:ring-4 focus-visible:ring-neutral-600 ${
-              isPropertyOwner
-                ? 'bg-neutral-800'
-                : 'cursor-pointer bg-black hover:bg-neutral-800'
-            }`}
-            onClick={toggleReserve}
-          >
-            Reserve
-          </button>
-        ) : (
-          <div className="flex flex-grow items-center justify-center gap-x-2 rounded-full border-2 py-[calc(0.75rem-2px)] sm:gap-x-2">
-            <HiOutlineCheck className="h-4 w-4 flex-shrink-0 text-green-600" />
-            <span className="text-sm text-black sm:text-base">
-              Reserved on {reformDate(alreadyReserved.from)}
-            </span>
-          </div>
-        )
+        buttonStatus()
       ) : (
         <button
           className="flex-grow cursor-pointer items-center justify-center rounded-full bg-black px-8 py-3 font-medium text-white transition-colors hover:bg-neutral-800 focus:outline-none focus-visible:ring-4 focus-visible:ring-neutral-600"

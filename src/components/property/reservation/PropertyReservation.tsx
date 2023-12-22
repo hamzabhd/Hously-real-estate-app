@@ -39,9 +39,11 @@ const PropertyReservation = ({ property }: { property: PropertyType }) => {
     setNumberOfGuests(1)
     setError('')
   }
-  const alreadyReserved = property.reservations.find(
+  const reservationsMade = property.reservations.filter(
     (item) => item.reserver === session?.user.id,
   )
+  const lastReservation = reservationsMade[reservationsMade.length - 1]
+
   const makeReservationAction = makeReservation.bind(
     null,
     property._id,
@@ -217,7 +219,7 @@ const PropertyReservation = ({ property }: { property: PropertyType }) => {
         pending={pending}
         reserve={reserve}
         availability={availability}
-        alreadyReserved={alreadyReserved}
+        lastReservation={lastReservation}
         isPropertyOwner={isPropertyOwner}
         toggleReserve={toggleReserve}
         handleReservation={handleReservation}
