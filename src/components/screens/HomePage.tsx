@@ -4,6 +4,7 @@ import { PropertyType } from '@/types/types'
 import PropertiesPage from './PropertiesPage'
 import { useSearchQueries } from 'hooks/useSearchQueries'
 import { filterHomeProperties } from 'utils/filterProperties'
+import { useEffect, useMemo } from 'react'
 
 const HomePage = ({
   properties,
@@ -15,7 +16,10 @@ const HomePage = ({
   const { searchQueries } = useSearchQueries()
   const { property, type } = searchQueries
 
-  const filteredProperties = filterHomeProperties(properties, property, type)
+  const filteredProperties = useMemo(
+    () => filterHomeProperties(properties, property, type),
+    [properties, property, type],
+  )
 
   return (
     <PropertiesPage
