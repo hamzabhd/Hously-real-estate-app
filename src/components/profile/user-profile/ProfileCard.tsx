@@ -15,7 +15,7 @@ const ProfileCard = ({
   currentUser: string
 }) => {
   const [share, setShare] = useState(false)
-  const link = `${process.env.NEXT_PUBLIC_BASE_URL as string}user/${user._id}`
+  const link = `${process.env.NEXT_PUBLIC_BASE_URL as string}/user/${user._id}`
   const year = new Date(user.createdAt as string).getFullYear()
   const profileReviews = getProfileReviews(user.properties)
   const isCurrentUserProfile = user._id === currentUser

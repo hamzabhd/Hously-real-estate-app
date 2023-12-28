@@ -5,7 +5,7 @@ import ShareLink from './ShareLink'
 
 const SharePropertyButton = ({ propertyId }: { propertyId: string }) => {
   const [share, setShare] = useState(false)
-  const link = `${process.env.NEXT_PUBLIC_BASE_URL}property/${propertyId}`
+  const link = `${process.env.NEXT_PUBLIC_BASE_URL}/property/${propertyId}`
   return (
     <div className="relative">
       {share && <ShareLink setShare={setShare} link={link} />}
