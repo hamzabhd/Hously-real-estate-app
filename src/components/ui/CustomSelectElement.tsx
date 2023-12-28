@@ -1,7 +1,7 @@
 import { useRef, useState } from 'react'
 import { CustomSelectionPropType } from '@/types/types'
 import { PiCaretDownBold } from 'react-icons/pi'
-import detectOutsideClick from 'utils/detectOutsideClick'
+import { useOutsideClick } from 'hooks/useOutsideClick'
 import InputValidator from '../custom/InputValidator'
 
 const CustomSelectElement = ({
@@ -22,7 +22,7 @@ const CustomSelectElement = ({
     return 'text-black/60'
   }
 
-  detectOutsideClick(containerRef, () => setSelect(false))
+  useOutsideClick(containerRef, () => setSelect(false))
 
   return (
     <div className={`${className}`}>

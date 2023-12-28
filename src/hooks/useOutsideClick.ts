@@ -1,6 +1,6 @@
-import { useEffect, RefObject } from 'react'
+import { RefObject, useEffect } from 'react'
 
-const detectOutsideClick = (
+export const useOutsideClick = (
   ref: RefObject<HTMLElement>,
   callback: () => void,
 ) => {
@@ -18,5 +18,3 @@ const detectOutsideClick = (
     }
   }, [ref, callback])
 }
-
-export default detectOutsideClick

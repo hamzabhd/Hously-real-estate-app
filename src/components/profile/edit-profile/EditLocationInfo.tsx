@@ -40,7 +40,7 @@ const EditLocationInfo = ({ details, setUserDetails }: UserLocationType) => {
     if (countryCode) {
       setSelectedCountry(countryCode)
     }
-  }, [countries])
+  }, [countries, details.country])
 
   return (
     <>

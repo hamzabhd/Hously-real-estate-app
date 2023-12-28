@@ -26,7 +26,7 @@ const AddReview = ({
     if (!state.success && state.status !== 'error') return
     toggleAddReview()
     notify(state)
-  }, [state])
+  }, [state, toggleAddReview])
 
   return (
     <DetailsContainer title="Add review" toggleContainer={toggleAddReview}>

@@ -11,8 +11,8 @@ const EditProperty = async ({ params }: { params: { id: string } }) => {
         </h1>
         <span className="text-sm">
           Ready for a property glow-up? Edit your property details—tweak the
-          description, update the images, or add a fresh vibe. Let's keep it
-          snappy and make your property shine!
+          description, update the images, or add a fresh vibe. Let&apos;s keep
+          it snappy and make your property shine!
         </span>
       </div>
 

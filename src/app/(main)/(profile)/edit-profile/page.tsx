@@ -12,7 +12,7 @@ const EditProfile = async () => {
         </h1>
         <span className="text-sm">
           How about a quick profile tweak? Add a hobby, change your pic, or toss
-          in a short bio. Let's keep it brief and uniquely you!
+          in a short bio. Let&apos;s keep it brief and uniquely you!
         </span>
       </div>
       <EditProfileForm user={user} />

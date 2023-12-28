@@ -15,7 +15,7 @@ const ReservedProperties = ({
       {reservations.length === 0 ? (
         <div className="p-4 md:p-6">
           <p className="mb-6 leading-relaxed text-black/60">
-            You haven't received any reservations yet
+            You haven&apos;t received any reservations yet
           </p>
         </div>
       ) : (

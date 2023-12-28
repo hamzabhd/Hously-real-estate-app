@@ -12,7 +12,7 @@ const NotFoundPage = () => {
           Page Not Found
         </span>
         <p className="mb-6 inline-block text-center text-lg text-black/60">
-          Oops! The page you're looking for is nowhere to be found.
+          Oops! The page you&apos;re looking for is nowhere to be found.
         </p>
         <div className="mt-auto flex gap-x-2">
           <button

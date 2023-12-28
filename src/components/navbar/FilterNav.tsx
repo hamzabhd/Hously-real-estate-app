@@ -1,14 +1,14 @@
 import { useEffect, useRef, useState } from 'react'
 import { IoFilter } from 'react-icons/io5'
-import FilterButtons from './FilterButtons'
-import detectOutsideClick from 'utils/detectOutsideClick'
 import { useOnScroll } from 'hooks/useOnScroll'
+import { useOutsideClick } from 'hooks/useOutsideClick'
+import FilterButtons from './FilterButtons'
 
 const FilterNav = () => {
   const { isScrollingDown } = useOnScroll()
   const [isFilter, setIsFilter] = useState(false)
   const filterRef = useRef<HTMLDivElement>(null)
-  detectOutsideClick(filterRef, () => setIsFilter(false))
+  useOutsideClick(filterRef, () => setIsFilter(false))
 
   const style = !isFilter
     ? {
@@ -30,7 +30,7 @@ const FilterNav = () => {
     if (isScrollingDown && isFilter) {
       setIsFilter(false)
     }
-  }, [isScrollingDown])
+  }, [isScrollingDown, isFilter])
 
   return (
     <div

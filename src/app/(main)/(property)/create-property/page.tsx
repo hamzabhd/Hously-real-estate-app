@@ -9,8 +9,8 @@ const CreateListing = async () => {
         </h1>
         <span className="text-sm">
           Time for a property creation party! Add a new property, give it a
-          catchy name, maybe a cool description, and voila! Let's make it quick
-          and uniquely yours!
+          catchy name, maybe a cool description, and voila! Let&apos;s make it
+          quick and uniquely yours!
         </span>
       </div>
 

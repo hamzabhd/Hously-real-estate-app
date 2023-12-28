@@ -28,9 +28,9 @@ const PropertyLocation = ({
           </h2>
 
           <p className="mb-6 leading-relaxed text-black/60 lg:mb-8">
-            The details supplied are specific to the property's exact location.
-            The address may be shown on the map as a precise position or as a
-            close approximation.
+            The details supplied are specific to the property&apos;s exact
+            location. The address may be shown on the map as a precise position
+            or as a close approximation.
           </p>
           <ul className="sm:grid sm:grid-cols-2 sm:gap-x-4 lg:block">
             <li className="mb-6 lg:mb-8">

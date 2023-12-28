@@ -6,6 +6,25 @@ export const useLocations = () => {
   const [cities, setCities] = useState([])
   const [selectedCountry, setSelectedCountry] = useState('')
 
+  const fetchCities = async (signal: AbortSignal) => {
+    try {
+      const cityResponse = await fetch(
+        `http://api.geonames.org/searchJSON?country=${selectedCountry}&username=${process.env.NEXT_PUBLIC_GOENAMES_API_KEY}`,
+        { signal },
+      )
+      const cityData = await cityResponse.json()
+      return cityData
+    } catch (error) {
+      // Check if the error is due to abortion
+      const cascadeError = error as Error
+      if (cascadeError.name === 'AbortError') {
+        return { aborted: true }
+      }
+      console.error('Error fetching cities:', error)
+      throw error
+    }
+  }
+
   useEffect(() => {
     const controller = new AbortController()
     const signal = controller.signal
@@ -28,23 +47,23 @@ export const useLocations = () => {
       // Cleanup the controller when the component is unmounted
       controller.abort()
     }
-  }, [selectedCountry])
+  }, [selectedCountry, fetchCities])
 
-  const fetchCities = async (signal: AbortSignal) => {
+  const fetchCountries = async (signal: AbortSignal) => {
     try {
-      const cityResponse = await fetch(
-        `http://api.geonames.org/searchJSON?country=${selectedCountry}&username=${process.env.NEXT_PUBLIC_GOENAMES_API_KEY}`,
+      const response = await fetch(
+        `http://api.geonames.org/countryInfoJSON?username=${process.env.NEXT_PUBLIC_GOENAMES_API_KEY}`,
         { signal },
       )
-      const cityData = await cityResponse.json()
-      return cityData
+      const data = await response.json()
+      return data
     } catch (error) {
       // Check if the error is due to abortion
       const cascadeError = error as Error
       if (cascadeError.name === 'AbortError') {
         return { aborted: true }
       }
-      console.error('Error fetching cities:', error)
+      console.error('Error fetching countries:', error)
       throw error
     }
   }
@@ -76,25 +95,6 @@ export const useLocations = () => {
       controller.abort() // Cleanup the controller when the component is unmounted
     }
   }, [])
-
-  const fetchCountries = async (signal: AbortSignal) => {
-    try {
-      const response = await fetch(
-        `http://api.geonames.org/countryInfoJSON?username=${process.env.NEXT_PUBLIC_GOENAMES_API_KEY}`,
-        { signal },
-      )
-      const data = await response.json()
-      return data
-    } catch (error) {
-      // Check if the error is due to abortion
-      const cascadeError = error as Error
-      if (cascadeError.name === 'AbortError') {
-        return { aborted: true }
-      }
-      console.error('Error fetching countries:', error)
-      throw error
-    }
-  }
 
   return {
     countries,

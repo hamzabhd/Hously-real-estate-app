@@ -29,9 +29,9 @@ const ReservationContainer = ({
             style={{ zIndex: 100 }}
           >
             <span className="mb-2 block leading-relaxed">
-              Please note that confirming a reservation in this demo app won't
-              lead to any actual payment. Feel free to test and make a
-              reservation!
+              Please note that confirming a reservation in this demo app
+              won&apos;t lead to any actual payment. Feel free to test and make
+              a reservation!
             </span>
 
             <button
