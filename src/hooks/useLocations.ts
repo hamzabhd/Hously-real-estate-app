@@ -1,29 +1,32 @@
 import { CityObjType, CountryObjType } from '@/types/types'
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useCallback } from 'react'
 
 export const useLocations = () => {
   const [countries, setCountries] = useState([])
   const [cities, setCities] = useState([])
   const [selectedCountry, setSelectedCountry] = useState('')
 
-  const fetchCities = async (signal: AbortSignal) => {
-    try {
-      const cityResponse = await fetch(
-        `http://api.geonames.org/searchJSON?country=${selectedCountry}&username=${process.env.NEXT_PUBLIC_GOENAMES_API_KEY}`,
-        { signal },
-      )
-      const cityData = await cityResponse.json()
-      return cityData
-    } catch (error) {
-      // Check if the error is due to abortion
-      const cascadeError = error as Error
-      if (cascadeError.name === 'AbortError') {
-        return { aborted: true }
+  const fetchCities = useCallback(
+    async (signal: AbortSignal) => {
+      try {
+        const cityResponse = await fetch(
+          `http://api.geonames.org/searchJSON?country=${selectedCountry}&username=${process.env.NEXT_PUBLIC_GOENAMES_API_KEY}`,
+          { signal },
+        )
+        const cityData = await cityResponse.json()
+        return cityData
+      } catch (error) {
+        // Check if the error is due to abortion
+        const cascadeError = error as Error
+        if (cascadeError.name === 'AbortError') {
+          return { aborted: true }
+        }
+        console.error('Error fetching cities:', error)
+        throw error
       }
-      console.error('Error fetching cities:', error)
-      throw error
-    }
-  }
+    },
+    [selectedCountry],
+  )
 
   useEffect(() => {
     const controller = new AbortController()

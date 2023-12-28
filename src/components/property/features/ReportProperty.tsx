@@ -25,7 +25,7 @@ const ReportProperty = ({
     if (!state.success && state.status !== 'error') return
     toggleReportProperty()
     notify(state)
-  }, [state])
+  }, [state, toggleReportProperty])
 
   return (
     <DetailsContainer

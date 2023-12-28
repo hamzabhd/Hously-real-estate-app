@@ -11,10 +11,10 @@ export const POST = async (req: NextRequest) => {
   const { body, images } = await req.json()
   const user = await serverSession()
   if (!user) {
-    return {
+    return NextResponse.json({
       success: false,
       message: 'User is not authenticated',
-    }
+    })
   }
   try {
     const result = listingSchema.safeParse({ ...body, images })

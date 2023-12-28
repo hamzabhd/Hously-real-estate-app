@@ -60,7 +60,7 @@ const Location = ({
     if (countryCode) {
       setSelectedCountry(countryCode)
     }
-  }, [countries])
+  }, [countries, details.country, setSelectedCountry])
 
   return (
     <Container title="Property address" type="normal">

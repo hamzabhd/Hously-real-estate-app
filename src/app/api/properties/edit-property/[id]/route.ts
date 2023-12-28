@@ -1,8 +1,8 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { listingSchema } from 'utils/validations/validations'
 import { connectToDb } from 'utils/connectToDb'
-import Property from 'models/property'
 import { serverSession } from 'utils/getUser'
+import Property from 'models/property'
 
 export const POST = async (
   req: NextRequest,
@@ -12,10 +12,10 @@ export const POST = async (
   try {
     const user = await serverSession()
     if (!user) {
-      return {
+      return NextResponse.json({
         success: false,
         message: 'User is not authenticated',
-      }
+      })
     }
     const result = listingSchema.safeParse({ ...body, images })
     if (!result.success) {
