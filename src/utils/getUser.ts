@@ -12,7 +12,7 @@ export const getUser = async () => {
   if (!session) return null
 
   const response = await fetch(
-    `${process.env.NEXTAUTH_URL}/api/users/${session?.user.id}`,
+    `${process.env.NEXT_PUBLIC_BASE_URL}/api/users/${session?.user.id}`,
     { cache: 'no-cache' },
   )
   return response.json()
@@ -22,7 +22,7 @@ export const getUserProfile = async (id: string) => {
   if (!id) return null
 
   const response = await fetch(
-    `${process.env.NEXTAUTH_URL}/api/profiles/${id}`,
+    `${process.env.NEXT_PUBLIC_BASE_URL}/api/profiles/${id}`,
     { cache: 'no-cache' },
   )
   if (!response.ok) {
