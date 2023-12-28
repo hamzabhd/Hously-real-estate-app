@@ -14,10 +14,10 @@ export const POST = async (req: NextRequest) => {
   const { body, profileImage } = await req.json()
   const userId = await serverSession().then((user) => user?.user.id)
   if (!userId) {
-    return {
+    return NextResponse.json({
       success: false,
       message: 'User is not authenticated',
-    }
+    })
   }
 
   const user = await getUser()
