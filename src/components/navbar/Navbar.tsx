@@ -10,6 +10,8 @@ import SearchForm from '../search/SearchForm'
 import FilterNav from './FilterNav'
 import { usePathname } from 'next/navigation'
 import useDisableScroll from 'hooks/useDIsableScroll'
+import Image from 'next/image'
+import LogoImage from '../ui/LogoImage'
 
 type NavbarPropsType = {
   user: UserObj
@@ -45,8 +47,9 @@ const Navbar = ({ user, session }: NavbarPropsType) => {
         <div className="w-[238px]">
           <Link
             href="/"
-            className="cursor-pointer select-none rounded-lg py-2 transition-colors"
+            className="flex cursor-pointer select-none items-center gap-x-2 rounded-lg py-2 transition-colors"
           >
+            <LogoImage width={48} height={48} />
             <span className="font-bold tracking-wide lg:text-lg">Hously.</span>
           </Link>
         </div>
