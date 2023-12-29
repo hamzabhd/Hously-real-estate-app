@@ -13,7 +13,7 @@ export const getUser = async () => {
 
   const response = await fetch(
     `${process.env.NEXT_PUBLIC_BASE_URL}/api/users/${session?.user.id}`,
-    { cache: 'no-cache' },
+    { cache: 'no-store' },
   )
   return response.json()
 }
@@ -23,7 +23,7 @@ export const getUserProfile = async (id: string) => {
 
   const response = await fetch(
     `${process.env.NEXT_PUBLIC_BASE_URL}/api/profiles/${id}`,
-    { cache: 'no-cache' },
+    { cache: 'no-store' },
   )
   if (!response.ok) {
     return null

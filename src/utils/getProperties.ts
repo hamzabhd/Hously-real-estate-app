@@ -2,7 +2,7 @@ export const getProperties = async () => {
   const response = await fetch(
     `${process.env.NEXT_PUBLIC_BASE_URL}/api/properties`,
     {
-      cache: 'no-cache',
+      cache: 'no-store',
     },
   )
 
@@ -16,7 +16,7 @@ export const getProperties = async () => {
 export const getProperty = async (id: string) => {
   const response = await fetch(
     `${process.env.NEXT_PUBLIC_BASE_URL}/api/properties/${id}`,
-    { cache: 'no-cache' },
+    { cache: 'no-store' },
   )
   if (!response.ok) {
     return null

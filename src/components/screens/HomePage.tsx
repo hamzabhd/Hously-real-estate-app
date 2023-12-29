@@ -1,10 +1,10 @@
 'use client'
 
 import { PropertyType } from '@/types/types'
-import PropertiesPage from './PropertiesPage'
 import { useSearchQueries } from 'hooks/useSearchQueries'
 import { filterHomeProperties } from 'utils/filterProperties'
-import { useEffect, useMemo } from 'react'
+import { useMemo } from 'react'
+import PropertiesPage from './PropertiesPage'
 
 const HomePage = ({
   properties,
