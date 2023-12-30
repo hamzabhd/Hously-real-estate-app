@@ -6,12 +6,17 @@ import { getUser } from 'utils/getUser'
 
 const PropertyPage = async ({ params }: { params: { id: string } }) => {
   const property = await getProperty(params.id)
-  const properties = await getProperties()
-  const currentUser = await getUser()
 
   if (!property) {
     redirect('/404')
   }
+
+  const propertiesData = getProperties()
+  const currentUserData = getUser()
+  const [properties, currentUser] = await Promise.all([
+    propertiesData,
+    currentUserData,
+  ])
 
   return (
     <div className="mx-auto min-h-screen max-w-[1248px]">
