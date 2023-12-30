@@ -3,6 +3,8 @@ import Review from 'models/review'
 import { NextResponse } from 'next/server'
 import { connectToDb } from 'utils/connectToDb'
 
+export const dynamic = 'force-dynamic'
+
 export const GET = async () => {
   try {
     await connectToDb()
