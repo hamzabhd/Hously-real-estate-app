@@ -10,7 +10,7 @@ export const useLocations = () => {
     async (signal: AbortSignal) => {
       try {
         const cityResponse = await fetch(
-          `http://secure.geonames.org/searchJSON?country=${selectedCountry}&username=${process.env.NEXT_PUBLIC_GOENAMES_API_KEY}`,
+          `secure.geonames.org/searchJSON?country=${selectedCountry}&username=${process.env.NEXT_PUBLIC_GOENAMES_API_KEY}`,
           { signal },
         )
         const cityData = await cityResponse.json()
@@ -31,19 +31,17 @@ export const useLocations = () => {
     const controller = new AbortController()
     const signal = controller.signal
 
-    fetchCities(signal)
-      .then((cityData) => {
-        if (!cityData.aborted) {
-          const cities = cityData.geonames
-            .map((c: any) => ({
-              cityName: c.name,
-              cityRegion: c.adminName1,
-            }))
-            .sort((a: CityObjType, b: CityObjType) => a.cityName > b.cityName)
-          setCities(cities)
-        }
-      })
-      .catch((error) => console.error('Error fetching cities:', error))
+    fetchCities(signal).then((cityData) => {
+      if (!cityData.aborted) {
+        const cities = cityData.geonames
+          .map((c: any) => ({
+            cityName: c.name,
+            cityRegion: c.adminName1,
+          }))
+          .sort((a: CityObjType, b: CityObjType) => a.cityName > b.cityName)
+        setCities(cities)
+      }
+    })
 
     return () => {
       // Cleanup the controller when the component is unmounted
@@ -54,7 +52,7 @@ export const useLocations = () => {
   const fetchCountries = async (signal: AbortSignal) => {
     try {
       const response = await fetch(
-        `http://secure.geonames.org/countryInfoJSON?username=${process.env.NEXT_PUBLIC_GOENAMES_API_KEY}`,
+        `secure.geonames.org/countryInfoJSON?username=${process.env.NEXT_PUBLIC_GOENAMES_API_KEY}`,
         { signal },
       )
       const data = await response.json()
@@ -74,23 +72,21 @@ export const useLocations = () => {
     const signal = controller.signal
 
     // Get list of countries
-    fetchCountries(signal)
-      .then((data) => {
-        if (!data.aborted) {
-          const countries = data.geonames
-            .map((c: any) => ({
-              countryName: c.countryName,
-              countryCode: c.countryCode,
-              continent: c.continentName,
-            }))
-            .sort(
-              (a: CountryObjType, b: CountryObjType) =>
-                a.countryName > b.countryName,
-            )
-          setCountries(countries)
-        }
-      })
-      .catch((error) => console.error('Error fetching countries:', error))
+    fetchCountries(signal).then((data) => {
+      if (!data.aborted) {
+        const countries = data.geonames
+          .map((c: any) => ({
+            countryName: c.countryName,
+            countryCode: c.countryCode,
+            continent: c.continentName,
+          }))
+          .sort(
+            (a: CountryObjType, b: CountryObjType) =>
+              a.countryName > b.countryName,
+          )
+        setCountries(countries)
+      }
+    })
 
     return () => {
       controller.abort() // Cleanup the controller when the component is unmounted
