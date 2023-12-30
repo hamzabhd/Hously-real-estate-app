@@ -10,7 +10,7 @@ export const useLocations = () => {
     async (signal: AbortSignal) => {
       try {
         const cityResponse = await fetch(
-          `http://api.geonames.org/searchJSON?country=${selectedCountry}&username=${process.env.NEXT_PUBLIC_GOENAMES_API_KEY}`,
+          `http://secure.geonames.org/searchJSON?country=${selectedCountry}&username=${process.env.NEXT_PUBLIC_GOENAMES_API_KEY}`,
           { signal },
         )
         const cityData = await cityResponse.json()
@@ -21,8 +21,7 @@ export const useLocations = () => {
         if (cascadeError.name === 'AbortError') {
           return { aborted: true }
         }
-        console.error('Error fetching cities:', error)
-        throw error
+        throw new Error('something went wrong trying to fetch locations')
       }
     },
     [selectedCountry],
@@ -55,7 +54,7 @@ export const useLocations = () => {
   const fetchCountries = async (signal: AbortSignal) => {
     try {
       const response = await fetch(
-        `http://api.geonames.org/countryInfoJSON?username=${process.env.NEXT_PUBLIC_GOENAMES_API_KEY}`,
+        `http://secure.geonames.org/countryInfoJSON?username=${process.env.NEXT_PUBLIC_GOENAMES_API_KEY}`,
         { signal },
       )
       const data = await response.json()
@@ -66,8 +65,7 @@ export const useLocations = () => {
       if (cascadeError.name === 'AbortError') {
         return { aborted: true }
       }
-      console.error('Error fetching countries:', error)
-      throw error
+      throw new Error('something went wrong trying to fetch locations')
     }
   }
 
