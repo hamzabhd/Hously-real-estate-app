@@ -4,6 +4,7 @@ import { PropertyType } from '@/types/types'
 import { useSearchQueries } from 'hooks/useSearchQueries'
 import { filterProperties } from 'utils/filterProperties'
 import { useLocations } from 'hooks/useLocations'
+import { useEffect, useState } from 'react'
 
 const SearchPage = ({
   properties,
@@ -14,11 +15,15 @@ const SearchPage = ({
 }) => {
   const { searchQueries } = useSearchQueries()
   const { countries } = useLocations()
-  const filteredProperties = filterProperties(
-    searchQueries,
-    properties,
-    countries,
+  const [filteredProperties, setFilteredProperties] = useState<PropertyType[]>(
+    [],
   )
+  useEffect(() => {
+    if (countries.length < 1) return
+    const data = filterProperties(searchQueries, properties, countries)
+
+    setFilteredProperties(data)
+  }, [countries])
 
   return (
     <>
