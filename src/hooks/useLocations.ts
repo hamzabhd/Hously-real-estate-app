@@ -10,7 +10,7 @@ export const useLocations = () => {
     async (signal: AbortSignal) => {
       try {
         const cityResponse = await fetch(
-          `secure.geonames.org/searchJSON?country=${selectedCountry}&username=${process.env.NEXT_PUBLIC_GOENAMES_API_KEY}`,
+          `https://secure.geonames.org/searchJSON?country=${selectedCountry}&username=${process.env.NEXT_PUBLIC_GOENAMES_API_KEY}`,
           { signal },
         )
         const cityData = await cityResponse.json()
@@ -52,7 +52,7 @@ export const useLocations = () => {
   const fetchCountries = async (signal: AbortSignal) => {
     try {
       const response = await fetch(
-        `secure.geonames.org/countryInfoJSON?username=${process.env.NEXT_PUBLIC_GOENAMES_API_KEY}`,
+        `https://secure.geonames.org/countryInfoJSON?username=${process.env.NEXT_PUBLIC_GOENAMES_API_KEY}`,
         { signal },
       )
       const data = await response.json()
