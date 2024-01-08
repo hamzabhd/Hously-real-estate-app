@@ -41,6 +41,11 @@
   .small-btn {
     @apply rounded-full border border-white bg-white/60 p-1 hover:bg-white;
   }
+
+  .main-header {
+    font-size: clamp(2.5rem, 7.5vw, 8rem);
+    line-height: 100%;
+  }
 }
 
 @layer components {
