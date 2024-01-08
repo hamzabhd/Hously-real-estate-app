@@ -22,7 +22,7 @@ const NotFoundPage = () => {
             <span className="block">Go back</span>
           </button>
           <Link
-            href="/"
+            href="/home"
             className="flex w-full cursor-pointer items-center justify-center rounded-full bg-black px-8 py-3 font-medium text-white transition-colors hover:bg-neutral-800 focus:outline-none focus-visible:ring-4 focus-visible:ring-neutral-600"
           >
             <span className="block">Go home</span>

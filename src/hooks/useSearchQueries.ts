@@ -19,7 +19,7 @@ export const useSearchQueries = () => {
 
   const handleQueries = (value: string, query: string, type: string | null) => {
     const newSearchParams = new URLSearchParams(searchParams.toString())
-    const filterPage = pathname === '/search' ? pathname : '/'
+    const filterPage = pathname === '/search' ? pathname : '/home'
     if (value && !type) {
       newSearchParams.append(query, value)
     } else if (value && type !== value) {

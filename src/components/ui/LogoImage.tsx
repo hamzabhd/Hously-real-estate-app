@@ -1,13 +1,16 @@
 import Image from 'next/image'
 
-const LogoImage = ({ width, height }: { width: number; height: number }) => {
+const LogoImage = () => {
   return (
     <Image
       alt="hously logo"
       src="/logo/hously-logo.png"
-      width={width}
-      height={height}
-      className="h-auto w-auto"
+      width={48}
+      height={48}
+      style={{
+        height: 'auto',
+        width: 'auto',
+      }}
     />
   )
 }

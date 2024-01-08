@@ -29,10 +29,10 @@ const NavOptions = ({
           </button>
         </div>
       ) : (
-        <div className="hidden gap-x-2 lg:flex">
+        <div className="hidden w-[238px] gap-x-2 lg:flex lg:items-center lg:gap-x-6">
           <Link
             href="/sign-in"
-            className="cursor-pointer rounded-full border border-grey px-6 py-[calc(0.75rem-1px)] font-medium text-black hover:border-black/60 focus:outline-none focus-visible:ring-4 focus-visible:ring-neutral-600"
+            className="cursor-pointer rounded-full border border-grey px-6 py-[calc(0.75rem-1px)] font-medium text-black hover:border-black/60 focus:outline-none focus-visible:ring-4 focus-visible:ring-neutral-600 lg:ml-auto lg:border-none lg:p-0 lg:hover:underline"
           >
             Sign in
           </Link>

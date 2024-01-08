@@ -1,4 +1,3 @@
-import LogoImage from '@/components/ui/LogoImage'
 import Image from 'next/image'
 import Link from 'next/link'
 import { redirect } from 'next/navigation'
@@ -11,38 +10,27 @@ const layout = async ({ children }: { children: ReactNode }) => {
     redirect('/')
   }
   return (
-    <div className="mx-auto flex h-screen max-w-[1248px]">
-      <div className=" relative w-full p-4 md:flex md:w-1/2 md:items-center xl:p-0">
-        <Link
-          href="/"
-          className="flex  w-fit cursor-pointer select-none items-center gap-x-2 py-2 transition-colors md:absolute md:top-4"
-        >
-          <LogoImage width={48} height={48} />
-          <span className="font-bold lg:text-xl">Hously.</span>
+    <div className="mx-auto flex h-screen lg:flex">
+      <div className="relative flex w-full flex-col px-4 py-5">
+        <Link href="/home" className="text-left font-bold">
+          <span>Hously.</span>
         </Link>
         {children}
       </div>
-      <div className="relative hidden h-screen flex-1 select-none sm:hidden md:flex md:items-center md:justify-center xl:absolute xl:right-0 xl:flex xl:w-1/2">
+      <div className="relative hidden h-full w-full lg:block">
         <Image
-          src="/images/abstract-cover.jpg"
-          alt="blur background"
-          sizes="(min-width: 1024px) 50vw, 100vw"
-          quality={100}
+          src="/images/auth-image.jpg"
+          alt="auth image"
           style={{
             objectFit: 'cover',
+            maxWidth: '100%',
+            height: '100%',
           }}
-          loading="lazy"
+          className="hidden lg:block"
+          sizes="(min-width: 1024px) 50vw,100vw"
           fill
+          priority
         />
-
-        <Link href="/" className="z-10 flex flex-col justify-center">
-          <div className="flex items-end gap-x-2 ">
-            <LogoImage width={96} height={96} />
-            <span className="text-4xl font-extrabold tracking-wider">
-              Hously.
-            </span>
-          </div>
-        </Link>
       </div>
     </div>
   )

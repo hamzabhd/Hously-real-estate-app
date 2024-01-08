@@ -1,9 +1,14 @@
 import Image from 'next/image'
 import Link from 'next/link'
-import React from 'react'
-import { FiSearch } from 'react-icons/fi'
+import { redirect } from 'next/navigation'
+import { serverSession } from 'utils/getUser'
 
-const page = () => {
+const page = async () => {
+  const session = await serverSession()
+
+  if (session) {
+    redirect('/home')
+  }
   return (
     <div className="flex min-h-screen flex-col overflow-hidden">
       <div className="px-4 py-2 ">
@@ -56,7 +61,7 @@ const page = () => {
           </Link>
         </div>
       </div>
-      <div className="h-ful relative w-full flex-grow">
+      <div className="relative w-full flex-grow">
         <Image
           src="/images/home-image.jpg"
           alt="home image"

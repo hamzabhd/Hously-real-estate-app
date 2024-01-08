@@ -29,8 +29,8 @@ const Form = () => {
     }
   }
 
-  const handAuth = (provider: string) => {
-    return signIn(provider, { callbackUrl: prevPage || '/' })
+  const handleAuth = (provider: string) => {
+    return signIn(provider, { callbackUrl: prevPage || '/home' })
   }
 
   useEffect(() => {
@@ -45,22 +45,22 @@ const Form = () => {
   }, [authError])
 
   return (
-    <form className="w-full py-8 xl:w-[386px]">
-      <h2 className="mb-4 text-4xl font-bold md:text-5xl">
+    <form className="m-auto w-full max-w-[400px] py-8 ">
+      <h2 className="mb-4 text-4xl font-bold lg:text-5xl">
         {isSignIn ? 'Sign in' : 'Sign up'}
       </h2>
       <p className="mb-12 font-medium text-neutral-600">
         Choose your preferred {isSignIn ? 'sign in' : 'sign up'} method
       </p>
 
-      <ProviderAuthButton handleAuth={() => handAuth('google')}>
+      <ProviderAuthButton handleAuth={() => handleAuth('google')}>
         <FcGoogle className="h-6 w-6 flex-shrink-0" />
         <span className="font-medium text-black">
           {isSignIn ? 'Sign in' : 'Sign up'} with Google
         </span>
       </ProviderAuthButton>
 
-      <ProviderAuthButton handleAuth={() => handAuth('github')}>
+      <ProviderAuthButton handleAuth={() => handleAuth('github')}>
         <IoLogoGithub className="h-6 w-6 flex-shrink-0" />
         <span className="font-medium text-black">
           {isSignIn ? 'Sign in' : 'Sign up'} with GitHub
@@ -73,7 +73,7 @@ const Form = () => {
         <span className=" h-[1px] w-full rounded-[1px] bg-grey"></span>
       </div>
 
-      <span className="text-sm text-gray-600">
+      <span className="block text-center text-sm text-gray-600">
         {isSignIn ? "Don't" : 'Already'} have an account?
         <Link
           href={getLink()}
