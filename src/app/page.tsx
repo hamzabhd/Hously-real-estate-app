@@ -1,3 +1,4 @@
+import LogoImage from '@/components/ui/LogoImage'
 import Image from 'next/image'
 import Link from 'next/link'
 import { redirect } from 'next/navigation'
@@ -11,10 +12,14 @@ const page = async () => {
   }
   return (
     <div className="flex min-h-screen flex-col overflow-hidden">
-      <div className="px-4 py-2 ">
+      <div className="px-4 py-3">
         <nav className="flex items-center justify-between">
-          <Link href="/home" className="font-bold">
-            <span>Hously.</span>
+          <Link
+            href="/home"
+            className="flex cursor-pointer select-none items-center gap-x-2 rounded-lg py-2 transition-colors"
+          >
+            <LogoImage />
+            <span className="font-bold tracking-wide lg:text-lg">Hously.</span>
           </Link>
 
           <div className="flex items-center gap-x-6">
@@ -61,7 +66,7 @@ const page = async () => {
           </Link>
         </div>
       </div>
-      <div className="relative w-full flex-grow">
+      <div className="relative w-full flex-grow overflow-hidden 2xl:m-auto 2xl:max-w-[1500px] 2xl:rounded-t-[3rem]">
         <Image
           src="/images/home-image.jpg"
           alt="home image"

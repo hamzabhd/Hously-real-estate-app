@@ -45,7 +45,7 @@ const Form = () => {
   }, [authError])
 
   return (
-    <form className="m-auto w-full max-w-[400px] py-8 ">
+    <form className="mt-8 w-full max-w-[400px]">
       <h2 className="mb-4 text-4xl font-bold lg:text-5xl">
         {isSignIn ? 'Sign in' : 'Sign up'}
       </h2>

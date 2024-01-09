@@ -1,3 +1,4 @@
+import LogoImage from '@/components/ui/LogoImage'
 import Image from 'next/image'
 import Link from 'next/link'
 import { redirect } from 'next/navigation'
@@ -10,14 +11,8 @@ const layout = async ({ children }: { children: ReactNode }) => {
     redirect('/')
   }
   return (
-    <div className="mx-auto flex h-screen lg:flex">
-      <div className="relative flex w-full flex-col px-4 py-5">
-        <Link href="/home" className="text-left font-bold">
-          <span>Hously.</span>
-        </Link>
-        {children}
-      </div>
-      <div className="relative hidden h-full w-full lg:block">
+    <div className="mx-auto flex h-screen lg:flex lg:gap-x-8">
+      <div className="relative hidden h-full basis-1/4 overflow-hidden lg:block 2xl:rounded-e-[3rem]">
         <Image
           src="/images/auth-image.jpg"
           alt="auth image"
@@ -31,6 +26,17 @@ const layout = async ({ children }: { children: ReactNode }) => {
           fill
           priority
         />
+      </div>
+      <div className="relative m-auto flex w-fit flex-col px-4 py-3 lg:ml-0">
+        <Link
+          href="/home"
+          className="flex cursor-pointer select-none items-center gap-x-2 rounded-lg py-2 transition-colors"
+        >
+          <LogoImage />
+          <span className="font-bold tracking-wide lg:text-lg">Hously.</span>
+        </Link>
+
+        {children}
       </div>
     </div>
   )

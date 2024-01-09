@@ -38,7 +38,7 @@ const Navbar = ({ user, session }: NavbarPropsType) => {
   return (
     <div className="sticky top-0" style={{ zIndex: '100' }}>
       <nav
-        className={`flex w-full items-center justify-between gap-x-2 border-b border-grey p-4 backdrop-blur-lg lg:py-3 ${
+        className={`flex w-full items-center justify-between gap-x-2 border-b border-grey px-4 py-3 backdrop-blur-lg ${
           isOpen || activeSearch ? 'bg-white' : 'bg-white/60'
         }`}
       >

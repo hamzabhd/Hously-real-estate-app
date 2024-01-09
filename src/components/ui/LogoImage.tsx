@@ -5,8 +5,8 @@ const LogoImage = () => {
     <Image
       alt="hously logo"
       src="/logo/hously-logo.png"
-      width={48}
-      height={48}
+      width={32}
+      height={32}
       style={{
         height: 'auto',
         width: 'auto',

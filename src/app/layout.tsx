@@ -8,7 +8,7 @@ export const metadata: Metadata = {
   title: 'Hously-Project',
   description: 'Hously | Everyone deserves a nicer house',
   icons: {
-    icon: '/logo/logo.png',
+    icon: '/logo/hously-logo.png',
   },
 }
 
