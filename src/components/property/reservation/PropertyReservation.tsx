@@ -164,7 +164,7 @@ const PropertyReservation = ({ property }: { property: PropertyType }) => {
     nights === 0
       ? 0
       : Number(property.cleaningFee) +
-        Number(property.cleaningFee) +
+        Number(property.securityFee) +
         Number(property.price) * nights +
         Number(property.price) * nights * 0.05
 
