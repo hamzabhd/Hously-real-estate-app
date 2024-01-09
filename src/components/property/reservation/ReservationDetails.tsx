@@ -26,7 +26,7 @@ const ReservationDetails = ({
           <div className="flex items-center gap-x-4">
             <span>{cleaningFee || 0}$</span>
             <span>x</span>
-            <span>{nights}</span>
+            <span>1</span>
           </div>
         </div>
         <div className="mb-4 flex items-center justify-between">
@@ -34,7 +34,7 @@ const ReservationDetails = ({
           <div className="flex items-center gap-x-4">
             <span>{securityFee || 0}$</span>
             <span>x</span>
-            <span>{nights}</span>
+            <span>1</span>
           </div>
         </div>
         <div className="flex items-center justify-between">

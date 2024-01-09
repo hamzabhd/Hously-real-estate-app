@@ -16,7 +16,7 @@ const ImagePreviewer = ({
         !image ? 'hidden' : 'lg:flex'
       }`}
     >
-      <div className="relative aspect-video  h-3/4 w-[1200px] overflow-hidden rounded-3xl shadow-md ">
+      <div className="relative h-3/4 w-4/5 select-none overflow-hidden ">
         {image && (
           <CldImage
             src={image}
@@ -25,7 +25,7 @@ const ImagePreviewer = ({
             blurDataURL="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR42mP88R8AAvUB+VkkrXoAAAAASUVORK5CYII="
             loading="lazy"
             style={{
-              objectFit: 'cover',
+              objectFit: 'contain',
             }}
             sizes="(min-width: 1024px) 1200px"
             fill

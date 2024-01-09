@@ -1,6 +1,17 @@
 import { CityObjType, CountryObjType } from '@/types/types'
 import { useState, useEffect, useCallback } from 'react'
 
+const sortNames = (a: string, b: string) => {
+  if (a < b) {
+    return -1
+  }
+  if (a > b) {
+    return 1
+  }
+  // names must be equal
+  return 0
+}
+
 export const useLocations = () => {
   const [countries, setCountries] = useState([])
   const [cities, setCities] = useState([])
@@ -38,7 +49,9 @@ export const useLocations = () => {
             cityName: c.name,
             cityRegion: c.adminName1,
           }))
-          .sort((a: CityObjType, b: CityObjType) => a.cityName > b.cityName)
+          .sort((a: CityObjType, b: CityObjType) =>
+            sortNames(a.cityName, b.cityName),
+          )
         setCities(cities)
       }
     })
@@ -80,9 +93,8 @@ export const useLocations = () => {
             countryCode: c.countryCode,
             continent: c.continentName,
           }))
-          .sort(
-            (a: CountryObjType, b: CountryObjType) =>
-              a.countryName > b.countryName,
+          .sort((a: CountryObjType, b: CountryObjType) =>
+            sortNames(a.countryName, b.countryName),
           )
         setCountries(countries)
       }
