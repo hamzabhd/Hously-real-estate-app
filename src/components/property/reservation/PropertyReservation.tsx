@@ -1,7 +1,7 @@
 import { makeReservation } from '@/app/actions'
 import { PropertyType, UserObj } from '@/types/types'
 import { useSession } from 'next-auth/react'
-import { useState, useTransition } from 'react'
+import { useReducer, useState, useTransition } from 'react'
 import { getReservationRange } from 'utils/isReserved'
 import { reservationSchema } from 'utils/validations/validations'
 import { useSearchQueries } from 'hooks/useSearchQueries'
@@ -13,10 +13,12 @@ import ReservationDetails from './ReservationDetails'
 import PropertyAvailability from '../prompts/PropertyAvailability'
 import ReserveDateSelection from './ReserveDateSelection'
 import ReservationGuests from './ReservationGuests'
+import { useRouter } from 'next/navigation'
 
 const PropertyReservation = ({ property }: { property: PropertyType }) => {
   const { checkAuthenticatedUser } = useSearchQueries()
   const { data: session } = useSession()
+  const router = useRouter()
   const [availability, setAvailability] = useState(false)
   const [reserve, setReserve] = useState(false)
   const [numberOfGuests, setNumberOfGuests] = useState(1)
@@ -140,7 +142,7 @@ const PropertyReservation = ({ property }: { property: PropertyType }) => {
   const toggleReserve = () => {
     checkAuthenticatedUser(() => {
       if (isPropertyOwner) {
-        return
+        return router.push('/edit-property/' + property._id)
       }
       setReserve(true)
       setAvailability(false)

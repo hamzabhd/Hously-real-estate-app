@@ -18,6 +18,8 @@ import PropertyReservation from '../reservation/PropertyReservation'
 import OwnerContact from '../prompts/OwnerContact'
 import EssentialDetails from '../prompts/EssentialDetails'
 import useDisableScroll from 'hooks/useDIsableScroll'
+import { useSession } from 'next-auth/react'
+import Link from 'next/link'
 
 const PropertyMainDetails = ({
   property,
@@ -26,6 +28,7 @@ const PropertyMainDetails = ({
   property: PropertyType
   savedProperties: string[]
 }) => {
+  const { data: session } = useSession()
   const { disableClick } = useDisableClick()
   const [selectedImage, setSelectedImage] = useState('')
   const [selected, setSelected] = useState('')
@@ -41,6 +44,7 @@ const PropertyMainDetails = ({
   const rate = reviewsRate(property.reviews)
   // avoid any checking errors
   const owner = property.owner as UserObj
+  const isCurrentUserProperty = session?.user.id === owner._id
 
   useDisableScroll(moreDetails)
   useDisableScroll(!!selected)
@@ -215,6 +219,13 @@ const PropertyMainDetails = ({
           </div>
           {property.listingType === 'Rent' ? (
             <PropertyReservation property={property} />
+          ) : isCurrentUserProperty ? (
+            <Link
+              href={'/edit-property/' + property._id}
+              className="flex w-full cursor-pointer items-center justify-center rounded-full bg-black py-3 font-medium text-white transition-colors hover:bg-neutral-800 focus:outline-none focus-visible:ring-4 focus-visible:ring-neutral-600"
+            >
+              Edit property
+            </Link>
           ) : (
             <OwnerContact user={owner} />
           )}

@@ -14,21 +14,16 @@ const ReservationButtons = ({
   toggleAvailability,
 }: ReservationButtonsType) => {
   const buttonStatus = () => {
-    console.log(lastReservation)
     if (
       !lastReservation ||
       new Date().getTime() > new Date(lastReservation.to).getTime()
     ) {
       return (
         <button
-          className={`flex-grow items-center justify-center rounded-full bg-black px-8 py-3 font-medium text-white transition-colors focus:outline-none focus-visible:ring-4 focus-visible:ring-neutral-600 ${
-            isPropertyOwner
-              ? 'bg-neutral-800'
-              : 'cursor-pointer bg-black hover:bg-neutral-800'
-          }`}
+          className='flex-grow items-center justify-center rounded-full bg-black px-8 py-3 font-medium text-white transition-colors focus:outline-none focus-visible:ring-4 focus-visible:ring-neutral-600 cursor-pointer hover:bg-neutral-800'
           onClick={toggleReserve}
         >
-          Reserve
+          {isPropertyOwner ? 'Edit property' : 'Reserve'}
         </button>
       )
     }
