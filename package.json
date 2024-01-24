@@ -10,6 +10,7 @@
   },
   "dependencies": {
     "@react-google-maps/api": "^2.19.2",
+    "@vercel/analytics": "^1.1.2",
     "axios": "^1.5.1",
     "cloudinary": "^1.41.0",
     "lucide-react": "^0.284.0",

@@ -1,8 +1,9 @@
-import './globals.css'
 import type { Metadata } from 'next'
+import { Analytics } from '@vercel/analytics/react'
 import { Poppins } from 'next/font/google'
 import AuthProvider from 'context/AuthProvider'
 import NotificationContainer from '@/components/shared/NotificationContainer'
+import './globals.css'
 
 export const metadata: Metadata = {
   title: 'Hously-Project',
@@ -28,6 +29,7 @@ export default function RootLayout({
       <body className="relative box-border">
         <NotificationContainer />
         <AuthProvider>{children}</AuthProvider>
+        <Analytics />
       </body>
     </html>
   )
