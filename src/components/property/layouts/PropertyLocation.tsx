@@ -6,7 +6,6 @@ import {
   HiOfficeBuilding,
   HiTag,
 } from 'react-icons/hi'
-import Map from '../../custom/Map'
 
 const PropertyLocation = ({
   address,
@@ -21,7 +20,7 @@ const PropertyLocation = ({
         Where is this property located
       </h2>
 
-      <div className="my-4 gap-x-8 lg:my-6 lg:grid lg:grid-cols-2">
+      <div className="my-4 gap-x-8">
         <div className="pt-2 lg:pt-4">
           <h2 className="mb-4 text-lg font-medium tracking-wide lg:text-xl">
             Property location
@@ -29,10 +28,10 @@ const PropertyLocation = ({
 
           <p className="mb-6 leading-relaxed text-black/60 lg:mb-8">
             The details supplied are specific to the property&apos;s exact
-            location. The address may be shown on the map as a precise position
-            or as a close approximation.
+            location. Please note that the map is not available in this demo
+            app.
           </p>
-          <ul className="sm:grid sm:grid-cols-2 sm:gap-x-4 lg:block">
+          <ul className="sm:grid sm:grid-cols-2 sm:gap-x-4 lg:grid lg:grid-cols-2">
             <li className="mb-6 lg:mb-8">
               <span className="mb-1 block font-medium">Address</span>
               <div className="flex items-center gap-x-2">
@@ -81,9 +80,9 @@ const PropertyLocation = ({
           </ul>
         </div>
         {/* render the map depending on the address provided */}
-        <div className="relative h-[500px] w-full overflow-hidden rounded-3xl border-2 lg:h-[600px] ">
+        {/* <div className="relative h-[500px] w-full overflow-hidden rounded-3xl border-2 lg:h-[600px] ">
           <Map address={address} />
-        </div>
+        </div> */}
       </div>
     </div>
   )
